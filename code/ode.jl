@@ -23,7 +23,12 @@ function rk4s!(B, f, x, ts, τ)
             t = min(ts[it], t + τ)
         end
 
-        B[it,1] = x[1]
-        B[it,2] = x[2]
+        B[it,:] = x
     end
+end
+
+function rk4s(f, x, ts, τ)
+    B = zeros(length(ts), length(x))
+    rk4s!(B, f, x, ts, τ)
+    B
 end
