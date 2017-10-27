@@ -35,9 +35,17 @@ function contour2d(f, coords, n)
     contour(xgrid,ygrid,z)
 end
 
-function foldi(f, acc, range)
-    for i = range
+function foldi(f, acc, upto)
+    for i = 1:upto
         acc = f(i, acc)
+    end
+    acc
+end
+
+function sumoveri(f, upto)
+    acc = 0
+    for i = 1:upto
+        acc += f(i)
     end
     acc
 end
