@@ -23,7 +23,7 @@ function plotMCMC(output)
     println(
         "$(accepted) / $(length(X)) of the sampled particles were accepted ($(round(accepted/length(X) * 100))%)
         \nThe mean estimation is of $(mean(X))"
-    )
+    );
 end
 
 function plotSMC(output; binwidth=0.01)
