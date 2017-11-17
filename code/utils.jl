@@ -22,11 +22,3 @@ function quad2(f)
     k89^2*f(0,0) + 
     k89*k59*(f(0,-k35) + f(-k35,0) + f(k35,0) + f(0,k35))
 end
-
-function unnormalized_posterior(prior, likelihood)
-    m ->
-    let
-        p = pdf(prior, m[1])
-        p > 0 ? p*likelihood(m[1]) : 0
-    end
-end
