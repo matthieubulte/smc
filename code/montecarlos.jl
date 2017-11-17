@@ -24,39 +24,60 @@ function MetropolisHastings(K, Π, γ, x₀)
     X, Y, W, accepted
 end
 
-function noop(n,W,X) 
+function noop(n,W,X,A,ESS) 
 end
 
-function SequentialMonteCarlo(X₀, p, γ; μ=0.1, progress=noop)
+
+function SequentialMonteCarlo(X₀, p, γ; μ=0.1, progress=noop, n_mcmc_updates=1)
     # initialization
     N,d = size(X₀)
     w = MvNormal(μ^2 * eye(d))
 
-    X = X₀
+    X = SharedArray{Float64}(X₀)
+    dX = zeros(X₀)
+    
     W = ones(N)/N
     Wₙ = SharedArray{Float64}(N)
     
-    @sync @parallel for i=1:N
-        Wₙ[i] = γ(1, X[i,:])
-    end
-    W = W.*Wₙ / vecdot(W, Wₙ)
-    progress(1,W,X)
+    acceptance_rate = zeros(p)
+    ess = zeros(p)
     
-    for n = 2:p
-        # resampling
-        if 1 / vecdot(W,W) < N/2
-            X = X[rand(Categorical(W), N), :]
+    for n = 1:p
+        # update
+        for i=1:n_mcmc_updates
+            dX = rand(w, N)'
+            
+            n_accepted = @sync @parallel (+) for i=1:N
+                xₙ = X[i,:] + dX[i,:]
+                wₙ = γ(n, xₙ)
+
+                accepted = 0
+                if rand() < min(1, wₙ / Wₙ[i])
+                    Wₙ[i] = wₙ
+                    X[i,:] = xₙ
+                    accepted = 1
+                end
+                accepted
+            end
+            acceptance_rate[n] += n_accepted
+        end
+        acceptance_rate[n] /= N * n_mcmc_updates
+
+        # compute new weights
+        W = W.*Wₙ / vecdot(W, Wₙ)
+        
+        # resample
+        ESS = 1 / vecdot(W,W)
+        ess[n] = ESS
+        if ESS < N/2            
+            perm = rand(Categorical(W), N)
+            X = X[perm, :]
+            Wₙ = Wₙ[perm]
             W = ones(N)/N
         end
-
-        X += rand(w, N)'
         
-        @sync @parallel for i=1:N
-            Wₙ[i] = γ(n, X[i,:])
-        end
-        W = W.*Wₙ / vecdot(W, Wₙ)
-        progress(n,W,X)
+        progress(n,W,X,acceptance_rate,ess)
     end
     
-    W,X
+    W,X,acceptance_rate,ess
 end

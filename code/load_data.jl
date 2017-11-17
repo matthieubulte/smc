@@ -14,7 +14,7 @@ filename = "../data/original_data"
 # It also filters out missing values, as they don't represent anything anymore.
 function load_flat_data()
     X = open(readdlm, filename)[:]
-    X[X .!= 0]
+    sort(X[X .!= 0])
 end
 
 # This function loads the experiment's data and returns it as a two dimensional array

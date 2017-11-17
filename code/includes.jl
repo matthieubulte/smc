@@ -1,5 +1,7 @@
 using PyPlot
 
+PyPlot.rc("figure", figsize=(8,8))
+
 include("plotting.jl")
 
 @everywhere using Distributions

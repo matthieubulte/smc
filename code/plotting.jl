@@ -22,12 +22,12 @@ function plotMCMC(output)
     
     println(
         "$(accepted) / $(length(X)) of the sampled particles were accepted ($(round(accepted/length(X) * 100))%)
-        \nThe mean estimation is of $(mean(X))"
+        \nThe expectation estimation is of $(mean(X))"
     );
 end
 
 function plotSMC(output; binwidth=0.01)
-    W,X = output
+    W,X,A,ESS = output
     Y = round.(X/binwidth)
     mini = minimum(Y)
 
@@ -42,10 +42,21 @@ function plotSMC(output; binwidth=0.01)
     g = vecdot(W,X)    
 
     clf()
+    
+    subplot(221)
+    title("dμʸ / dμ₀ (expectation estimation = $(round(vecdot(X,W)*1000)/1000))")
     ylim(0,maxW*1.1)
-    xlim(8,10)
-
+    xlim(minimum(X)-2*binwidth,maximum(X)+2*binwidth)
     bar((collect(1:m) + mini - 1)*binwidth, ws, width=binwidth)
-
-    plot([g; g], [0; maxW*1.1], "r--");
+    plot([g; g], [0; maxW*1.1], "r--")
+    
+    subplot(223)
+    title("Acceptance rate (mean = $(round(mean(A) * 100)/100))")
+    plot(1:length(A), A)
+    plot(1:length(A), ones(A)*A[end], "r--")
+    
+    subplot(224)
+    title("ESS (mean = $(round(mean(ESS))))")
+    plot(1:length(ESS), ESS)
+    plot(1:length(ESS), ones(ESS)*ESS[end], "r--")
 end
