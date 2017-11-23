@@ -42,17 +42,23 @@ function SequentialMonteCarlo(X₀, p, γ; μ=0.1, progress=noop, n_mcmc_updates
     acceptance_rate = zeros(p)
     ess = zeros(p)
     
+    
+    # initialize
+    @sync @parallel for i=1:N
+        Wₙ[i] = γ(1, X[i,:])
+    end
+    W = W.*Wₙ / vecdot(W, Wₙ)
+    
     for n = 1:p
-        # update
         for i=1:n_mcmc_updates
+            # update
             dX = rand(w, N)'
-            
             n_accepted = @sync @parallel (+) for i=1:N
                 xₙ = X[i,:] + dX[i,:]
                 wₙ = γ(n, xₙ)
 
                 accepted = 0
-                if rand() < min(1, wₙ / Wₙ[i])
+                if rand() < min(1, wₙ / W[i])
                     Wₙ[i] = wₙ
                     X[i,:] = xₙ
                     accepted = 1
@@ -60,12 +66,12 @@ function SequentialMonteCarlo(X₀, p, γ; μ=0.1, progress=noop, n_mcmc_updates
                 accepted
             end
             acceptance_rate[n] += n_accepted
+            
+            # normalize weights
+            W = W.*Wₙ / vecdot(W, Wₙ)
         end
         acceptance_rate[n] /= N * n_mcmc_updates
 
-        # compute new weights
-        W = W.*Wₙ / vecdot(W, Wₙ)
-        
         # resample
         ESS = 1 / vecdot(W,W)
         ess[n] = ESS
