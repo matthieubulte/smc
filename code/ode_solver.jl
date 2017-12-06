@@ -18,10 +18,11 @@ end
 function rk4s!(B, f, x, ts, τ)
     t = ts[1]
     for it = 1:length(ts)
-        while t < ts[it]
+        while abs(t - ts[it]) > 1e-8
+            t += min(ts[it], t+τ)-t
             x = rk4(f, x, τ)
-            t = min(ts[it], t + τ)
         end
+        t = ts[it]
 
         B[it,:] = x
     end

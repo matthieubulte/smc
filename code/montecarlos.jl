@@ -11,7 +11,7 @@ function MetropolisHastings(K, Π, γ, x₀)
     for k=1:K
         y = x + rand(w)
         πₙ = Π(y)
-        if rand() < min(1, πₙ / πₓ)
+        if rand() < min(1, exp(πₙ - πₓ))
             x = y
             πₓ = πₙ
             accepted += 1
@@ -21,7 +21,7 @@ function MetropolisHastings(K, Π, γ, x₀)
         Y[k,:] = y
         X[k,:] = x
     end
-    X, Y, W, accepted
+    X, Y, exp.(W), accepted
 end
 
 function noop(n,W,X,A,ESS) 

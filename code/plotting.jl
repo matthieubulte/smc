@@ -11,7 +11,7 @@ function plotMCMC(output)
 
     subplot(223)
     title("K(xᵢ₊₁, xᵢ)")
-    scatter(1:(length(W)-1), min(1, W[2:end] ./ W[1:end-1]), s=0.1)
+    scatter(1:(length(W)-1), min.(1, W[2:end] ./ W[1:end-1]), s=0.1)
 
     subplot(224)
     title("dμʸ / dμ₀(xᵢ)")
