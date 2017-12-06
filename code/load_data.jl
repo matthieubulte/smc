@@ -22,5 +22,5 @@ end
 # maskᵢⱼ = 0 if dataᵢⱼ is missing, 1 otherwise 
 function load_experiments()
     X = open(readdlm, filename)
-    X, abs(sign(X))
+    X, abs.(sign.(X))
 end
