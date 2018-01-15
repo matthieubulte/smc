@@ -1,24 +1,13 @@
 function plotMCMC(output)
     X, Y, W, accepted = output
     
-    subplot(221)
-    title("dμʸ / dμ₀")
+    subplot(121)
+    title("pdf")
     PyPlot.plt[:hist](X, 40)
 
-    subplot(222)
-    title("xᵢ")
+    subplot(122)
+    title("g")
     scatter(1:length(X), X, s=0.1)
-
-    subplot(223)
-    title("K(xᵢ₊₁, xᵢ)")
-    scatter(1:(length(W)-1), min.(1, W[2:end] ./ W[1:end-1]), s=0.1)
-
-    subplot(224)
-    title("dμʸ / dμ₀(xᵢ)")
-    WW = W/sum(W)
-    
-    ylim(minimum(WW)*0.95, maximum(WW)*1.05)
-    scatter(1:length(W), WW, s=0.1)
     
     println(
         "$(accepted) / $(length(X)) of the sampled particles were accepted ($(round(accepted/length(X) * 100))%)
