@@ -1,0 +1,37 @@
+\begin{thebibliography}{1}
+
+\bibitem{bayes-tutorial}
+Moritz Allmaras, Wolfgang Bangerth, Jean~Marie Linhart, Javier Polanco, Fang
+  Wang, Kainan Wang, Jennifer Webster, and Sarah Zedler.
+\newblock Estimating parameters in physical models through bayesian inversion:
+  A complete example.
+\newblock {\em SIAM Review}, 55(1):149--167, 2013.
+
+\bibitem{chopin_2002}
+Nicolas Chopin.
+\newblock A sequential particle filter method for static models.
+\newblock {\em Biometrika}, 89(3):539--552, 2002.
+
+\bibitem{del_moral_2006}
+Pierre Del~Moral, Arnaud Doucet, and Ajay Jasra.
+\newblock Sequential monte carlo samplers.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 68(3):411--436, 2006.
+
+\bibitem{hadamard}
+Jacques Hadamard.
+\newblock {Sur les probl\`{e}mes aux d\'{e}riv\'{e}s partielles et leur
+  signification physique}.
+\newblock {\em Princeton University Bulletin}, 13:49--52, 1902.
+
+\bibitem{kaipio2006statistical}
+Jari Kaipio and Erkki Somersalo.
+\newblock {\em Statistical and computational inverse problems}, volume 160.
+\newblock Springer Science \& Business Media, 2006.
+
+\bibitem{stuart_2010}
+A.~M. Stuart.
+\newblock Inverse problems: A bayesian perspective.
+\newblock {\em Acta Numerica}, 19:451–559, 2010.
+
+\end{thebibliography}

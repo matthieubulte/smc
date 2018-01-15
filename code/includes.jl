@@ -1,6 +1,6 @@
 using PyPlot
 
-PyPlot.rc("figure", figsize=(8,8))
+PyPlot.rc("figure", figsize=(12,4))
 
 include("plotting.jl")
 
