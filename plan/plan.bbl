@@ -1,0 +1,31 @@
+\begin{thebibliography}{1}
+
+\bibitem{beskos_2015}
+Alexandros Beskos, Ajay Jasra, Ege~A Muzaffer, and Andrew~M. Stuart.
+\newblock Sequential monte carlo methods for bayesian elliptic inverse
+  problems.
+\newblock {\em Statistics and Computing}, 25(4):727--737, 2015.
+
+\bibitem{chopin_2002}
+Nicolas Chopin.
+\newblock A sequential particle filter method for static models.
+\newblock {\em Biometrika}, 89(3):539--552, 2002.
+
+\bibitem{del_moral_2006}
+Pierre Del~Moral, Arnaud Doucet, and Ajay Jasra.
+\newblock Sequential monte carlo samplers.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 68(3):411--436, 2006.
+
+\bibitem{hadamard}
+Jacques Hadamard.
+\newblock {Sur les probl\`{e}mes aux d\'{e}riv\'{e}s partielles et leur
+  signification physique}.
+\newblock {\em Princeton University Bulletin}, 13:49--52, 1902.
+
+\bibitem{stuart_2010}
+Andrew~M. Stuart.
+\newblock Inverse problems: A bayesian perspective.
+\newblock {\em Acta Numerica}, 19:451–559, 2010.
+
+\end{thebibliography}
