@@ -1,0 +1,62 @@
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+
+\documentclass{article}
+\usepackage{cite}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage[utf8]{inputenc}
+
+\usepackage[ruled,lined]{algorithm2e}
+
+\begin{document}
+
+\date{}
+\title{Sequential Monte Carlo for time-dependent Bayesian Inverse Problems}
+\author{Matthieu Bulté}
+\maketitle
+
+This document is a detailed plan of the Bachelor thesis I intend to write under the supervision of Prof. Ullmann and J. Latz covering Sequential Monte Carlo methods for static Bayesian inverse problems.
+
+The goal of this Bachelor thesis will be to give the mathematical reader a self-contained guide for infering static parameters of time-dependent models from a set of observations. To do this, I will present the Bayesian inverse problem associated to the time-dependent inference task, as well as theoretical properties of this formulation. I will follow with a presentation and analysis of Sequential Monte Carlo methods as a numerical approximation of the solution of the Bayesian inverse problem. I will then conclude with a practical application on a real-world inference problem in order to illustrate theoretical results and assess performances of the numerical method.
+
+The plan of the Bachelor thesis will be the following:
+
+\begin{itemize}
+\item{Introduction}
+  \begin{itemize}
+  \item Inverse problem and ill-posedness, refering to Hadamard's definition \cite{hadamard}
+  \item Pendulum inverse problem 
+  \item Litterature review
+  \end{itemize}
+  
+\item{Bayesian Inverse Problem}
+  \begin{itemize}
+  \item Filtering problem for static problems, similar to \cite{stuart_2010} and \cite{chopin_2002}
+  \item Time-dependent Bayesian updating 
+  \item Characterization of the solution and its well-posedness
+  \end{itemize}
+
+\item{Sequential Monte Carlo}
+  \begin{itemize}
+  \item Monte Carlo to approximate a solution
+  \item Importance Sampling and Sequential Importance Sampling
+  \item Sequential Monte Carlo, presenting the general method defined in \cite{del_moral_2006}
+  \item Kernel choice (focus on MCMC kernels)
+  \item Proof of convergence, probably an adaptation of \cite{beskos_2015}
+  \end{itemize}
+
+\item{Application}
+  \begin{itemize}
+  \item Presentation and bayesian formulation of the Pendulum inverse problem
+  \item Proof that the problem is well-posed
+  \item Presentation and analysis of the SMC numerical solution
+  \end{itemize}
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
