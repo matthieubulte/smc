@@ -1,7 +1,7 @@
 using PyPlot
 using Interact
 
-PyPlot.rc("figure", figsize=(10,4))
+PyPlot.rc("figure", figsize=(10,8))
 
 include("plotting.jl")
 
