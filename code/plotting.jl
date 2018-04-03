@@ -16,7 +16,7 @@ function plotMCMC(output)
 end
 
 function plotSMC(output)
-    W,X,A,ESS,M,V = output
+    W,X,A,ESS,d,u = output
     
     t = 1:length(A)
     
@@ -25,16 +25,14 @@ function plotSMC(output)
     PyPlot.plt[:hist](X, 40, weights=W)
     
     subplot(222)
-    plot(t, M, linewidth=.5,color="black")
-    fill_between(t, M-V, M+V, alpha=0.5, color="lightgrey")
+    title("Weights Range")
+    fill_between(t, d, u, alpha=0.5, color="lightgrey")
     
     subplot(223)
     title("Acceptance rate (mean = $(round(mean(A) * 100)/100))")
     plot(t, A)
-    plot(t, ones(A)*A[end], "r--")
     
     subplot(224)
     title("ESS (mean = $(round(mean(ESS))))")
     plot(t, ESS)
-    plot(t, ones(ESS)*ESS[end], "r--");
 end
