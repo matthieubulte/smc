@@ -1,8 +1,33 @@
+# latex files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+
+# auto folder when using emacs and auctex
+./auto/*
+*.el
+
+
 .ipynb_checkpoints
 notes
 *~
 \#notes\#
 .\#notes
+
 literature/the-bayesian-choice.pdf
 literature/2005-Statistical-and-Computational-Inverse-Problems.pdf
 literature/monte-carlo-strategies-scientific-computing.pdf
