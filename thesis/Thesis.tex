@@ -1,0 +1,52 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage{lmtstyle}
+\usepackage[BCOR1cm]{typearea}
+\usepackage[american]{babel}
+\usepackage{tocbibind}
+\usepackage{parskip}
+\usepackage[latin1]{inputenc}
+\usepackage{a4wide}
+\usepackage{makeidx}
+\usepackage{url}
+\usepackage{doc}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amsmath}
+\graphicspath{{figures/}}
+
+\global\newcommand{\note}[1]{ {\color{red} (NOTE: #1)} }
+
+\title{Sequential Monte Carlo for time-dependent Bayesian Inverse Problems}
+\author{Matthieu Bulté}
+\advisor{Latz, Jonas; M.Sc}
+\supervisor{Ullmann, Elisabeth; Prof. Dr. rer. nat.}
+\dateend{15. June 2018}
+
+\begin{document}
+
+\makemtgtitle
+
+\pagenumbering{roman}
+\include{Abstract}
+\tableofcontents 
+
+\include{Introduction}
+\include{BayesianInverseProblem}
+\include{SequentialMonteCarlo}
+\include{CaseStudy}
+\include{Conclusions}
+\appendix
+\include{Appendix}
+
+\listoffigures
+\listoftables
+
+\bibliographystyle{alpha}
+\bibliography{Bibliography}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

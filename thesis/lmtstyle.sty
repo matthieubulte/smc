@@ -1,0 +1,60 @@
+\pagestyle{headings}
+\sloppy
+
+\renewcommand{\title}[1]{ \newcommand{\inserttitle}{#1} }
+\renewcommand{\author}[1]{ \newcommand{\insertauthor}{#1} }
+\newcommand{\advisor}[1]{ \newcommand{\insertadvisor}{#1} }
+\newcommand{\supervisor}[1]{ \newcommand{\insertsupervisor}{#1} }
+\newcommand{\dateend}[1]{ \newcommand{\insertdateend}{#1} }
+
+
+% TITLE #######################################################################
+\newcommand{\makemtgtitle}
+{
+
+  \thispagestyle{empty}
+  \newpage
+
+  \vspace{5cm}
+  \begin{center}
+    \includegraphics[width=4cm]{TUMLogo_oZ_Outline_schwarz_CMYK}
+  \end{center}
+
+  \begin{center} {\sf 
+      \Large  Technische Universit\"at M\"unchen
+      \smallskip
+      
+      \Large Department of Mathematics
+      \smallskip
+    }
+  \end{center}
+  
+  \vspace{1.5cm}
+  \begin{center}
+    {\large Bachelor's Thesis} 
+  \end{center}
+
+  
+  \vspace{2cm}
+  \begin{center}
+    {\LARGE
+      \bf\inserttitle
+    }
+  \end{center}
+  \begin{center}
+    \large \insertauthor
+  \end{center}
+  \vfill         
+
+  \begin{center}
+    \setlength{\baselineskip}{0.2cm}
+    \large
+    \begin{tabular}{ll}
+      Supervisor: & \insertsupervisor\\
+      Advisor: & \insertadvisor\\
+      Submission Date: &  \insertdateend
+    \end{tabular}
+  \end{center}
+        
+  \include{StatementsEN}  
+}

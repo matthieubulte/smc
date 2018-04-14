@@ -1,0 +1,25 @@
+\chapter{Introduction}
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\thispagestyle{empty}
+
+Understanding physical systems is often done through mathematical models, which parameters allow to predict and understand the behaviour of these systems. Estimating these parameters from a set of measurements, called an \textit{inverse problem}, is a challenging task for which a large variety of methodologies and mathematical frameworks have been developed. This thesis is designed to be a rigorous but approachable guide for practitioners interested in solving inverse problems related to dynamical systems, often found in fields such as biology, robotics and many others. While being a natural fit for such time-dependent problems, the methods presented will also be shown to have desirable properties for static inverse problems.
+
+Inspired by \cite{bayes-tutorial}, this thesis will be structured around a practical case study of solving an inverse problem, this time in the context of a dynamical system, in order to illustrate and validate theoretical concepts and numerical algorithms presented in the thesis. The dynamical system studied along this thesis is a simple pendulum, an idealized model for a pendulum in which the mass of the pendulum and its friction are ignored, described by the following second-order and non-linear differential equation;
+
+\begin{equation} \label{pendulum-diff-eq}
+  \frac{\text{d}^2\theta}{\text{d}t^2} = -\frac{g}{l}\sin(\theta),
+\end{equation}
+
+where $\theta$ is the angle of the pendulum to its resting point, $l$ is the length of the pendulum and $g$ is the acceleration due to gravity, called \textit{gravitational acceleration}. The inverse problem will be to estimate the gravitational acceleration from an data of an experiment in which the pendulum is let go with no initial velocity from an angle $\theta_0$, and where to measurements are the times $(t_1, \ldots, t_n)$ at which the pendulum reaches a zero angle.
+
+This thesis will start with a presentation of \textit{Bayesian data analysis}, a methodology with probabilistic modeling as its core, expressing the solution of the inverse problem as a probability distribution of the parameters, called the \textit{posterior distribution}. We will show how to express inverse problems in this framework using the example of the estimation of the gravitational acceleration. Furthemore, this section will characterize the set of problems having a \textit{well-posed} solution, using Hadamard's \cite{hadamard} definition, and will proove well-posedness of the pendulum inverse problem. For most practical applications the posterior distribution does not have a closed form solution, creating the need to consider numerical approximations of the real posterior. In Section 3, a construction of the \textit{Sequential Monte Carlo} algorithm will be presented, showing it to provide a natural and efficient way of estimating the real posterior distribution. This section will also provide a proof of convergence of the approximation to the exact solution, and illustrate these results by approximating the solution to the pendulum's inverse problem.
+
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "Thesis"
+%%% End:
