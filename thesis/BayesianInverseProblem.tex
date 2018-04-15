@@ -1,5 +1,30 @@
-\chapter{Bayesian Inverse Problem}
-(should this be 'bayesian filtering problem' ? 
+\section{Bayesian Inverse Problem}
+\subsection{Overview}
+
+This section will introduce 
+
+
+
+
+A more mathematical formulation of the inverse problem is the following: given some \textit{observation} $y \in Y$, what is the parameter $x \in X$ solving the equation
+
+\begin{equation}
+  y = \mathcal{G}(x)
+\end{equation}
+
+where $\mathcal{G}$ is the \textit{}, mapping values from the \textit{parameter space} $X$ to the \textit{data space} $Y$, with $X,Y$ vector spaces of finite dimension.
+
+
+
+
+
+thesis is a simple pendulum, an idealized model for a pendulum in which the mass of the pendulum and its friction are ignored, described by the following second-order and non-linear differential equation;
+
+\begin{equation} \label{pendulum-diff-eq}
+  \frac{\text{d}^2\theta}{\text{d}t^2} = -\frac{g}{l}\sin(\theta),
+\end{equation}
+
+where $\theta$ is the angle of the pendulum to its resting point, $l$ is the length of the pendulum and $g$ is the acceleration due to gravity, called \textit{gravitational acceleration}. The inverse problem will be to estimate the gravitational acceleration from an data of an experiment in which the pendulum is let go with no initial velocity from an angle $\theta_0$, and where to measurements are the times $(t_1, \ldots, t_n)$ at which the pendulum reaches a zero angle.
 
 %%% Local Variables:
 %%% mode: latex
