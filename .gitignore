@@ -1,3 +1,6 @@
+# result directory is just very large
+results/
+
 # latex files
 *.aux
 *.lof
