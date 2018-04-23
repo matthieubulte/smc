@@ -13,6 +13,27 @@
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\newtheoremstyle{def}
+  {12pt}   % ABOVESPACE
+  {6pt}   % BELOWSPACE
+  {\normalfont}  % BODYFONT
+  {0pt}       % INDENT (empty value is the same as 0pt)
+  {\bfseries} % HEADFONT
+  {.}         % HEADPUNCT
+  {5pt plus 1pt minus 1pt} % HEADSPACE
+  {}          % CUSTOM-HEAD-SPEC
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{def}
+\newtheorem{definition}{Definition}[section]
+
 \graphicspath{{figures/}}
 
 \global\newcommand{\note}[1]{ {\color{red} (NOTE: #1)} }
@@ -32,7 +53,7 @@
 \tableofcontents 
 
 \include{Introduction}
-\include{BayesianInverseProblem}
+\include{BayesianFiltering}
 \include{SequentialMonteCarlo}
 \include{CaseStudy}
 \include{Conclusions}
