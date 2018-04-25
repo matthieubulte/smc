@@ -9,7 +9,7 @@ We study parametrized models for which the value of the \textit{parameter} $\the
 
 We consider a real system described by $\mathcal{G}$ and the true parameter $\theta_{true} \in \Theta$, and assume that \textit{observations} $y \in Y$ of the system are available from measurements. To model the noise often present in such measurements, we treat $y$ as a realization of $\mathcal{G}(\theta_{true}) + \eta$ where $\eta$ is a mean-zero random variable, usually chosen to be Gaussian with covariance matrix $\Gamma$. This leaves us with the equation
 
-\begin{equation}
+\begin{equation}\label{inverse-formula}
   y = \mathcal{G}(\theta_{true}) + \eta,
 \end{equation}
 
@@ -48,14 +48,14 @@ We proceeded to run an experiment, in which the pendulum was let go from an init
 
 The previous paragraphs focused on giving a definition of inverse and filtering problems. Before starting to discussing frameworks for expressing such problems, we define the useful concept of \textit{well-posedness} first given by Hadamard for describing properties of models of physical phenomena.
 
-\begin{definition}[Well-posedness] A problem is said to be well-posed if it satisfies the following conditions:
+\begin{definition}[Well-posedness] A problem is said to be \textit{well-posed} if it satisfies the following conditions:
   \begin{enumerate}
   \item{a solution exists,}
   \item{the solution is unique,}
   \item{the solution changes continuously with the initial condition.}
   \end{enumerate}
 
-  A problem failing to satisfy these conditions is said to be ill-posed. In the context of inverse problems, the 3rd property should be understand as continuity of the solution of the problem with respect to the data.  
+  A problem failing to satisfy these conditions is said to be \textit{ill-posed}. In the context of inverse problems, the 3rd property should be understand as continuity of the solution of the problem with respect to the data.  
 \end{definition}
 
 A possible way to solve inverse problems is to try to find a value $\hat \theta \in \Theta$ that solves the inverse problem \textit{as well as possible}. This is done by replacing the inverse problem by the optimization problem
@@ -64,9 +64,13 @@ A possible way to solve inverse problems is to try to find a value $\hat \theta 
   \hat\theta = \underset{\theta \in \Theta}{\text{argmin}} \norm{ y - \mathcal{G}(\theta) }_Y.
 \end{equation*}
 
-However, finding a global minimum in the presence of noise is often a difficult task since it might not exist, or the minimized function might admit multiple local minima. Solving the inverse problem by minimization is thus an ill-posed problem. While some of these problems can be addresses by \textit{regularization}, two issues remain unresolved. First, regularization and the choice of the minimized norm are ad hoc decisions that are not part of the modeling process but rather tuning parameters of the optimization problem. Then, assuming that the optimization algorithm does provide an estimate $\hat\theta$, this point estimate does not contain any information about the \textit{uncertainty} around this estimation, making it hard to take decisions based on this result.
+However, finding a global minimum in the presence of noise is often a difficult task since it might not exist, or the minimized function might admit multiple local minima. Solving the inverse problem by minimization is thus an ill-posed problem. While some of these problems can be addresses by \textit{regularization}, two issues remain unresolved. First, regularization and the choice of the minimized norm are ad hoc decisions that are not part of the modeling process but rather tuning parameters of the optimization problem. Then, assuming that the optimization algorithm does provide an estimate $\hat\theta$, this point estimate does not contain any information about the \textit{uncertainty} around this estimation.
 
-We choose instead to study Bayesian methods for solving inverse problems.
+In the Bayesian framework, the inverse problem is treated as a statistical problem. It does not attempt to find a single estimate $\hat\theta$ of the real parameter $\theta_{true}$, but instead tries to find a probability measure $\mu^y$ called the \textit{posterior measure} on the parameter space, incorporating the information available in the model of the data and in the data.
+
+The first step towards obtaining the Bayesian solution to the inverse problem is to augment the model in equation \
+
+
 
 
 %%% Local Variables:
