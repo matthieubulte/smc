@@ -1,14 +1,9 @@
-function plotMCMC(output, loglikelihood, prior)
+function plotMCMC(output)
     X, W, accepted = output
     
     subplot(121)
     title("pdf")
     PyPlot.plt[:hist](X, 40, weights=ones(W)/length(W))
-
-    mesh = linspace(minimum(X), maximum(X), 40)
-    lhood = (g -> -loglikelihood(g)[1] + Distributions.logpdf(prior, g)).(mesh)
-    post = exp.(lhood)
-    plot(mesh, post / 2e-19)
 
     subplot(122)
     title("g")
@@ -19,7 +14,6 @@ function plotMCMC(output, loglikelihood, prior)
         \nThe expectation estimation is of $(mean(X))"
     );
 end
-
 
 function plotSMC(output)
     W,X,A,ESS,d,u = output
