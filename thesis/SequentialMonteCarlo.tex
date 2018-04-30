@@ -1,5 +1,6 @@
 \section{Proofs}
 
+\subsection{bayes' rule}
 
 \begin{theorem}
   \label{duley}
@@ -30,7 +31,7 @@
 \end{theorem}
 
 \begin{proof}
-  Let $\mathbb{Q}_0(\text{d}y) = \rho(y)\text{d}y$ and $\mathbb{Q}(dy|\theta) = \rho(y - \mathcal{G}(\theta))$. Since both measures have a Radon-Nikodym derivative with respect to the Lebesgue measure, we have
+  Let $\mathbb{Q}_0(\text{d}y) = \rho(y)\text{d}y$ and $\mathbb{Q}(dy|\theta) = \rho(y - \mathcal{G}(\theta))\text{d}y$. Since both measures have a Radon-Nikodym derivative with respect to the Lebesgue measure, we have
 
   \begin{equation*}
     \frac{\text{d}\mathbb{Q}}{\text{d}\mathbb{Q}_0}(y|\theta) = \frac{\text{d}\mathbb{Q}}{\text{d}\lambda}(y|\theta)\left(\frac{\text{d}\mathbb{Q}_0}{\text{d}\lambda}(y)\right)^{-1} = \frac{\rho(y - \mathcal{G}(\theta)}{\rho(y)} =: C(y)\rho(u - \mathcal{G}(\theta)).
@@ -44,18 +45,19 @@
     \end{aligned}
   \end{equation*}
 
+  \note{not sure why $\mu(\Theta) = 1$ is required}
+  
   Since $\mathcal{G}$ is continuous and $\mu(\Theta) = 1$, it is also $\mu_0$-measurable. Thus, $\nu$ is well-defined and continuous with respect to $\nu_0$ with Radon-Nikodym derivative
 
   \begin{equation*}
     \frac{\text{d}\nu}{\text{d}\nu_0}(y, \theta) = C(y)\rho(y - \mathcal{G}(\theta)).
   \end{equation*}
 
-  Since $\nu_0$ is a product measure over $Y \times \Theta$, the random variables $y$ and $\theta$ are independent giving $\theta|y = \theta$. This implies that the conditional distribution of $\theta|y$ under $\nu_0$ is then $\nu_0^y = \mu_0$. We further note that since $\rho > 0$ we have $C(y) > 0$ and $\rho(y - \mathcal{G}(\theta)) > 0$ giving
+  Since $\nu_0$ is a product measure over $Y \times \Theta$, the random variables $y$ and $\theta$ are independent giving $\theta|y = \theta$. This implies that the conditional distribution of $\theta|y$ under $\nu_0$ is then $\nu_0^y = \mu_0$. In addition, since $\rho > 0$ we have $C(y) > 0$ and $\rho(y - \mathcal{G}(\theta)) > 0$ giving
 
   \begin{equation*}
     c(y) := \int_\Theta C(y)\rho(y - \mathcal{G}(\theta))\mu_0(\text{d}\theta) > 0 
   \end{equation*}
-
 
   Thus, by Theorem \ref{duley}, the conditional distribution of $\theta|y$ under $\nu$, denoted $\mu^y$, exists and its Radon-Nikodym derivative with respect to $\nu_0^y = \mu_0$ is
 
@@ -66,17 +68,91 @@
   where $Z_y = \int_\Theta\rho(y - \mathcal{G}(\theta))\mu_0(\text{d}\theta)$.
 \end{proof}
 
+\subsection{well-posedness}
+
+\begin{assumption}\label{assumption-ll}
+  The function $\Phi : \Theta \times Y \rightarrow \mathbb{R}$ has the following properties.
+  
+  \begin{enumerate}[i)]
+  \item For every $\epsilon > 0$ and $r > 0$ there is an $M \in \mathbb{R}$ such that, for all $\theta \in \Theta$ and all $y \in Y$ with $\norm{y}_Y < r$,
+    \begin{equation*}
+      \Phi(\theta; y) \ge M - \epsilon\norm{\theta}_\Theta^2.
+    \end{equation*}
+  \item For every $r > 0$ there is a $K > 0$ such that, for all $\theta \in \Theta$ and $y \in Y$ with $\text{max}\{\norm{\theta}_\Theta, \norm{y}_Y\} < r$,
+    \begin{equation*}
+      \Phi(\theta; y) \le K.
+    \end{equation*}
+
+  \item For every $r > 0$ there is a $L > 0$ such that, for all $\theta_1, \theta_2 \in \Theta$ and $y \in Y$ with $\text{max}\{\norm{\theta_1}_\Theta, \norm{\theta_2}_\Theta, \norm{y}_Y\} < r$,
+
+    \begin{equation*}
+      |\Phi(\theta_1; y) - \Phi(\theta_2; y)| \le L\norm{\theta_1 - \theta_2}_\Theta.
+    \end{equation*}
+
+  \item For every $\epsilon > 0$ and $r > 0$ there is a $C \in \mathbb{R}$ such that, for all $y_1, y_2 \in Y$ with $\text{max}\{\norm{y_1}_Y, \norm{y_2}_Y\} < r$, and for all $\theta \in \Theta$,
+
+    \begin{equation*}
+      |\Phi(\theta; y_1) - \Phi(\theta; y_2)| \le \exp(\epsilon\norm{\theta}_\Theta^2 + C)\norm{y_1 - y_2}_Y.
+    \end{equation*}
+  \end{enumerate}
+\end{assumption}
+
+\begin{assumption}\label{assumption-fw}
+  The function $\mathcal{G} : \Theta \rightarrow \mathbb{R}^N$ satisfies the following.
+
+  \begin{enumerate}[i)]
+  \item For every $\epsilon > 0$ there is an $M \in \mathbb{R}$ such that for all $\theta \in \Theta$,
+    \begin{equation*}
+      |\mathcal{G}(\theta)|_\Gamma \le \exp(\epsilon \norm{\theta}_\Theta^2 + M).
+    \end{equation*}
+  \item For every $r > 0$ there is a $K > 0$ such that, for all $\theta_1, \theta_2 \in \Theta$ with $\text{max}\{\norm{\theta_1}_\Theta, \norm{\theta_2}_\Theta\} < r$,
+    \begin{equation*}
+      |\mathcal{G}(\theta_1) - \mathcal{G}(\theta_2)|_\Gamma \le K\norm{\theta_1 - \theta_2}_\Theta.
+    \end{equation*}
+  \end{enumerate}
+\end{assumption}
+
+\begin{lemma} \label{fw-implies-ll}
+  Assume that $\mathcal{G} : \Theta \rightarrow \mathbb{R}^N$ satisfies Assumption \ref{assumption-fw}. Then, for any covariance matrix $\Gamma$ and the potential function $\Phi : \Theta \times \mathbb{R}^N \rightarrow \mathbb{R}$ given by
+  \begin{equation*}
+    \Phi(\theta; y) = \frac12 \left|\Gamma^{-1/2}(y - \mathcal{G}(\theta))\right|^2 = \frac12 \left|y - \mathcal{G}(\theta)\right|^2_\Gamma
+  \end{equation*}
+
+  satisfies Assumption \ref{assumption-ll} with $(Y, \norm{\cdot}_Y) = (\mathbb{R}^N, \norm{\cdot}_\Gamma)$.
+\end{lemma}
+
+\begin{proof} This is trivial, can I skip this proof?
+\end{proof}
+
+\begin{lemma} The pendulum problem satisfies Assumption \ref{assumption-ll}.
+\end{lemma}
+
+\begin{proof}
+  We first prove that the solution $x(t)$ of the initial value problem is bounded, which is a stronger property than property i). We start by defining the Hamiltonian
+  \begin{equation*}
+    H(x, x') = \frac12 x'^2 - \frac{g}{l}\cos(x).
+  \end{equation*}
+  By simple calculation, one can show that $H$ is constant along the solution of the initial value problem. Since the initial values are $x_0 \in (0, \pi/2)$ and $x_0' = 0$, we have $H(x(t), x'(t)) = -\frac{g}{l}\cos(x_0) \in (-\frac{g}{l}, 0)$ for all $t > 0$. Assuming that $x(t)$ is not bounded, since $x$ is continuous and $x_0 \le \pi/2$, there is a time $t^\star$ such that $x(t^\star) = \pi$, giving
+  \begin{equation*}
+    H(x(t^\star), x'(t^\star)) = \frac12 x'(t^\star)^2 - \frac{g}{l}cos(x(t^\star)) \ge -\frac{g}{l}\cos(\pi) = \frac{g}{l} > 0.
+  \end{equation*}
+  This contradicts $H(x(t), x'(t)) = H(x_0, x'_0) \in (\frac{g}{l}, 0)$.Thus the solution of the initial value problem is bounded and so is $\mathcal{G}$, proving i).
+  Furthermore, we know that the solution of the initial value problem is continuously differentiable with respect to $g$, it is thus locally Lipschitz continuous everywhere, and so is $\mathcal{G}$, thus completing the proof.
+\end{proof}
+
+\subsection{smc convergence}
+
 \begin{lemma}
   Let $P(E)$ denote the set of all probability measures on $E$. For every $\mu$ and $\nu$ random variables with values in $P(E)$, we define
 
   \begin{equation*}
-    d(\mu, \nu) := \underset{f}{\text{sup}} \sqrt{\mathbb{E}\left[(\mu f - \nu f)^2\right]},
+    d(\mu, \nu) := \underset{f}{\text{sup}} \sqrt{\expec{|\mu f - \nu f|^2}},
   \end{equation*}
 
   where the supremum is taken over all $f : E \rightarrow \mathbb{R}$ with $|f|_\infty \le 1$, and $\mu f$ denotes the integral of $f$ under $\mu$. Then $d$ is a metric over the space of random measures over $E$.
 \end{lemma}
 
-\begin{proof} Trivial enough not skip the proof?
+\begin{proof} Trivial enough to skip the proof?
 \end{proof}
 
 \begin{definition}
@@ -86,11 +162,10 @@
     S^M\mu = \frac1{M}\sum_{i=1}^M\delta_{u_i},
   \end{equation*}
 
-  where $u^{(1)}, \ldots, u^{(M)}$ are i.i.d. random variables distributed according to $\mu$. From the randomness of the samples $u^{(1)}, \ldots, u^{(M)}$, it follows that $S^M\mu$ is a random variable with values in $P(E)$. The operator $\mu \mapsto S^M\mu$ is called the \textit{sampling operator}.
+  where $u^{(1)}, \ldots, u^{(M)}$ are i.i.d. random variables distributed according to $\mu$. From the randomness of the samples $u^{(1)}, \ldots, u^{(M)}$, it follows that $S^M\mu$ is a random variable with values in $P(E)$. The operator $\mu \mapsto S^M\mu$ is called \textit{sampling operator}.
 \end{definition}
 
-
-\begin{lemma}\label{sampling_bound}
+\begin{lemma}\label{sampling-bound}
   The sampling operator satisfies
 
   \begin{equation*}
@@ -108,27 +183,112 @@
   where $f_i = f(u^{(i)}) - \mu f$. This gives
 
   \begin{equation*}
-    \begin{aligned}
-      ((S^M\mu - \mu)(f))^2
-      &= \left(\frac1{M}\sum_{i=1}^Mf(u^{(i)}) - \mu f\right)^2\\
-      &= \frac1{M^2}\sum_{i,j=1}^M(f(u^{(i)}) - \mu f)(f(u^{(j)}) - \mu f)\\
-      &= \frac1{M^2}\sum_{i,j=1}^Mf_if_j.
-    \end{aligned}
+    \left|(S^M\mu - \mu)f\right|^2
+    = \left(\frac1{M}\sum_{i=1}^Mf_i\right)^2
+    = \frac1{M^2}\sum_{i,j=1}^Mf_if_j.
   \end{equation*}
 
-  Since we are interested in the expected value of the initial term, we now consider $\mathbb{E}[f_if_j]$. For $i \neq j$, $f_i$ and $f_j$ are independent random variables, thus $\mathbb{E}[f_if_j] = \mathbb{E}[f_i]\mathbb{E}[f_j]$, and since $u^{(i)} \sim \mu$, we have $\mathbb{E}[f_i] = \mathbb{E}[f(u^{(i)})] - \mu f = 0$, giving $\mathbb{E}[f_if_j] = 0$ for $i \neq j$. Furthermore, since $|f|_\infty \le 1$ we have
+  Since we are interested in the expected value of this term, we now consider $\expec{f_if_j}$. For $i \neq j$, $f_i$ and $f_j$ are independent random variables, thus $\expec{f_if_j} = \expec{f_i}\expec{f_j}$, and since $u^{(i)} \sim \mu$, we have $\expec{f_i} = \expec{f(u^{(i)})} - \mu f = 0$, giving $\expec{f_if_j} = 0$ for $i \neq j$. Furthermore, since $|f|_\infty \le 1$ we have
 
   \begin{equation*}
-    \mathbb{E}[f_i^2] = \text{Var}[f(u^{(i)})] = \mathbb{E}[f(u^{(i)})^2] - \mathbb{E}[f(u^{(i)})]^2 \leq 1.
+    \expec{f_i^2} = \text{Var}[f(u^{(i)})] = \expec{f(u^{(i)})^2} - \expec{f(u^{(i)})}^2 \leq 1.
   \end{equation*}
 
   By linearity of the expected value, we then have for every $f$ with $|f|_\infty \le 1$
 
   \begin{equation*}
-    \mathbb{E}[( (S^M\mu)f - \mu f)^2] = \frac1{M^2}\sum_{i=0}^N\mathbb{E}[f_i^2] \le \frac1{M}.
+    \expec{\left|(S^M\mu)f - \mu f\right|^2} = \frac1{M^2}\sum_{i=1}^M\expec{f_i^2} \le \frac1{M}.
   \end{equation*}
 
   Taking the square root on both sides of the equation and the supremum over all such $f$ yields the desired result.
+\end{proof}
+
+\begin{assumption}\label{kappa-assumption}
+  There exists a $\kappa > 0$ such that for every $n \in \mathbb{N}$ and $\theta \in \Theta$
+
+  \begin{equation*}
+    \kappa \leq l_n(\theta) \leq 1/\kappa.
+  \end{equation*}
+
+  This assumption is weaker than \note{assumption 2.6 in Stuart 2010} if $\Theta$ is compact.
+\end{assumption}
+
+\note{$\Phi_n$ is defined in Beskos 2015, as $\Phi_n = K_nL_{n-1}$ where $K_n$ is a transition kernel and $L_{n-1}$ is the Bayes' rule update, meaning $(L_{n-1}\mu)(du) = \frac{l_{n-1}(u)}{\mu(l_{n-1})}\mu(du)$, where $l_i$ are the likelihoods of the sequence. These values will be properly defined in the thesis and another notation will probably be used. }
+\begin{lemma} \label{seq-bound}
+  Assume that the likelihoods $l_i$ satisfy Assumption \ref{kappa-assumption}. Then for any $n \in \mathbb{N}$ and $\mu, \nu \in P(E)$,
+
+  \begin{equation*}
+    d(\Phi_n\mu, \Phi_n\nu) \leq \frac2{\kappa^2}d(\mu, \nu).
+  \end{equation*}
+\end{lemma}
+
+\begin{proof}
+  Let $f : E \rightarrow \mathbb{R}$ be a measurable function with $|f|_\infty \le 1$, we then have
+
+  \begin{equation*}
+    \begin{aligned}
+      (\Phi_n\mu - \Phi_n\nu)f
+      &= (K_nL_{n-1}\mu - K_nL_{n-1}\nu)f \\
+      &= \frac{\mu(l_{n-1}K_n(f))}{\mu(l_{n-1})} - \frac{\nu(l_{n-1}K_n(f))}{\nu(l_{n-1})} \\
+      &= \frac{\mu - \nu}{\mu(l_{n-1})}(l_{n-1}K_n(f)) + \frac{\nu(l_{n-1}K_n(f))}{\mu(l_{n-1})} - \frac{\nu(l_{n-1}K_n(f))}{\nu(l_{n-1})}\\
+      &= \frac{\mu - \nu}{\mu(l_{n-1})}(l_{n-1}K_n(f)) + \nu(l_{n-1}K_n(f))\left(\frac1{\mu(l_{n-1})} - \frac1{\nu(l_{n-1})}\right)\\
+      &= \frac{\mu - \nu}{\mu(l_{n-1})}(l_{n-1}K_n(f)) + \frac{ \nu(l_{n-1}K_n(f))}{\mu(l_{n-1})\nu(l_{n-1})}(\nu - \mu)(\l_{n-1}).
+    \end{aligned}
+  \end{equation*}
+  
+  By Minkowski's inequality, we then have
+
+  \begin{equation*}
+    \begin{aligned}
+      \sqrt{\expec{|(\Phi_n\mu - \Phi_n\nu)f|^2}}
+      &\leq \expec{\left|\frac{\mu - \nu}{\mu(l_{n-1})}(l_{n-1}K_n(f))\right|^2}^{\frac12}\\
+      &+ \expec{\left|\frac{ \nu(l_{n-1}K_n(f))}{\mu(l_{n-1})\nu(l_{n-1})}(\nu - \mu)(\l_{n-1})\right|^2}^{\frac12}      .
+    \end{aligned}
+  \end{equation*}
+
+
+  In the second term, we observe that $\frac{\nu(l_{n-1}K_n(f))}{\nu{l_{n-1}}}$ is the expectation of $f$ under the probability measure $\Phi_n \nu$. Together with $|f|_\infty \le 1$, this gives us $\frac{\nu(l_{n-1}K_n(f))}{\nu{l_{n-1}}} \le 1$. Similarly, since $l_{n-1}(u) \ge 1/\kappa$ for all $u$, it holds that $\mu(l_{n-1}) \ge \kappa$ and $1 / \mu(l_{n-1}) \le 1/\kappa$. From these two bounds, we obtain
+
+  \begin{equation*}
+    \begin{aligned}
+      \sqrt{\expec{|(\Phi_n\mu - \Phi_n\nu)f|^2}}
+      &\le \frac1\kappa\expec{|(\mu - \nu)(l_{n-1}K_n(f))|^2}^{\frac12}\\
+      &+ \frac1\kappa\expec{|(\mu - \nu)(l_{n-1})|^2}^{\frac12}.
+    \end{aligned}
+  \end{equation*}
+
+
+  Finally, using that $0 \le l_{n-1} \le 1/\kappa$, we have $|\kappa l_{n-1}|_\infty \le 1$ and similarly $[l_{n-1}K_n(f)](u) = \int_{\Theta} f(y)l_{n-1}(u)K_n(u, \text{d}y) \leq |fl_{n-1}|_\infty K_n(\Theta, u) \leq 1 / \kappa$, thus making $|\kappa l_{n-1}K_n(f)|_\infty \leq 1$. We can thus bound our expression by the supremum over all $g$ with $|g|_\infty \le 1$ and get
+
+  \begin{equation*}
+    \sqrt{\expec{|(\Phi_n\mu - \Phi_n\nu)f|^2}} \le \frac2{\kappa^2}\underset{g}{\text{sup}} \sqrt{\expec{|\mu g - \nu g|^2}} =  \frac2{\kappa^2}d(\mu, \nu).
+  \end{equation*}
+
+  Since this result is valid for all $f$ with $|f|_\infty \le 1$, taking the supremum on the left side yields the desired result.
+\end{proof}
+
+\note{$\nu_n^M = S^M\Phi_n\nu_{n-1}^M$ and for $n=0$ we dirac approximate with an initial sample of $\nu_0$, this will be better defined in the presentation of the algorithm.}
+\begin{theorem}
+  Assume that the likelihoods $l_i$ satisfy Assumption \ref{kappa-assumption} and consider the SMC algorithm with $M_{thresh} = M$. Then, for any $n \in \mathbb{N}$,
+
+  \begin{equation*}
+    d(\nu_n, \nu_n^M) \leq \sum_{j=0}^n\left(\frac2{\kappa^2}\right)^j\frac1{\sqrt{M}}.
+  \end{equation*}
+\end{theorem}
+
+\begin{proof}
+  For $n=0$, the result hold by direct application of Lemma \ref{sampling-bound}. For $n > 0$ we have by the triangle inequality and Lemmata \ref{sampling-bound} and \ref{seq-bound}
+
+  \begin{equation*}
+    \begin{aligned}
+      d(\nu_n, \nu_n^M)
+      &= d(\Phi_n\nu_{n-1}, S^M\Phi_n\nu_{n-1}^M)\\
+      &\le d(\Phi_n\nu_{n-1}, \Phi_n\nu_{n-1}^M) + d(\Phi_n\nu_{n-1}^M, S^M\Phi_n\nu_{n-1}^M)\\
+      &\le \frac2{\kappa^2}d(\nu_{n-1}, \nu_{n-1}^M) + \frac1{\sqrt{M}}.
+    \end{aligned}
+  \end{equation*}
+
+  Iterating on $n$ gives the desired result.
 \end{proof}
 
 %%% Local Variables:
