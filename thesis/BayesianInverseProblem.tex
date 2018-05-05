@@ -1,0 +1,261 @@
+\section{Bayesian Filtering}
+\subsection{Overview}
+
+This section will introduce and describe the Bayesian for solving time-dependent inverse problems, laying out the theoretical foundations of the taken approach. In Section 2.3 we reformulate the definition of inverse problems for the finite-dimensional time-dependent case. We then present the pendulum problem, which will be studied along the whole thesis to illustrate important ideas. In Section 2.4 we present first present the classical approach for solving inverse problems and the challenges it encounters with noisy data. We next present the Bayesian approach, and show how it incorporates prior information about the structure of the problem to address uncertainty. We then adapt the definition of the pendulum problem to the Bayesian framework. Finally, Section 2.5 presents important results, including a characterization of the class of well-posed inverse problems. We conclude the section by proving that the pendulum problem is well-posed.
+
+\subsection{Set-Up}
+
+We study parametrized models for which the value of the \textit{parameter} $u \in X$ is unknown or uncertain. To model the behaviour of the system, we introduce \textit{forward response operators} $\mathcal{G} : X \rightarrow Y$ mapping values of the \textit{parameter space} to the \textit{data space}, assuming both spaces to be finite-dimensional vector spaces.
+
+We consider a real system described by $\mathcal{G}$ and the true parameter $u^* \in X$, and assume that \textit{observations} $y_{obs} \in Y$ of the system are available from measurements. The data $y$ is then the image of the true parameter under the mapping $\mathcal{G}$. Due to noise present in the data, we obtain the following approximate model
+
+\begin{equation}\label{inverse-formula}
+  y_{obs} \approx \G(u^*),
+\end{equation}
+
+and the question \textit{To which extent can we find the \textit{inverse} of the data $y_{obs}$ under the forward response operator $\G$?} Answering this question is known as the \textit{inverse problem}.
+
+In this thesis, we are interested in solving the inverse problem by incrementaly building up knowledge about the unknown. To do this, we decompose the data and consider a growing sequence of observations made available for analysis. The advantages of this approach are twofold. First, it allows to perform inference on running dynamical systems and update our knowledge as more measurements become available. Second, it can also be used for non-dynamical problems in the hope to transform one hard problem in a sequence of smaller problems that can hopefully be solved more efficiently.
+
+In this sequential formulation, the data $y$ is decomposed in a finite sequence of observations $y_{obs} = (y_{obs}^{(1)}, \ldots, y_{obs}^{(N)})$ \note{maybe it's relevant to cite \cite{chopin_2002} here}. We also decompose the forward response oeprator $\G$ in a sequence of operators $\{\G_i\}_{i=1}^N$ such that
+
+\begin{equation*}
+  y_{obs}^{(i)}\approx \G_i(u^*).
+\end{equation*}
+
+
+This allows us to reformulate the question from above as \textit{How can we use new observations to update our knowledge about $\theta_{true}$?} Answering this new question is called the \textit{filtering problem}, and solving inserve and filtering problems will be the focus of this thesis.
+
+One situation where this decomposition can naturally be used is when the system is described by a initial value problem of the form
+
+\begin{equation}
+  \begin{aligned}
+    \frac{\text{d}x}{\text{d}t} &= f(x; u^*)\\
+    x(0) &= x_0,
+  \end{aligned}
+\end{equation}  
+
+where $u^* \in X$ is the parameter of the model, and the solution $x(t; u^*)$ is assumed to exist for every time $t \geq 0$. The sequence of observations then correspond to measurements at times  $0 \leq t_1 < \ldots < t_N$. We further use an \textit{observational operator} $\mathcal{O}$ to model the measurement procedure, mapping states of the system to observations. The sequence of forward response operator is $\G_i : X \rightarrow Y$ are then given by $\G_i = \mathcal{O} \circ x(t_i; \cdot)$. We illustrate this in the next section.
+
+\subsection{Pendulum problem}
+
+We now introduce a filtering problem that will guide the rest of the thesis. Using a pendulum, we would like to estimate the value of the Earth's gravitational acceleration. To do this, we first had to model the behaviour of the pendulum using a model parametrized by the gravitational acceleration $g$. We chose to use the \textit{simple pendulum model}, a simplified model that ignores the mass of the hanging mass and of the string, ignores the forces of friction present on the hanging mass and assumes the movement on the pendulum is only happening on one plane. This model is illustrated in Figure 1. This simplification allows to model the state of the pendulum with a single value $x(t)$ representing the angle of the pendulum to the resting point, described by the following differential equation
+
+\begin{equation}
+  \frac{\text{d}^2x}{\text{d}t^2} = -\frac{g}{l}\sin(x).
+\end{equation}
+
+In this model, $g$ is the Earth's gravitational acceleration and $l$ is the length of the string holding the hanging mass.
+
+We proceeded to run an experiment, in which the pendulum was let go from an initial angle of $5^\circ$ and no initial velocity. We then measured the first $N = 11$ times at which the pendulum was aligned with the vertical axis, indicating a null angle.
+
+\subsection{Bayesian filtering}
+
+The previous paragraphs focused on giving a definition of inverse and filtering problems. Before starting to discuss solutions to these problems, we present the concept of \textit{well-posedness} first given by Hadamard for describing properties of models of physical phenomena.
+
+\begin{definition} A problem is said to be \textit{well-posed} if it satisfies the following conditions:
+  \begin{enumerate}
+  \item{a solution exists,}
+  \item{the solution is unique,}
+  \item{the solution changes continuously with the initial condition.}
+  \end{enumerate}
+
+  A problem failing to satisfy these conditions is said to be \textit{ill-posed}. In the context of inverse problems, the 3rd property should be understand as continuity of the solution of the problem with respect to the data.  
+\end{definition}
+
+A possible way to solve inverse problems is to try to find a value $u^* \in X$ that solves the inverse problem \textit{as well as possible}. This is done by replacing the inverse problem by the optimization problem
+
+\begin{equation*}
+  u^* = \underset{u \in X}{\text{argmin}} \norm{ y_{obs} - \G(u) }_Y.
+\end{equation*}
+
+However, finding a global minimum in the presence of noise is often a difficult task since it might not exist, or the minimized function might admit multiple local minima. Solving the inverse problem by minimization is thus an ill-posed problem. While some of these difficulties can be addresses by \textit{regularization}, two issues remain unresolved. First, regularization and the choice of the minimized norm are \textit{ad hoc} decisions that are not part of the modeling process. Then, assuming that the optimization algorithm does provide an estimate $\hat u$, this point estimate does not contain information about the quality, or \textit{uncertainty}, of this estimation. We chose to study a different approach for solving inverse problems: the Bayesian framework.
+
+In the Bayesian framework, the model is not anymore treated as an equation that has to be inverted, but rather as an encoding the relation between the knowns and the unknowns of the system. In this encoding, we represent every variable using \textit{random variables} and refine the model to include every available information of the system. This allows us to rewrite the standard inverse problem as follows
+
+\begin{equation}
+  y = \G(u) + \eta.
+\end{equation}
+
+Here, the variable $y$ models the measurements of the system, and the observations $y_{obs}$ are treated as realizations of this random variable. Existing knowledge about the parameter \textit{prior} collecting the data is incorporated in the distribution of $u$, called the \textit{prior distribution} with measure $\mu_0$. The remaining variable $\eta$ is used to represents the uncertainty in the observations $y$. Commonly, $\eta$ is used to incorporate measurement noise or modelling error, and is often model using a mean-zero Gaussian distribution.
+
+The coupling of these random variables allows to answer a wide range of questions about the model through the use of conditioning. For instance, in a situation where the real parameter $u = u^*$ is known, we can consider the conditioned random variable $y|u$. The probability density of this conditioned random variable is refered to as the \textit{likelihood function}. If  $\rho$ denotes the density function of $\eta$, the likelihood function is
+
+\begin{equation}\label{def-ell}
+  \ell(y|u) := \rho(y - \G(u)).
+\end{equation}
+
+Motivated by the wide use of the Gaussian distribution for error modeling, we assume throughout the thesis that the likelihood function can be written as
+
+\begin{equation} \label{exponential-ell}
+  \ell(y|u) = \exp(-\Phi(u;y)),
+\end{equation}
+
+where $\Phi$ is called a \textit{potential function}, or \textit{negative log-likelihood}. In the case where the uncertainty is modeled by a multivariate Gaussian distribution $\eta \sim \mathcal{N}(0, \Gamma)$, the potential function is given by
+
+\begin{equation} \label{gaussian-potential}
+  \Phi(u; y) = \norm{\Gamma^{-1/2}(y - \G(u))}_Y^2.
+\end{equation}
+\note{reference to the link between regularization and error modeling?}
+
+
+When solving the inverse problem, we are interested in learning how observed data update our prior believes about the model's parameters. This question can be naturally translated into studying the conditional distribution of $u$ under the observations $y = y_{obs}$. The new knowledge about the parameter $u$ is then contained in the distribution of $u|y$, called the \textit{posterior distribution} with measure $\mu^y$. Intuitively, \textit{Bayes' rule} can be used to find the posterior distribution in terms of the prior distribution and the likelihood.
+
+Given a probability triplet $(\Omega, \mathcal{F}, \P)$, and two events $A, B \in \mathcal{F}$ with $\P(B) > 0$, Bayes' rule gives the distribution of the conditioned event $\P(A|B)$ by
+
+\begin{equation*}
+  \P(A|B) = \frac{\P(B|A)\P(A)}{P(B)}.
+\end{equation*}
+
+An informal extension of this theorem to infinitesimal events gives the following relation for the posterior distribution
+
+\begin{equation*}\label{bayes-rule}
+  \mu^y(\text{d}u) \propto \ell(y|u)\mu_0(\d u),
+\end{equation*}
+
+where the $\propto$ symbol denotes proportionality up to a constant factor. While this argument does provide the correct result, the extension of Bayes' rule from events to probability measures is not valid. Moreover, it is not clear which assumptions are made about the model to ensure existence  the solution, and more generally, well-posedness has not been discussed. A more rigorous proof and characterization of well-posed inverse problems will now be presented.
+
+We start by stating the following assumptions
+
+\begin{assumption}\label{assumption-ll}
+  The function $\Phi : X \times Y \rightarrow \mathbb{R}$ has the following properties.
+  
+  \begin{enumerate}
+  \item For every $\epsilon > 0$ and $r > 0$ there is an $M \in \mathbb{R}$ such that, for all $u \in X$ and all $y \in Y$ with $\norm{y}_Y < r$,
+    \begin{equation*}
+      \Phi(u; y) \ge M - \epsilon\norm{u}_X^2.
+    \end{equation*}
+  \item For every $r > 0$ there is a $K > 0$ such that, for all $u \in X$ and $y \in Y$ with $\text{max}\{\norm{u}_X, \norm{y}_Y\} < r$,
+    \begin{equation*}
+      \Phi(u; y) \le K.
+    \end{equation*}
+
+  \item For every $r > 0$ there is a $L > 0$ such that, for all $u_1, u_2 \in X$ and $y \in Y$ with $\text{max}\{\norm{u_1}_X, \norm{u_2}_X, \norm{y}_Y\} < r$,
+
+    \begin{equation*}
+      |\Phi(u_1; y) - \Phi(u_2; y)| \le L\norm{u_1 - u_2}_X.
+    \end{equation*}
+
+  \item For every $\epsilon > 0$ and $r > 0$ there is a $C \in \mathbb{R}$ such that, for all $y_1, y_2 \in Y$ with $\text{max}\{\norm{y_1}_Y, \norm{y_2}_Y\} < r$, and for all $u \in X$,
+
+    \begin{equation*}
+      |\Phi(u; y_1) - \Phi(u; y_2)| \le \exp(\epsilon\norm{u}_X^2 + C)\norm{y_1 - y_2}_Y.
+    \end{equation*}
+  \end{enumerate}
+\end{assumption}
+
+These mild assumptions happen to be rather easy to fulfill for many practical problems. They provide with upper and lower bounds, and Lipshitz continuity with respect to the data $y$ and the parameter $u$.  However, since potential functions often are of the form of (\ref{gaussian-potential}), we are interested in refining these assumptions to the shared structure of such problems.
+
+\begin{assumption}\label{assumption-fw}
+  The function $\G : X \rightarrow \mathbb{R}^N$ satisfies the following.
+
+  \begin{enumerate}
+  \item For every $\epsilon > 0$ there is an $M \in \mathbb{R}$ such that for all $u \in X$,
+    \begin{equation*}
+      |\G(u)|_\Gamma \le \exp(\epsilon \norm{u}_X^2 + M).
+    \end{equation*}
+  \item For every $r > 0$ there is a $K > 0$ such that, for all $u_1, u_2 \in X$ with $\text{max}\{\norm{u_1}_X, \norm{u_2}_X\} < r$,
+    \begin{equation*}
+      |\G(u_1) - \G(u_2)|_\Gamma \le K\norm{u_1 - u_2}_X.
+    \end{equation*}
+  \end{enumerate}
+\end{assumption}
+
+We can naturally use these assumptions on the forward response operator $\G$ to derive properties of the potential function using the following lemma.
+
+\begin{lemma} \label{fw-implies-ll}
+  Assume that $\G  : X \rightarrow \mathbb{R}^N$ satisfies Assumption \ref{assumption-fw}. Then, for any covariance matrix $\Gamma$, the potential function given by (\ref{gaussian-potential}) satisfies Assumption \ref{assumption-ll} with $(Y, \norm{\cdot}_Y) = (\mathbb{R}^N, \norm{\cdot}_\Gamma)$.
+\end{lemma}
+
+\begin{proof} \note{This is trivial, can I skip this proof?}
+\end{proof}
+
+Using these assumptions, we can now proceed to provide a formal proof of Bayes' rule for continuous random variables and (\ref{bayes-rule}). The following theorem will play a central role in proving
+
+\begin{theorem}
+  \label{duley}
+  Let $\mu, \nu$ be probability measures on $S \times T$, where $(S, \mathcal{A})$ and $(T, \mathcal{B})$ are measurable spaces. Let $(x, y) \in S \times T$. Assume that $\mu \ll \nu$ and that $\mu$ has Radon-Nikodym derivative $\phi$ with respect to $\mu$. Assume further that the conditional distributions of $x|y$ under $\nu$, denoted by $\nu^y(\d x)$, exists. Then the conditional distribution of $x|y$ under $\mu$, denoted $\mu^y(\d x)$, exists and $\mu^y(\d x) \ll \nu^y(\d x)$. The Radon-Nikodym derivative is given by
+
+  \begin{equation}
+    \frac{\d \nu^y}{\d \mu^y}(x) =  \begin{cases}
+      \frac1{c(y)}\phi(x,y) & \text{if $c(y) > 0$, and}\\
+      1 & \text{else,}
+    \end{cases}  
+  \end{equation}
+
+  where $c(y) = \int_{S}\phi(x,y)\d \mu^y(x)$ for all $y \in T$.
+\end{theorem}
+
+\begin{proof}
+  The proof of this theorem is given by Dudley \cite{dudley_2002}.
+\end{proof}
+
+We now state Bayes' rule for continuous distribution and prove it using the previously stated theorem.
+
+\begin{theorem}[Generalized Bayes' Rule]
+  Assume that the likelihood function is given as in (\ref{exponential-ell}) where $\Phi$ satisfies Assumptions (\ref{assumption-ll}) and that $\mu_0(X) = 1$. Then $u | y$ is distributed according to the measure $\mu^y$, with $\mu^y \ll \mu_0$ and Radon-Nikodym derivative with respect to $\mu_0$ given by
+
+  \begin{equation}
+    \frac{\d \mu^y}{\d \mu_0}(u) = \frac1{Z_y}\exp(-\Phi(u;y)),
+  \end{equation}
+
+  where $Z_y$ is a constant that only dependends on $y$ and not on $u$, called the \textit{model evidence}.
+\end{theorem}
+
+\begin{proof}
+  Let $\mathbb{Q}_0(\d y) = \rho(y)\d y$ and $\mathbb{Q}(\d y|u) = \rho(y - \G (u))\d y$. Since both measures have a Radon-Nikodym derivative with respect to the Lebesgue measure $\lambda$, we have
+
+  \begin{equation*}
+    \frac{\d \mathbb{Q}}{\d \mathbb{Q}_0}(y|u) = \frac{\d \mathbb{Q}}{\d \lambda}(y|u)\left(\frac{\d \mathbb{Q}_0}{\d \lambda}(y)\right)^{-1} = \frac{\rho(y - \G (u)}{\rho(y)} = C(y)\rho(y - \G (u)),
+  \end{equation*}
+
+  where $C(y) := 1 / \rho(y)$ is well defined since Assumption \ref{assumption-ll}.2 gives an upper bound on $\Phi$ thus also giving a strictly positive lower bound on $\rho$. We further define two measures $\nu_0, \nu$ on $Y \times X$ by
+  \begin{equation*}
+    \begin{aligned}
+      \nu_0(\d y, \d u) &= \mathbb{Q}_0(\d y) \otimes \mu_0(\d u)\\
+      \nu(\d y, \d u) &= \mathbb{Q}(\d y|u) \mu_0(\d u).
+    \end{aligned}
+  \end{equation*}
+  
+  Since $\G$ is continuous and $\mu_0(X) = 1$, it is also $\mu_0$-measurable. Thus, $\nu$ is well-defined and continuous with respect to $\nu_0$ with Radon-Nikodym derivative
+
+  \begin{equation*}
+    \frac{\d \nu}{\d \nu_0}(y, u) = C(y)\rho(y - \G(u)).
+  \end{equation*}
+
+  Since $\nu_0$ is a product measure over $Y \times u$, the random variables $y$ and $u$ are independent giving $u|y = u$. This implies that the conditional distribution of $u|y$ under $\nu_0$ is then $\nu_0^y = \mu_0$. In addition, again using Assumption \ref{assumption-ll}.2, we have a strictly positive lower bound on $\rho$ which in turn shows that
+
+  \begin{equation*}
+    c(y) := \int_X C(y)\rho(y - \G(u))\mu_0(\d u) > 0 
+  \end{equation*}
+
+  Thus, by Theorem \ref{duley}, the conditional distribution of $u|y$ under $\nu$, denoted $\mu^y$, exists and its Radon-Nikodym derivative with respect to $\nu_0^y = \mu_0$ is
+
+  \begin{equation*}
+    \frac{\d \mu^y}{\d \mu_0}(u) = \frac1{c(y)}C(y)\rho(y - \G (u)) =  \frac1{Z_y}\rho(y - \G (u)) = \frac1{Z_y}\exp(-\Phi(u;y)).
+  \end{equation*}
+  
+  where $Z_y = \int_X\exp(-\Phi(u;y))\mu_0(\d u)$.
+\end{proof}
+
+
+\begin{definition}
+  A measure $\mu$ on a Banach space $X$ with $\mu(X) = 1$ is called light-tailed if there exists an $\alpha > 0$ such that
+
+  \begin{equation*}
+    \int_X\exp(\alpha\norm{x}^2_X)\mu(\d x) < \infty.
+  \end{equation*}
+\end{definition}
+
+\begin{remarks} Light-tailed measures, as opposed to heavy-tailed measures, have an exponential decay in weights as they come appart from their center. 
+
+  \begin{itemize}
+  \item Every distribution over a compact subset $S \subset X$ is light-tailed.
+  \item The zero-mean Gaussian measure $\mu = \mathcal{N}(0, K)$ over any Banach space is light-tailed. This is a result of Fernique's theorem.
+  \end{itemize}
+\end{remarks}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "Thesis"
+%%% End:

@@ -20,6 +20,9 @@
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\expec}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\G}{\mathcal{G}}
+\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\d}{\text{d}}
 
 \newtheoremstyle{def}
   {12pt}   % ABOVESPACE
@@ -38,6 +41,7 @@
 \theoremstyle{def}
 \newtheorem{assumption}{Asssumption}[section]
 \newtheorem*{remark}{Remark}
+\newtheorem*{remarks}{Remarks}
 \theoremstyle{def}
 \newtheorem{definition}{Definition}[section]
 
@@ -55,12 +59,21 @@
 
 \makemtgtitle
 
+\numberwithin{equation}{section}
 \pagenumbering{roman}
 \include{Abstract}
-\tableofcontents 
+\tableofcontents
+
+\begin{paragraph}
+  things that could be done:
+  \begin{enumerate}
+  \item add examples after definitions
+  \item more structure in first chapter
+  \end{enumerate}
+\end{paragraph}
 
 \include{Introduction}
-\include{BayesianFiltering}
+\include{BayesianInverseProblem}
 \include{SequentialMonteCarlo}
 \include{CaseStudy}
 \include{Conclusions}
