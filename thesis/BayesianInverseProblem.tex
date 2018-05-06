@@ -147,7 +147,7 @@ We start by stating the following assumptions
 These mild assumptions happen to be rather easy to fulfill for many practical problems. They provide with upper and lower bounds, and Lipshitz continuity with respect to the data $y$ and the parameter $u$.  However, since potential functions often are of the form of (\ref{gaussian-potential}), we are interested in refining these assumptions to the shared structure of such problems.
 
 \begin{assumption}\label{assumption-fw}
-  The function $\G : X \rightarrow \mathbb{R}^N$ satisfies the following.
+  The function $\G : X \rightarrow \mathbb{R}^N$ has the following properties.
 
   \begin{enumerate}
   \item For every $\epsilon > 0$ there is an $M \in \mathbb{R}$ such that for all $u \in X$,
@@ -193,7 +193,7 @@ Using these assumptions, we can now proceed to provide a formal proof of Bayes' 
 We now state Bayes' rule for continuous distribution and prove it using the previously stated theorem.
 
 \begin{theorem}[Generalized Bayes' Rule]
-  Assume that the likelihood function is given as in (\ref{exponential-ell}) where $\Phi$ satisfies Assumptions (\ref{assumption-ll}) and that $\mu_0(X) = 1$. Then $u | y$ is distributed according to the measure $\mu^y$, with $\mu^y \ll \mu_0$ and Radon-Nikodym derivative with respect to $\mu_0$ given by
+  Assume that the likelihood function is given as in (\ref{exponential-ell}) where $\Phi$ satisfies Assumptions \ref{assumption-ll} and that $\mu_0(X) = 1$. Then $u | y$ is distributed according to the measure $\mu^y$, with $\mu^y \ll \mu_0$ and Radon-Nikodym derivative with respect to $\mu_0$ given by
 
   \begin{equation}
     \frac{\d \mu^y}{\d \mu_0}(u) = \frac1{Z_y}\exp(-\Phi(u;y)),
@@ -209,7 +209,7 @@ We now state Bayes' rule for continuous distribution and prove it using the prev
     \frac{\d \mathbb{Q}}{\d \mathbb{Q}_0}(y|u) = \frac{\d \mathbb{Q}}{\d \lambda}(y|u)\left(\frac{\d \mathbb{Q}_0}{\d \lambda}(y)\right)^{-1} = \frac{\rho(y - \G (u)}{\rho(y)} = C(y)\rho(y - \G (u)),
   \end{equation*}
 
-  where $C(y) := 1 / \rho(y)$ is well defined since Assumption \ref{assumption-ll}.2 gives an upper bound on $\Phi$ thus also giving a strictly positive lower bound on $\rho$. We further define two measures $\nu_0, \nu$ on $Y \times X$ by
+  where $C(y) := 1 / \rho(y)$ is well defined since Assumption \ref{assumption-ll}(2) gives an upper bound on $\Phi$ thus also giving a strictly positive lower bound on $\rho$. We further define two measures $\nu_0, \nu$ on $Y \times X$ by
   \begin{equation*}
     \begin{aligned}
       \nu_0(\d y, \d u) &= \mathbb{Q}_0(\d y) \otimes \mu_0(\d u)\\
@@ -223,7 +223,7 @@ We now state Bayes' rule for continuous distribution and prove it using the prev
     \frac{\d \nu}{\d \nu_0}(y, u) = C(y)\rho(y - \G(u)).
   \end{equation*}
 
-  Since $\nu_0$ is a product measure over $Y \times u$, the random variables $y$ and $u$ are independent giving $u|y = u$. This implies that the conditional distribution of $u|y$ under $\nu_0$ is then $\nu_0^y = \mu_0$. In addition, again using Assumption \ref{assumption-ll}.2, we have a strictly positive lower bound on $\rho$ which in turn shows that
+  Since $\nu_0$ is a product measure over $Y \times X$, the random variables $y$ and $u$ are independent, giving $u|y = u$. This implies that the conditional distribution of $u|y$ under $\nu_0$ is then $\nu_0^y = \mu_0$. In addition, again using Assumption \ref{assumption-ll}(2), we have a strictly positive lower bound on $\rho$ which in turn shows that
 
   \begin{equation*}
     c(y) := \int_X C(y)\rho(y - \G(u))\mu_0(\d u) > 0 
@@ -238,22 +238,103 @@ We now state Bayes' rule for continuous distribution and prove it using the prev
   where $Z_y = \int_X\exp(-\Phi(u;y))\mu_0(\d u)$.
 \end{proof}
 
+The previous theorems provide a well defined solution to the bayesian inverse problem. In order to consider the problem well-posed, we still need to prove that the solution is continuous with respect to the data $y$. In order to prove this continuity of the solution, we need to define a metric over the space of probability measures.
+
+\begin{definition} The \textit{Hellinger distance} between $\mu$ and $\mu'$ is
+
+  \begin{equation*}
+    d_{Hell}(\mu, \mu') = \sqrt{\frac12\int\left(\frac{\d \mu}{\d \nu} - \frac{\d \mu'}{\d \nu}\right)^2\d \nu},
+  \end{equation*}
+
+  where $\nu$ is an arbitrary measure to which both $\mu$ and $\mu'$ are absolutely continuous.
+\end{definition}
+
+Moreover, we will require the prior measure to have exponentially bounded tails. This is formalized in the following definition.
 
 \begin{definition}
-  A measure $\mu$ on a Banach space $X$ with $\mu(X) = 1$ is called light-tailed if there exists an $\alpha > 0$ such that
+  A probability measure $\mu$ on a Banach space $X$ is called \textit{light-tailed} if there exists an $\alpha > 0$ such that
 
   \begin{equation*}
     \int_X\exp(\alpha\norm{x}^2_X)\mu(\d x) < \infty.
   \end{equation*}
 \end{definition}
 
-\begin{remarks} Light-tailed measures, as opposed to heavy-tailed measures, have an exponential decay in weights as they come appart from their center. 
+The restriction on light-tailed measures still allows to use many common distributions, such as Gaussians and distributions over compact sets, and is thus not too restrictive in practical situations. We can now complete the proof of well-posedness by the following theorem.
 
-  \begin{itemize}
-  \item Every distribution over a compact subset $S \subset X$ is light-tailed.
-  \item The zero-mean Gaussian measure $\mu = \mathcal{N}(0, K)$ over any Banach space is light-tailed. This is a result of Fernique's theorem.
-  \end{itemize}
-\end{remarks}
+\begin{theorem}
+  Let $\Phi$ satisfy Assumptions \ref{assumption-ll} and $\mu_0$ be light-tailed with support equals to $X$. Then $\mu^y$ given in \ref{bayes-rule} is Lipschitz continuous with respect to the data $y$ in the Hellinger distance.
+\end{theorem}
+
+\begin{proof}
+  Since many different temporary constants are being used throughout the proof, we use $C$ as a placeholder for a non-negative constant, and may change its value from term to term.
+
+  Let $y, y' \in Y$ and  $\mu^y, \mu^{y'}$ be the measures obtained by application of Bayes' rule and $Z, Z'$ be the respecting model evidences.
+
+  \begin{equation*}
+    \begin{aligned}
+      |Z - Z'|
+      &= \left|\int_X \exp(-\Phi(u; y)) - \exp(-\Phi(u; y'))  \d \mu_0(u)\right|\\
+      &= \left|\int_X \exp(-\Phi(u; y'))\left(\exp(\Phi(u; y')-\Phi(u; y)) - 1\right)  \d \mu_0(u)\right|\\
+      &\le \int_X \exp(-\Phi(u; y'))\left|\exp(\Phi(u; y')-\Phi(u; y)) - 1\right| \d \mu_0(u)\\
+      &\le \int_X \exp(-\Phi(u; y'))\exp(\Phi(u; y')-\Phi(u; y)) \d \mu_0(u)\\
+      &\le \int_X \exp(-\Phi(u; y'))\left|\Phi(u; y')-\Phi(u; y)\right| \d \mu_0(u)
+    \end{aligned}
+  \end{equation*}
+
+  Since $\mu_0$ is light-tailed, there is an $\epsilon > 0$ such that $\int_X\exp(\epsilon \norm{u}_X^2)\d \mu_0(u) = C < \infty$. Using this $\epsilon / 2$ for Assumption \ref{assumption-ll}(1) and (4), we get
+
+  \begin{equation*}
+    \begin{aligned}
+      |Z - Z'|
+      &\le \int_X \exp(\frac12\epsilon\norm{u}_X^2 - M)\exp(\frac12\epsilon\norm{u}_X^2 + C)\norm{y - y'}_Y \d\mu_0(u) \\
+      &= C  \norm{y - y'}_Y \int_X \exp(\epsilon\norm{u}_X^2) \d\mu_0(u)\\
+      &\le C\norm{y - y'}_Y.
+      \end{aligned}
+  \end{equation*}
+
+  From the definition of the Hellinger distance, we have by triangle inequality
+
+  \begin{equation*}
+    \begin{aligned}
+      2d_{Hell}(\mu^y, \mu^{y'}) &= \int_X\bigg[Z^{-1/2}\exp\left(-\frac12\Phi(u;y)\right) - (Z')^{-1/2}\exp\left(-\frac12\Phi(u; y')\right)\bigg]^2\d\mu_0(u)\\
+      &\le \frac2Z\int_X\bigg[\exp\left(-\frac12\Phi(u;y)\right) - \exp\left(-\frac12\Phi(u; y')\right)\bigg]^2\d\mu_0(u)\\
+      &+ 2\left|Z^{-1/2} - (Z')^{-1/2}\right|^2\int_X\exp\left(-\Phi(u; y')\right)\d\mu_0(u)\\
+      &= I_1 + I_2.
+    \end{aligned}
+  \end{equation*}
+  
+  By using Assumptions \ref{assumption-ll}(1) and (4), and the same reasoning as above, we get
+
+  \begin{equation*}
+    \begin{aligned}
+      \frac{Z}2I_1 &\le \int_X\frac14\exp(\epsilon\norm{u}_X^2 - M)\exp(2\epsilon\norm{u}_X^2 + 2C)\norm{y - y'}_Y^2 \d\mu_0(u)\\
+        & \le C\norm{y - y'}_Y^2.
+    \end{aligned}
+  \end{equation*}
+
+  And we can further show that $Z$ greater than zero using Assumption \ref{assumption-ll}(2), since for every $r > 0$
+  \begin{equation*}
+    Z \ge \int_{\norm{u}_X \le r}\exp(-C)\d\mu_0(u) = \exp(-C)\mu_0(\norm{u}_X \le r) > 0.
+  \end{equation*}
+  Where the last inequality holds because $\mu_0$ has support equal to $X$. This together with the previously given upper bound on $Z / 2 I_1$ gives us $I_1 \le C\norm{y - y'}$.
+
+  Additionally, we have
+
+  \begin{align*}
+    \left|Z^{-1/2} - (Z')^{-1/2}\right|^2
+    &= \left|\frac{\sqrt{Z} - \sqrt{Z'}}{\sqrt{ZZ'}}\right|^2 \leq \left|\frac{\sqrt{Z} - \sqrt{Z'}}{Z \land Z'}\right|^2 \\
+    &= (Z \land Z')^{-3}\left|\sqrt{Z \land Z'}(\sqrt{Z} - \sqrt{Z'})\right|^2\\
+    &\le (Z \land Z')^{-3}\left|Z - Z'\right|^2 \le C\norm{y - y'}_Y^2.
+  \end{align*}
+
+  Where the last inequality holds because both $Z$ and $Z'$ are strictly greater than $0$ and the bound proved earlier. Moreover using Assumption \ref{assumption-ll}(2) and that $\mu_0$ is light-tailed, we can easily show that $\int_X\exp(-\Phi(u; y'))\d\mu_0(u)$ is bounded by a constant. This shows that $I_2 \le C\norm{y - y'}_Y^2$, hence completing the proof.
+\end{proof}
+
+We have shown that the Bayesian inverse problem is well-defined under light conditions on $\Phi$, given in Assumption \ref{assumption-ll}, and provided that the prior measure $\mu_0$ is light-tailed. In the next section, we will model the pendulum problem in the probabilistic framework presented earlier, and will show that it is a well-posed problem.
+
+\subsection{A new take at the Pendulum problem}
+
+
 
 %%% Local Variables:
 %%% mode: latex
