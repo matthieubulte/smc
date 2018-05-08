@@ -41,13 +41,13 @@ where $u^* \in X$ is the parameter of the model, and the solution $x(t; u^*)$ is
 
 We now introduce a filtering problem that will guide the rest of the thesis. Using a pendulum, we would like to estimate the value of the Earth's gravitational acceleration. To do this, we first had to model the behaviour of the pendulum using a model parametrized by the gravitational acceleration $g$. We chose to use the \textit{simple pendulum model}, a simplified model that ignores the mass of the hanging mass and of the string, ignores the forces of friction present on the hanging mass and assumes the movement on the pendulum is only happening on one plane. This model is illustrated in Figure 1. This simplification allows to model the state of the pendulum with a single value $x(t)$ representing the angle of the pendulum to the resting point, described by the following differential equation
 
-\begin{equation}
+\begin{equation}\label{pendulum-ode}
   \frac{\text{d}^2x}{\text{d}t^2} = -\frac{g}{l}\sin(x).
 \end{equation}
 
 In this model, $g$ is the Earth's gravitational acceleration and $l$ is the length of the string holding the hanging mass.
 
-We proceeded to run an experiment, in which the pendulum was let go from an initial angle of $5^\circ$ and no initial velocity. We then measured the first $N = 11$ times at which the pendulum was aligned with the vertical axis, indicating a null angle.
+We proceeded to run an experiment, in which the pendulum was let go from an initial angle of $5^\circ$ and no initial velocity. We then measured the first $N = 9$ times at which the pendulum was aligned with the vertical axis, indicating a null angle.
 
 \subsection{Bayesian filtering}
 
@@ -69,7 +69,9 @@ A possible way to solve inverse problems is to try to find a value $u^* \in X$ t
   u^* = \underset{u \in X}{\text{argmin}} \norm{ y_{obs} - \G(u) }_Y.
 \end{equation*}
 
-However, finding a global minimum in the presence of noise is often a difficult task since it might not exist, or the minimized function might admit multiple local minima. Solving the inverse problem by minimization is thus an ill-posed problem. While some of these difficulties can be addresses by \textit{regularization}, two issues remain unresolved. First, regularization and the choice of the minimized norm are \textit{ad hoc} decisions that are not part of the modeling process. Then, assuming that the optimization algorithm does provide an estimate $\hat u$, this point estimate does not contain information about the quality, or \textit{uncertainty}, of this estimation. We chose to study a different approach for solving inverse problems: the Bayesian framework.
+However, finding a global minimum in the presence of noise is often a difficult task since it might not exist, or the minimized function might admit multiple local minima. Solving the inverse problem by minimization is thus an ill-posed problem. While some of these difficulties can be addresses by \textit{regularization}, two issues remain unresolved. First, regularization and the choice of the minimized norm are \textit{ad hoc} decisions that are not part of the modelling process. Then, assuming that the optimization algorithm does provide an estimate $\hat u$, this point estimate does not contain information about the quality, or \textit{uncertainty}, of this estimation. We chose to study a different approach for solving inverse problems: the Bayesian framework.
+
+\note{maybe skip the bitching?}
 
 In the Bayesian framework, the model is not anymore treated as an equation that has to be inverted, but rather as an encoding the relation between the knowns and the unknowns of the system. In this encoding, we represent every variable using \textit{random variables} and refine the model to include every available information of the system. This allows us to rewrite the standard inverse problem as follows
 
@@ -84,8 +86,9 @@ The coupling of these random variables allows to answer a wide range of question
 \begin{equation}\label{def-ell}
   \ell(y|u) := \rho(y - \G(u)).
 \end{equation}
+\note{maybe extend this to filtering and sequence of likelihoods}
 
-Motivated by the wide use of the Gaussian distribution for error modeling, we assume throughout the thesis that the likelihood function can be written as
+Motivated by the wide use of the Gaussian distribution for error modelling, we assume throughout the thesis that the likelihood function can be written as
 
 \begin{equation} \label{exponential-ell}
   \ell(y|u) = \exp(-\Phi(u;y)),
@@ -96,7 +99,7 @@ where $\Phi$ is called a \textit{potential function}, or \textit{negative log-li
 \begin{equation} \label{gaussian-potential}
   \Phi(u; y) = \norm{\Gamma^{-1/2}(y - \G(u))}_Y^2.
 \end{equation}
-\note{reference to the link between regularization and error modeling?}
+\note{reference to the link between regularization and error modelling? }
 
 
 When solving the inverse problem, we are interested in learning how observed data update our prior believes about the model's parameters. This question can be naturally translated into studying the conditional distribution of $u$ under the observations $y = y_{obs}$. The new knowledge about the parameter $u$ is then contained in the distribution of $u|y$, called the \textit{posterior distribution} with measure $\mu^y$. Intuitively, \textit{Bayes' rule} can be used to find the posterior distribution in terms of the prior distribution and the likelihood.
@@ -113,7 +116,11 @@ An informal extension of this theorem to infinitesimal events gives the followin
   \mu^y(\text{d}u) \propto \ell(y|u)\mu_0(\d u),
 \end{equation*}
 
-where the $\propto$ symbol denotes proportionality up to a constant factor. While this argument does provide the correct result, the extension of Bayes' rule from events to probability measures is not valid. Moreover, it is not clear which assumptions are made about the model to ensure existence  the solution, and more generally, well-posedness has not been discussed. A more rigorous proof and characterization of well-posed inverse problems will now be presented.
+where the $\propto$ symbol denotes proportionality up to a constant factor. This framework for solving inverse problems can be used to express filtering problems, and thus also provide a solution to the later. 
+
+\note{TODO: extend to filtering and show two examples of sequences of likelihoods and their intermediate updates}
+
+While this argument does provide the correct result, the extension of Bayes' rule from events to probability measures is not valid. Moreover, it is not clear which assumptions are made about the model to ensure existence  the solution, and more generally, well-posedness has not been discussed. A more rigorous proof and characterization of well-posed inverse problems will now be presented.
 
 We start by stating the following assumptions
 
@@ -262,7 +269,7 @@ Moreover, we will require the prior measure to have exponentially bounded tails.
 The restriction on light-tailed measures still allows to use many common distributions, such as Gaussians and distributions over compact sets, and is thus not too restrictive in practical situations. We can now complete the proof of well-posedness by the following theorem.
 
 \begin{theorem}
-  Let $\Phi$ satisfy Assumptions \ref{assumption-ll} and $\mu_0$ be light-tailed with support equals to $X$. Then $\mu^y$ given in \ref{bayes-rule} is Lipschitz continuous with respect to the data $y$ in the Hellinger distance.
+  Let $\Phi$ satisfy Assumptions \ref{assumption-ll} and $\mu_0$ be a light-tailed probability measure with support equals to $X$. Then $\mu^y$ given in \ref{bayes-rule} is Lipschitz continuous with respect to the data $y$ in the Hellinger distance.
 \end{theorem}
 
 \begin{proof}
@@ -332,8 +339,54 @@ The restriction on light-tailed measures still allows to use many common distrib
 
 We have shown that the Bayesian inverse problem is well-defined under light conditions on $\Phi$, given in Assumption \ref{assumption-ll}, and provided that the prior measure $\mu_0$ is light-tailed. In the next section, we will model the pendulum problem in the probabilistic framework presented earlier, and will show that it is a well-posed problem.
 
+\note{maybe first spend some time at stating that these properties extend for filtering}
+
 \subsection{A new take at the Pendulum problem}
 
+To model the pendulum problem in the Bayesian framework, we need to define a prior measure for the value of the parameter $g$ and find a distribution to model the measurements error.
+
+In chosing our prior measure, we first note that gravity attracts objects towards the center of the Earth. Given the coordinates system we have chosen, we know that the gravitational acceleration must be a positive value. We can also convince ourselves, by prior experiments or high-school knowledge, that the value of $g$ is lower than $20$. Provided no additional information, the natural choice for the prior distribution is to use a uniform distribution on the interval $[0, 20]$.
+
+For modelling the error, we assume that measurement errors will be symmetrical around $0$, and further assume an error in the measurements of approximately half a second. By simple numerical forward error propagation estimation, we modelled the uncertainty in the angle of the pendulum with a zero-mean Gaussian of variance $0.035$. The left pane of Figure \ref{uncertainty-posteriors} gives an empirical validation of this modelling choice.
+
+We consider the estimation of the gravitational acceleration as a filtering problem, in which the sequence of likelihoods is given by the sequence of potentials obtained by incorporating an increasing number of data points, giving
+
+\begin{equation*}
+  \ell_i(x|g) := \exp\left(-\frac12\sum_{j=1}^i\left|x^{(j)} - \G_j(g)\right|^2\right).
+\end{equation*}
+
+Where $\G_i(u)$ is the solution of the equation \ref{pendulum-ode} at time $t = t_i$ with parameter $g$. The un-normalized posteriors resulting from this model are illustrated in the right pane of Figure \ref{uncertainty-posteriors}.
+
+While the choice of prior is triviallt light-tailed, we still need the following lemma to show that the pendulum problem is well-posed.
+
+\begin{lemma} The pendulum problem satisfies Assumption \ref{assumption-fw}.
+\end{lemma}
+
+
+\begin{figure}[t!]
+  \begin{minipage}{.5\textwidth}
+    \includegraphics[width=\linewidth]{uncertainty}
+  \end{minipage}
+  \begin{minipage}{.5\textwidth}
+    \includegraphics[width=0.97\linewidth]{posteriors}
+  \end{minipage}
+  \caption{Left: numerical forward propagation of time uncertainties through the pendulum's model. Dashed line is the density function of the Gaussian used to model the uncertainty in the probabilistic model. Right: Sequence of posteriors densities after observing $n=0, 3, 6, 9$ data points from light to dark, the lightest and darkest being prior and posterior density. }
+  \label{uncertainty-posteriors}
+\end{figure}
+
+
+\begin{proof}
+  We first prove that the solution $x(t)$ of the initial value problem is bounded, which is a stronger property than property i). We start by defining the Hamiltonian
+  \begin{equation*}
+    H(x, x') = \frac12 x'^2 - \frac{g}{l}\cos(x).
+  \end{equation*}
+  By simple calculation, one can show that $H$ is constant along the solution of the initial value problem. Since the initial values are $x_0 \in (0, \pi/2)$ and $x_0' = 0$, we have $H(x(t), x'(t)) = -\frac{g}{l}\cos(x_0) \in (-\frac{g}{l}, 0)$ for all $t > 0$. Assuming that $x(t)$ is not bounded, since $x$ is continuous and $x_0 \le \pi/2$, there is a time $t^\star$ such that $x(t^\star) = \pi$, giving
+  \begin{equation*}
+    H(x(t^\star), x'(t^\star)) = \frac12 x'(t^\star)^2 - \frac{g}{l}cos(x(t^\star)) \ge -\frac{g}{l}\cos(\pi) = \frac{g}{l} > 0.
+  \end{equation*}
+  This contradicts $H(x(t), x'(t)) = H(x_0, x'_0) \in (\frac{g}{l}, 0)$.Thus the solution of the initial value problem is bounded and so is $\mathcal{G}$, proving i).
+  Furthermore, we know that the solution of the initial value problem is continuously differentiable with respect to $g$, it is thus locally Lipschitz continuous everywhere, and so is $\mathcal{G}$, thus completing the proof.
+\end{proof}
 
 
 %%% Local Variables:
