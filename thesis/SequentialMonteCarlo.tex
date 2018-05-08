@@ -1,26 +1,4 @@
-\section{Proofs}
-
-
-
-\subsection{well-posedness}
-
-
-
-\begin{lemma} The pendulum problem satisfies Assumption \ref{assumption-ll}.
-\end{lemma}
-
-\begin{proof}
-  We first prove that the solution $x(t)$ of the initial value problem is bounded, which is a stronger property than property i). We start by defining the Hamiltonian
-  \begin{equation*}
-    H(x, x') = \frac12 x'^2 - \frac{g}{l}\cos(x).
-  \end{equation*}
-  By simple calculation, one can show that $H$ is constant along the solution of the initial value problem. Since the initial values are $x_0 \in (0, \pi/2)$ and $x_0' = 0$, we have $H(x(t), x'(t)) = -\frac{g}{l}\cos(x_0) \in (-\frac{g}{l}, 0)$ for all $t > 0$. Assuming that $x(t)$ is not bounded, since $x$ is continuous and $x_0 \le \pi/2$, there is a time $t^\star$ such that $x(t^\star) = \pi$, giving
-  \begin{equation*}
-    H(x(t^\star), x'(t^\star)) = \frac12 x'(t^\star)^2 - \frac{g}{l}cos(x(t^\star)) \ge -\frac{g}{l}\cos(\pi) = \frac{g}{l} > 0.
-  \end{equation*}
-  This contradicts $H(x(t), x'(t)) = H(x_0, x'_0) \in (\frac{g}{l}, 0)$.Thus the solution of the initial value problem is bounded and so is $\mathcal{G}$, proving i).
-  Furthermore, we know that the solution of the initial value problem is continuously differentiable with respect to $g$, it is thus locally Lipschitz continuous everywhere, and so is $\mathcal{G}$, thus completing the proof.
-\end{proof}
+\section{Sequential Monte Carlo}
 
 \subsection{smc convergence}
 
