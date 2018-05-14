@@ -17,13 +17,19 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\usetikzlibrary{arrows,calc,patterns,angles,quotes}
+
+\usepackage[ruled,lined]{algorithm2e}
+\DontPrintSemicolon
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\expec}[1]{\mathbb{E}\left[#1\right]}
 \newcommand{\G}{\mathcal{G}}
 \renewcommand{\P}{\mathbb{P}}
 \renewcommand{\d}{\text{d}}
-
+\newcommand{\trarrow}[1]{\xrightarrow{\text{#1}}}
 \newtheoremstyle{def}
   {12pt}   % ABOVESPACE
   {6pt}   % BELOWSPACE
@@ -39,7 +45,7 @@
 \theoremstyle{def}
 \newtheorem{lemma}{Lemma}[section]
 \theoremstyle{def}
-\newtheorem{assumption}{Asssumption}[section]
+\newtheorem{assumption}{Assumption}[section]
 \newtheorem*{remark}{Remark}
 \newtheorem*{remarks}{Remarks}
 \theoremstyle{def}
@@ -47,7 +53,7 @@
 
 \graphicspath{{figures/}}
 
-\global\newcommand{\note}[1]{ {\color{red} (NOTE: #1)} }
+\global\newcommand{\note}[1]{{\color{red}(#1)}}
 
 \title{Sequential Monte Carlo for time-dependent Bayesian Inverse Problems}
 \author{Matthieu Bulté}
@@ -64,24 +70,13 @@
 \include{Abstract}
 \tableofcontents
 
-\begin{paragraph}
-  things that could be done:
-  \begin{enumerate}
-  \item add examples after definitions
-  \item more structure in first chapter
-  \end{enumerate}
-\end{paragraph}
-
 \include{Introduction}
 \include{BayesianInverseProblem}
 \include{SequentialMonteCarlo}
-\include{CaseStudy}
 \include{Conclusions}
-\appendix
-\include{Appendix}
 
 \listoffigures
-\listoftables
+%\listoftables
 
 \bibliographystyle{alpha}
 \bibliography{Bibliography}
