@@ -1,6 +1,6 @@
 \section{Sequential Monte Carlo}
 \subsection{Overview}
-The last chapter was motivated by validating the use of Bayesian methods for solving inverse problems. However, the solution of Bayesian filtering problems, given by the sequence of posterior measures, often does not have a closed form solution. This requires us to construct numerical estimates of the sequence of posterior measures.
+The last section was motivated by validating the use of Bayesian methods for solving inverse problems. However, the solution of Bayesian filtering problems, given by the sequence of posterior measures, often does not have a closed form solution. This requires us to construct numerical estimates of the sequence of posterior measures.
 
 The class of estimators we will be considering for this task are \textit{sampling estimators}. Such estimators are constructed by using a set of \textit{particles} representing weighted points of the parameter space $X$ in order to estimate the distribution of interest. A building block of such estimators is the following operator
 
@@ -20,9 +20,9 @@ The sampling operator is the simplest building block we will use in the construc
   \mu^y \xrightarrow{\text{sample}} S^M\mu^y.
 \end{equation*}
 
-When only using this single building block, we obtain the \textit{Monte Carlo} estimate, or \textit{empirical measure}, of $\mu^y$. One can easily check that the Monte Carlo estimate is unbiased, and we will later prove that it has a variance of order $\mathcal{O}(M^{-1})$, regardless of the dimension of $X$. This algorithm alone can only be used in specific situations where direct sampling from the distribution of interest is possible. In Bayesian filtering however, the sequence of posterior distributions $\mu^y_t$ is  often too complex to be directly sampled from, and a simple Monte Carlo estimate cannot be constructed. This requires us to extend the Monte Carlo method to let us approximate non-trivial distributions as well. \textit{Sequential Monte Carlo} (SMC) is such a method.
+When only using this single building block, we obtain the \textit{Monte Carlo} estimate, or \textit{empirical measure}, of $\mu^y$. One can easily check that the Monte Carlo estimate is unbiased, and we will later prove that it has a standard deviation of $\mathcal{O}(M^{-1/2})$, regardless of the dimension of $X$. This algorithm alone can only be used in specific situations where direct sampling from the distribution of interest is possible. In Bayesian filtering however, the sequence of posterior distributions $\mu^y_t$ is  often too complex to be directly sampled from, and a simple Monte Carlo estimate cannot be constructed. This requires us to extend the Monte Carlo method to let us approximate non-trivial distributions as well. \textit{Sequential Monte Carlo} (SMC) is such a method.
 
-The rest of the chapter will be structured as follows. In Section 3.2, we will present more building blocks for constructing estimation algorithms and show how we can use them to construct several popular algorithms. These iterations over the simple Monte Carlo estimate will then finally lead us to the SMC algorithm. In Section 3.3, we prove convergence properties of different algorithm blocks, and use these properties to show that the SMC algorithm provides a good estimate of each distribution of the sequence of filtering posterior distributions. We will conclude the chapter in Section 3.4 by presenting and analysing numerical solutions to the pendulum problem.
+The rest of the section will be structured as follows. In Section 3.2, we will present more building blocks for constructing estimation algorithms and show how we can use them to construct several popular algorithms. These iterations over the simple Monte Carlo estimate will then finally lead us to the SMC algorithm. In Section 3.3, we prove convergence properties of different algorithm blocks, and use these properties to show that the SMC algorithm provides a good estimate of each distribution of the sequence of filtering posterior distributions.
 
 \subsection{Sequential Monte Carlo}
 
@@ -88,7 +88,7 @@ We can then verify that the IS algorithm, written as a composition of the two bl
 
 This formulation is thus identical to the previous formulation. However, we will later see how this modular definition of algorithms makes it easier to extend them and study their properties.
 
-The IS method provides an unbiased estimate for the normalizing constant $Z_y$ and a biased estimate for $\mu^y(f)$ with both bias and variance of order $\mathcal{O}(M^{-1})$ \note{ref needed}. However, while this method provides asymptotic convergence results, we are interested in the non asymptotic regime and the constants involved. In this situation were $M$ is fixed, the variance of the estimation is proportional to the variance of the importance weights \note{ref}. This means that the estimator is only good if the importance distribution is \textit{close enough} to the distribution we want to sample from. In practice, finding good importance distributions can be hard for non-standard target distributions, which makes it hard or impossible to directly use IS. Yet, this does not imply that ideas of IS should be completely discarded, and we now show how IS can be extended to sample filtering distributions.
+The IS method provides an unbiased estimate for the normalizing constant $Z_y$ and a biased estimate for $\mu^y(f)$ with both bias of order $\mathcal{O}(M^{-1})$ and variance of order $\mathcal{O}(M^{-1/2})$ \cite{agapiou2017importance}. However, while this method provides asymptotic convergence results, we are interested in the non asymptotic regime and the constants involved. In this situation were $M$ is fixed, the variance of the estimation is proportional to the variance of the importance weights \cite{agapiou2017importance}. This means that the estimator is only good if the importance distribution is \textit{close enough} to the distribution we want to sample from. In practice, finding good importance distributions can be hard for non-standard target distributions, which makes it hard or impossible to directly use IS. Yet, this does not imply that ideas of IS should be completely discarded, and we now show how IS can be extended to sample filtering distributions.
 
 Considering a sequence of distributions such as (\ref{phi-seq}), we can expect consecutive distributions to be approximately close to each other. This means that each distribution $\mu^y_{t-1}$ should be a good importance distribution to use importance sampling on the next distribution $\mu^y_t$. This gives us for each importance sampling step $t$ from $\mu^y_{t-1}$ to $\mu^y_t$ an importance weight function $w_{t-1}$ and a reweighting operator $L_{t-1} = L^{w_{t-1}}$. We can thus iterate reweighting steps to map the prior distribution to any arbitrary distribution of the sequence of posteriors giving $\mu^y_t = (L_{t-1} \circ \ldots \circ L_0) \mu_0$ and
 
@@ -115,7 +115,7 @@ this implies that the reweighting operator can be efficiently implemented by onl
 
 While this appears to be a valid algorithm for estimating the sequence of distributions, it does not work. A simple counter-example would be to consider estimating a sequence of Gaussian distributions shifting away from $\mu_0$ as $t$ increases. Since the initial set of samples will, with high probability, be concentrated around the mean of $\mu_0$, as $t$ increases the distributions will shift away from where the samples are located. This will cause the weights of each particle to decrease as $t$ increases, which in turn will increase the variance of the estimate and make each estimate worse than the previous one.
 
-\paragraph{Sequential Importance Sampling} To avoid this, we introduce an additional step after applying the reweighting operator to \textit{correct} the position of the samples by getting them closer to the target distribution. This should then result in a better importance distribution for the next step. To do this correction, we construct for each posterior distribution $\mu^y_t$ an ergodic Markov chain with stationary distribution $\mu^y_t$ characterized by its Markov kernel $K_t$ from which we know how to sample the next state given the current state, i.e. for every $u \in X$ we can sample from $K_t(u, \cdot)$. Since the Markov chain is ergodic, the limiting distribution of the Markov chain is equal to its stationary distribution $\mu^y_t$ regardless of the initial distribution \note{ref?}. Considering the operator induced by the Markov kernel $K_t$ given by
+\paragraph{Sequential Importance Sampling} To avoid this, we introduce an additional step after applying the reweighting operator to \textit{correct} the position of the samples by getting them closer to the target distribution. This should then result in a better importance distribution for the next step. To do this correction, we construct for each posterior distribution $\mu^y_t$ an ergodic Markov chain with stationary distribution $\mu^y_t$ characterized by its Markov kernel $K_t$ from which we know how to sample the next state given the current state, i.e. for every $u \in X$ we can sample from $K_t(u, \cdot)$. Since the Markov chain is ergodic, the limiting distribution of the Markov chain is equal to its stationary distribution $\mu^y_t$ regardless of the initial distribution \cite{Robert2}. Considering the operator induced by the Markov kernel $K_t$ given by
 
 \begin{equation*}
   (K_t\mu)(f) = \mu(K_t(f)) = \int_X\int_X f(u) K_t(x, \d u) \mu(\d x),
@@ -240,8 +240,6 @@ The final form of the standard Sequential Monte Carlo algorithm is given in Algo
   }
 \end{algorithm}
 
-
-
 \subsection{Convergence of the SMC algorithm}
 
 In this section, we will prove properties of the different building blocks used in the construction of the SMC algorithm and use them to prove convergence of the algorithm. Since the output of the SMC algorithm is not deterministic, but instead a sequence of random probability measures, we will show that each of these approximations converges weakly to the true probabilities in the number of particles $M$ used for the approximation.
@@ -261,7 +259,7 @@ Then $d$ is a metric over the space of random measures on $X$. To lighten the no
 Note that this metric bounds the variance of the unbiased estimate of an integral. Indeed, if we wish to estimate $\mu(f)$ by approximating $\mu$ using the unbiased estimate $\nu$ coming from a randomized algorithm, the variance of the estimate would be given by
 
 \begin{equation*}
-  \mathbb{V}\text{ar}(\nu(f)) = \expec{\left|\nu(f) - \expec{\nu(f)}\right|^2} = \expec{\left|\nu(f) - \mu(f)\right|^2} \le d(\nu, \mu)^2.
+  \mathbb{V}(\nu(f)) = \expec{\left|\nu(f) - \expec{\nu(f)}\right|^2} = \expec{\left|\nu(f) - \mu(f)\right|^2} \le d(\nu, \mu)^2.
 \end{equation*}
 
 Hence, many of the results given in the coming lemma will not only show prove weak convergence of our approximations, but also bound the variance of the estimates as the number of particles increases.
@@ -318,7 +316,7 @@ We start by showing that the sampling operator can approximate any probability m
   Since we are interested in the expected value of this term, we now consider $\expec{f_if_j}$. For $i \neq j$, $f_i$ and $f_j$ are independent random variables, thus $\expec{f_if_j} = \expec{f_i}\expec{f_j}$, and since $U_i \sim \mu$, we have $\expec{f_i} = \expec{f(U_i)} - \mu(f) = 0$, giving $\expec{f_if_j} = 0$ for $i \neq j$. Furthermore, since $|f|_\infty \le 1$ we have
 
   \begin{equation*}
-    \expec{f_i^2} = \mathbb{V}\text{ar}[f(U_i)] = \expec{f(U_i)^2} - \expec{f(U_i)}^2 \leq 1.
+    \expec{f_i^2} = \mathbb{V}[f(U_i)] = \expec{f(U_i)^2} - \expec{f(U_i)}^2 \leq 1.
   \end{equation*}
 
   By linearity of the expected value, we then have for every $f$ with $|f|_\infty \le 1$
@@ -427,7 +425,7 @@ We now show that the composition of reweighting and correction found in the SIS 
   Since this result is valid for all $f$ with $|f|_\infty \le 1$, taking the supremum on the left hand side of the inequality yields the desired result.
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}\label{smc-convergence}
   Assume that the importance weights $w_0, \ldots, w_{T-1}$ satisfy Assumption \ref{kappa-assumption} and consider the SMC algorithm with $M_{thresh} = M$. Then, for any $t \in \mathbb{N}$,
 
   \begin{equation*}
@@ -450,48 +448,9 @@ We now show that the composition of reweighting and correction found in the SIS 
   \end{equation*}
 \end{proof}
 
-This theorem shows that the SMC algorithm has an asymptotical variance $\mathcal{O}(d(\mu_t, \mu^M_t)^2) = \mathcal{O}(M^{-1})$. To conclude this section on the convergence analysis of the SMC algorithm, we first point that while the SMC algorithm is biased \note{ref}, the asymptotical magnitude of the bias is of order $\mathcal{O}(M^{-1})$. Since the mean square error (MSE) can be decomposed as $MSE = bias^2 + variance$, the mean square error of the SMC algorithm is dominated by the variance of the estimate, which is of $\mathcal{O}(M^{-1})$.
 
-\subsection{Numerical solution to the pendulum problem}
 
-In this section, we present and analyse the numerical solution of the filtering problem associated to the pendulum experiment. We start by showing that the pendulum filtering problem satisfy Assumption \ref{kappa-assumption} which implies that the SMC estimation of the sequence of posteriors converges. As a reference, we present the MCMC estimation solution of the Bayesian inverse problem associated to the pendulum problem. 
-
-In the first experiment, we estimate the solution to the Bayesian inverse problem found by considering all the available data of the pendulum problem. We used the MCMC algorithm for $10,000$ steps and construct the Markov chain using Metropolis-Hasting kernel with Gaussian proposals of variance $0.1$. We have found that a burn-in period of $500$ steps was enough to reach equilibrium distribution. After $5$ runs of the algorithm, we find an mean estimate of $\expec{u|y} = 9.86 \pm \mathcal{O}(10^{-3})$ and a variance of $\mathcal{O}(10^{-6})$. This result is consistent with the unnormalized likelihoods presented in Figure \ref{uncertainty-posteriors}, and validate the theoretical results stated in Lemma \ref{sampling-bound}. A typical run of the algorithm is given in Figure \ref{mcmc-figure}.
-
-\begin{figure}[t!]
-  \label{mcmc-figure}
-  \begin{minipage}{.43\textwidth}
-    \includegraphics[width=\linewidth]{mcmc}
-  \end{minipage}
-  \begin{minipage}{.5\textwidth}
-    \includegraphics[width=0.97\linewidth]{mcmc-mixin}
-  \end{minipage}
-  \caption{Left: estimated posterior distribution using $M=10,000$ samples from the MCMC algorithm. Right: samples of the Markov chain for one run on the MCMC algorithm.}
-\end{figure}
-
-However, we are interested in approximating the sequence of filtering posterior distributions arising from the pendulum problem. In the following experiments, we use the sequence of importance weights given in (\ref{pendulum-weights}). Since we fulfill all assumptions stated in Lemma \ref{easy-lemma}, it also satisfies Assumption \ref{kappa-assumption} and the solution provided by the SIS and SMC algorithms weakly converge in $M$ to the true posteriors. In both algorithm, we use Metropolis-Hastings kernels with Gaussian proposals of variance $0.05$. 
-
-In the second experiment, we illustrate why the step of resampling is crucial in the SMC algorithm. We run the SIS algorithm with $M=5,000$ particles and monitor the ESS as well as the importance weights over time. As expected, the experiment shows that the variance of the weights increase with both very large and very small weights, meaning that most of the probability mass of the particle estimate is contained in only a few estimate. This is also shown by the convergence of the ESS to a value of order $\mathcal{O}(1)$. These two results are shown in Figure \ref{sis-figure}.
-
-Finally, we run a last experiment in which we run the SMC algorithm with $M_{thresh} = M/2$ for different values of $M$.
-
-the code is running right now, missing plots are
-\begin{itemize}
-\item sequence of estimates for 5 MCMC updates
-\item convergence of the mean/variance
-\item comparison to MCMC and conclusion of the section
-\end{itemize}
-
-\begin{figure}[h]
-  \label{sis-figure}
-  \begin{minipage}{.5\textwidth}
-    \includegraphics[width=\linewidth]{importance-weights-sis}
-  \end{minipage}
-  \begin{minipage}{.5\textwidth}
-    \includegraphics[width=0.97\linewidth]{ess-decay}
-  \end{minipage}
-  \caption{Left: the evolution of the importance weights of the particle estiamtes. The upper and lower bounds of the shaded area represent the value of the largest and smaller importance weight of the population. We can see that close to the end, a single particle contain almost all mass of the estimated probability measure. Right: evolution of the ESS over time, we see that after half the total number of iterations, the ESS is already only almost 1. }
-\end{figure}
+This theorem shows that the SMC algorithm has an asymptotical standard deviation of $\mathcal{O}(d(\mu_t, \mu^M_t)) = \mathcal{O}(M^{-1/2})$. Furthermore, since the SMC algorithm is at its core an IS algorithm, it also has an asymptoticaly vanishing bias of order $\mathcal{O}(M^{-1})$. Since the mean square error (MSE) can be decomposed as $MSE = bias^2 + variance$, the mean square error of the SMC algorithm is dominated by the variance of the estimate, which is of $\mathcal{O}(M^{-1})$.
 
 %%% Local Variables:
 %%% mode: latex
