@@ -1,5 +1,5 @@
 \section{Numerical solution to the pendulum problem}
-In this section, we present and analyse the numerical solution of the filtering problem associated to the pendulum experiment. We then run the SIS and SMC algorithms to approximate the expected value of the full posterior distribution and analyze their empirical convergence properties. As a reference, we also present the result of the MCMC approximation to the complete data set.
+In this section, we present and analyze the numerical solution of the filtering problem associated to the pendulum experiment. We then run the SIS and SMC algorithms to approximate the expected value of the full posterior distribution and analyze their empirical convergence properties. As a reference, we also present the result of the MCMC approximation to the complete data set.
 
 In the first experiment, we estimate the solution to the Bayesian inverse problem found by considering all the available data collected during the physical experiment. We use the MCMC algorithm for $10,000$ steps after a burn-in period of $500$ steps and construct the Markov chain using Metropolis-Hasting kernel with Gaussian proposals of variance $0.1$. The burn-in period runs the Markov Chain for $500$ steps without collecting the generated samples needed to reach the region of high probability. After $5$ runs of the algorithm, we find an mean estimate of $\expec{u|y} = 9.86 \pm \mathcal{O}(10^{-3})$ and a variance of $\mathcal{O}(10^{-6})$. This result is consistent with the unnormalized likelihoods presented in Figure \ref{uncertainty-posteriors}, and validate the theoretical results stated in Lemma \ref{sampling-bound}. A typical run of the algorithm is given in Figure \ref{mcmc-figure}.
 
@@ -11,7 +11,7 @@ In the first experiment, we estimate the solution to the Bayesian inverse proble
   \begin{minipage}{.5\textwidth}
     \includegraphics[width=0.97\linewidth]{mcmc-mixin}
   \end{minipage}
-  \caption{Left: estimated posterior distribution using $M=10,000$ samples from the MCMC algorithm with burn-in period of $500$ samples. Right: samples of the Markov chain for one run on the MCMC algorithm. We see that the burn-in period allows to have all actualy samples in the zone of high density and converge.}
+  \caption{Left: estimated posterior distribution using $M=10,000$ samples from the MCMC algorithm with burn-in period of $500$ samples. Right: samples of the Markov chain for one run on the MCMC algorithm. We see that the burn-in period allows to have all samples in the zone of high density and converge.}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -21,7 +21,7 @@ In the first experiment, we estimate the solution to the Bayesian inverse proble
   \begin{minipage}{.5\textwidth}
     \includegraphics[width=0.97\linewidth]{ess-decay}
   \end{minipage}
-  \caption{Left: the evolution of the importance weights of the particle estiamtes. The upper and lower bounds of the shaded area represent the value of the largest and smaller importance weight of the population. We can see that close to the end, a single particle contain almost all mass of the estimated probability measure. Right: evolution of the ESS over time, we see that after half the total number of iterations, the ESS is already only almost 1.}\label{sis-figure}
+  \caption{Left: the evolution of the importance weights of the particle estimates. The upper and lower bounds of the shaded area represent the value of the largest and smaller importance weight of the population. We can see that close to the end, a single particle contain almost all mass of the estimated probability measure. Right: evolution of the ESS over time, we see that after half the total number of iterations, the ESS is already only almost 1.}\label{sis-figure}
 
   \bigskip
   

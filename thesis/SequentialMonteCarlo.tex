@@ -26,7 +26,7 @@ The rest of the section will be structured as follows. In Section 3.2, we will p
 
 \subsection{Sequential Monte Carlo}
 
-\paragraph{Importance sampling} An additional basic building block of SMC samplers is the \textit{Importance Sampling} (IS) method. The IS method can be used to estimate probability measures $\mu^y$ of the form of (\ref{bayes-rule}) for which the Radon-Nikodym derivative with respect to the prior $\mu_0$ is only known up to an unknown normalizing constant. To create an estimate, the IS method relies on using an \textit{importance distribution} $\nu$ from which we can easily generate samples. If $\mu^y \ll \nu \ll \mu_0$, then by the chain rule for Radon-Nikodym derivatives and substituting by (\ref{bayes-rule}), we have
+\paragraph{Importance sampling} An additional basic building block of SMC samplers is the \textit{Importance Sampling} (IS) method. The IS method can be used to estimate probability measures $\mu^y$ of the form of (\ref{bayes-rule}) for which the Radon-Nikodym derivative with respect to the prior $\mu_0$ is only known up to an unknown normalizing constant. To create an estimate, the IS method relies on using an \textit{importance distribution} $\nu$ from which we can easily generate samples. If $\mu^y \ll \nu \ll \mu_0$, by the chain rule for Radon-Nikodym derivatives and substituting by (\ref{bayes-rule}), we have
 
 \begin{align*}
   \frac{\d\mu^y}{\d\nu}(u)
@@ -154,7 +154,7 @@ which gives us the transitions from any posterior distribution $\mu_{t-1}^y$ to 
   \mu^y_{t-1} \trarrow{reweight} L_{t-1}\mu^y_{t-1} \trarrow{correct} \Psi_t\mu^y_{t-1} = \mu^y_t.
 \end{equation*}
 
-As previously done, we can apply the sequence of operators to map $\mu_0$ to any posterior distribution of the sequence $\mu^y_t$ giving $\mu^y_t = (\Psi_t \circ \ldots \circ \Psi_1)\mu_0$ and
+As done previously, we can apply the sequence of operators to map $\mu_0$ to any posterior distribution of the sequence $\mu^y_t$ giving $\mu^y_t = (\Psi_t \circ \ldots \circ \Psi_1)\mu_0$ and
 
 \begin{align*}
   \mu_0
@@ -196,7 +196,7 @@ We can verify that this value is indeed bounded by the actual number of samples 
 
 where the inequality is the weighted Jensen's inequality. This tells us that if the weights are too imbalanced, the effective size of our sample is going to be much smaller than the number of particles we have, which results in a Monte Carlo estimate of higher variance.
 
-We thus are interested in modifying our algorithm to control the variance of the weights within our population, and thus keep the ESS over a certain level $M_{thresh}$ close to $M$. To achieve this, the Sequential Monte Carlo (SMC) algorithm controls the ESS after each step of reweighting and performs a step of \textit{resampling} if the ESS is too low. The resampling will reset the population by applying the sampling operator to the current estimate. This will reset every weight to $M^{-1}$ and discard with high probability the particles with lower weights. Specifically, the resampling step maps the current population estimate of the posterior distribution $\mu^y_t$ to a new population with uniform weights,
+We are interested in modifying our algorithm to control the variance of the weights within our population, and thus keep the ESS over a certain level $M_{thresh}$ close to $M$. To achieve this, the Sequential Monte Carlo (SMC) algorithm controls the ESS after each step of reweighting and performs a step of \textit{resampling} if the ESS is too low. The resampling will reset the population by applying the sampling operator to the current estimate. This will reset every weight to $M^{-1}$ and discard with high probability the particles with lower weights. Specifically, the resampling step maps the current population estimate of the posterior distribution $\mu^y_t$ to a new population with uniform weights,
 
 \begin{equation*}
   \sum_{i=1}^MW^i_t\delta_{U_i} \trarrow{resample} S^M\left(\sum_{i=1}^MW^i_t\delta_{U_i}\right) = \sum_{i=1}^M\frac1M\delta_{V_i},
