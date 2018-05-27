@@ -15,7 +15,7 @@ We consider a real system described by $\mathcal{G}$ and the true parameter $u^*
 
 where the equality is not exact due to uncertainties. Our initial question then becomes: \textit{to which extent can we find the inverse of the data $y^{obs}$ under the forward response operator $\G$?} Answering this question is known as the \textit{inverse problem}.
 
-In this thesis, we are interested in solving the inverse problem by incrementaly building up knowledge about the unknown parameter $u^*$. To do this, we decompose the data and consider a growing sequence of observations made available for analysis. The advantages of this approach are twofold. First, it allows to perform inference on running dynamical systems and update our knowledge as more measurements become available. Second, it can also be used in situations where all the data is available to transform one large problem in a sequence of smaller problems that can hopefully be solved more efficiently.
+In this thesis, we are interested in solving the inverse problem by incrementally building up knowledge about the unknown parameter $u^*$. To do this, we decompose the data and consider a growing sequence of observations made available for analysis. The advantages of this approach are twofold. Firstly, it allows to perform inference on running dynamical systems and update our knowledge as more measurements become available. Secondly, it can also be used in situations where all the data is available to transform one large problem in a sequence of smaller problems that can hopefully be solved more efficiently.
 
 In this sequential formulation, the data $y$ is decomposed in a finite sequence of observations $y^{obs} = (y^{obs}_1, \ldots, y^{obs}_T)^\top$. We also decompose the forward response operator $\G$ in a sequence of operators $\G_1, \ldots, \G_T$ such that
 
@@ -111,7 +111,7 @@ where $\Phi$ is called a \textit{potential function}, or \textit{negative log-li
 
 When solving the inverse problem, we are interested in using observed data to update our prior believes about the model's parameter $u$. This question can be naturally translated into studying the conditional distribution of $u$ under the observation $y = y^{obs}$. The new knowledge about the parameter $u$ is then contained in the distribution of $u$ given $y$, called the \textit{posterior distribution} with measure $\mu^y$. Intuitively, \textit{Bayes' rule} can be used to find the posterior distribution in terms of the prior distribution and the likelihood.
 
-Given a probability space $(\Omega, \mathcal{F}, \P)$, and two events $A, B \in \mathcal{F}$ with $\P(B) > 0$, Bayes' rule gives the distribution of the conditioned event $\P(A|B)$ by
+Given a probability space $(\Omega, \mathcal{F}, \P)$, and two events $A, B \in \mathcal{F}$ with $\P(B) > 0$, Bayes' rule gives the distribution of the conditioned event by
 
 \begin{equation*}
   \P(A|B) = \frac{\P(B|A)\P(A)}{\P(B)}.
@@ -123,9 +123,9 @@ An informal extension of this theorem to infinitesimal events gives the followin
   \d\mu^y(u) \propto \ell(y|u)\d\mu_0(u),
 \end{equation}
 
-where the $\propto$ symbol denotes proportionality up to a constant factor. This framework for solving inverse problems can be used to express filtering problems, and thus also provide a solution to the later. 
+where the $\propto$ symbol denotes proportionality up to a constant factor. This framework for solving inverse problems can be used to express filtering problems, and thus also provide a solution to the latter. 
 
-Extending the proposed formulation of inverse problems to filtering problems is done in an intuitive way. The use of a prior distribution to model existing knowledge about the model paramater remains unchanged. However, more structure has to be given to the uncertainty since it now requires a sequence of independent random variables $\eta_1, \ldots, \eta_T$ for each step of the filtering. This provides us with a sequence of potentials $\Phi_1, \ldots, \Phi_T$ and likelihoods $\ell_1, \ldots, \ell_T$ which in turn provide us with a sequence of partial solutions
+Extending the proposed formulation of inverse problems to filtering problems is done in an intuitive way. The use of a prior distribution to model existing knowledge about the model paramater remains unchanged. However, more structure has to be given to the uncertainty since it now requires a sequence of independent random variables $\eta_1, \ldots, \eta_T$ for each step of the filtering. This provides us with a sequence of potentials $\Phi_1, \ldots, \Phi_T$ and likelihoods $\ell_1, \ldots, \ell_T$, which in turn provide us with a sequence of partial solutions
 
 \begin{equation*}
   \d\mu_t^y(u) \propto \ell_t(u|y_{1:t})\d\mu_0(u).
@@ -201,7 +201,7 @@ Using these assumptions, we can now proceed to provide a formal proof of Bayes' 
 
 \begin{theorem}
   \label{duley}
-  Let $\mu, \nu$ be probability measures on $S \times T$, where $(S, \mathcal{A})$ and $(T, \mathcal{B})$ are measurable spaces. Let $(x, y) \in S \times T$. Assume that $\mu \ll \nu$ and that $\mu$ has Radon-Nikodym derivative $\phi$ with respect to $\mu$. Assume further that the conditional distributions of $x|y$ under $\nu$, denoted by $\nu^y(\d x)$, exists. Then the conditional distribution of $x|y$ under $\mu$, denoted $\mu^y(\d x)$, exists and $\mu^y(\d x) \ll \nu^y(\d x)$. The Radon-Nikodym derivative is given by
+  Let $\mu, \nu$ be probability measures on $S \times T$, where $(S, \mathcal{A})$ and $(T, \mathcal{B})$ are measurable spaces. Let $(x, y) \in S \times T$. Assume that $\mu \ll \nu$ and that $\mu$ has Radon-Nikodym derivative $\phi$ with respect to $\mu$. Further assume that the conditional distributions of $x|y$ under $\nu$, denoted by $\nu^y(\d x)$, exists. Then, the conditional distribution of $x|y$ under $\mu$, denoted $\mu^y(\d x)$, exists and $\mu^y(\d x) \ll \nu^y(\d x)$. The Radon-Nikodym derivative is given by
 
   \begin{equation}
     \frac{\d \nu^y}{\d \mu^y}(x) =  \begin{cases}
@@ -265,7 +265,7 @@ We now prove the infinitesimal version of Bayes' rule as stated in (\ref{bayes-r
   where $Z_y = \int_X\exp(-\Phi(u;y))\mu_0(\d u)$.
 \end{proof}
 
-The previous theorems provide a well defined solution to the Bayesian inverse problem. In order to show that the problem is well-posed, we still need to prove that the solution is continuous with respect to the data $y$. Proving continuity of the solution requires us to define a metric over the space of probability measures, we make us of the following metric
+The previous theorems provide a well defined solution to the Bayesian inverse problem. In order to show that the problem is well-posed, we still need to prove that the solution is continuous with respect to the data $y$. Proving continuity of the solution requires us to define a metric over the space of probability measures, we make use of the following metric
 
 \begin{definition} The \textit{Hellinger distance} between $\mu$ and $\mu'$ is
 
@@ -295,7 +295,7 @@ The restriction on light-tailed measures still allows us to use many common dist
 \begin{proof}
   Since many different temporary constants are being used throughout the proof, we use $C$ as a placeholder for a non-negative constant, and may change its value from term to term.
 
-  Let $y, y' \in Y$ and  $\mu^y, \mu^{y'}$ be the measures obtained by application of Bayes' rule and $Z, Z'$ be the respecting model evidences.
+  Let $y, y' \in Y$ and  $\mu^y, \mu^{y'}$ be the measures obtained by application of Bayes' rule and $Z, Z'$ be the respective model evidences.
 
   \begin{equation*}
     \begin{aligned}
@@ -341,9 +341,9 @@ The restriction on light-tailed measures still allows us to use many common dist
 
   And we can further show that $Z$ is greater than zero using Assumption \ref{assumption-ll}(2), since for every $r > 0$
   \begin{equation*}
-    Z \ge \int_{\norm{u}_X \le r}\exp(-C)\d\mu_0(u) = \exp(-C)\mu_0(\norm{u}_X \le r) > 0.
+    Z \ge \int_{\norm{u}_X \le r}\exp(-C)\d\mu_0(u) = \exp(-C)\mu_0(\norm{u}_X \le r) > 0,
   \end{equation*}
-  Where the last inequality holds because $\mu_0$ has support equal to $X$. This, together with the previously given upper bound on $I_1 Z/2$ gives us $I_1 \le C\norm{y - y'}_Y$.
+  where the last inequality holds because $\mu_0$ has support equal to $X$. This, together with the previously given upper bound on $I_1 Z/2$ gives us $I_1 \le C\norm{y - y'}_Y$.
 
   Additionally, we have
 
