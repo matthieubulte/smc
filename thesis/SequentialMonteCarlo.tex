@@ -266,26 +266,35 @@ Hence, many of the results given in the coming lemma will not only show prove we
 
 The following lemma shows that it is enough to prove convergence in the metric $d$ to prove weak convergence of our estimates
 
+
+
 \begin{lemma}
-  Let $(\mu_n)_{n \in \mathbb{N}}$ be a sequence of random probability measures in $\mathcal{P}(X)$ and $\mu \in \mathcal{P}(X)$ such that $\underset{n \rightarrow \infty}{\text{lim}} d(\mu_n, \mu) = 0$, then the sequence $(\mu_n)_{n \in \mathbb{N}}$ converges weakly to $\delta_\mu$.
+  Let $(\mu_n)_{n \in \mathbb{N}}$ be a sequence of random probability measures in $\mathcal{P}(X)$ and $\mu \in \mathcal{P}(X)$ such that $\underset{n \rightarrow \infty}{\text{lim}} d(\mu_n, \mu) = 0$, then the sequence $(\mu_n)_{n \in \mathbb{N}}$ converges to $\delta_\mu$ almost surely.
 \end{lemma}
 \begin{proof}
-  Let $(\mu_n)_{n \in \mathbb{N}}$ be a sequence of random measures converging to $\delta_\mu$ in $d$. We recall that $(\mu_n)_{n \in \mathbb{N}}$ converges weakly to $\delta_\mu$ if and only if
+  Let $(\mu_n)_{n \in \mathbb{N}}$ be a sequence of random measures converging to $\delta_\mu$ in $d$. We recall that $(\mu_n)_{n \in \mathbb{N}}$ converges to $\delta_\mu$ almost surely if and only if
   \begin{equation*}
-    \underset{n \rightarrow \infty}{\text{lim}}\expec{\left|\mu_n(f) - \mu(f)\right|} = 0,
+    \P\left(\underset{n \rightarrow \infty}{\text{lim}}\mu_n = \mu\right) = 1.
   \end{equation*}
 
-  for every continuous and bounded function $f : X \rightarrow \mathbb{R}$. Let $f$ be such a function, we then have by Jensen's inequality
+  Further, using the definition of $d$, we have for all bounded and measurable function $f$ with $|f|_\infty \leq 1$,
+  \begin{align*}
+    \underset{n \rightarrow \infty}{\text{lim}} \expec{|\mu_n(f) - \mu(f)|^2} = 0.
+  \end{align*}
+
+  Since $|f|_\infty \leq 1$ and $\mu_n$ and $\mu$ are probability measures, $|\mu_n(f) - \mu(f)| \leq 2$ and since $\expec{2} = 2$, using the Dominated convergence theorem we obtain
 
   \begin{equation*}
-    \expec{\left|\mu_n(f) - \mu(f)\right|}  = \sqrt{\expec{\left|\mu_n(f) - \mu(f)\right|}^2} \le \sqrt{\expec{\left|\mu_n(f) - \mu(f)\right|^2}}
+    \expec{\underset{n \rightarrow \infty}{\text{lim}}|\mu_n(f) - \mu(f)|^2} = \underset{n \rightarrow \infty}{\text{lim}} \expec{|\mu_n(f) - \mu(f)|^2} = 0.
   \end{equation*}
 
-  Since $f$ is continuous, it is also  measurable and by linearity of the integral and expectation we can assume without loss of generality that $|f|_\infty \le 1$. The proof is completed by bounding the right hand side of the equation by its supremum over all $|f|_\infty \le 1$
+  And since the quantity $\underset{n \rightarrow \infty}{\text{lim}}|\mu_n(f) - \mu(f)|^2$ is non-negative, by taking the supremum over all bounded and measurable $f$, we have
 
   \begin{equation*}
-    \expec{\left|\mu_n(f) - \mu(f)\right|} \le \underset{|f|_\infty\le1}{\text{sup}} \sqrt{\expec{|\mu_n(f) - \mu(f)|^2}} = d(\mu_n, \mu) \overset{n \rightarrow \infty}{\longrightarrow} 0.
+    \P\left(\underset{n \rightarrow \infty}{\text{lim}} \mu_n \neq \mu\right) = \P\left(\underset{n \rightarrow \infty}{\text{lim}}\ \underset{|f|_\infty\leq 1}{\text{sup}}\ |\mu_n(f) - \mu(f)|^2 > 0\right) = 0,
   \end{equation*}
+
+  thus proving the almost sure convergence of $\mu_n$ to $\mu$.
 \end{proof}
 
 We start by showing that the sampling operator can approximate any probability measure to an arbitrary precision using enough samples.
