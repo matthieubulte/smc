@@ -142,7 +142,7 @@ However, when no natural sequence of intermediate measures exists, we need to cr
   \Phi_t(u; y) = \norm{y_{1:t} - \G(u)_{1:t}}_{Y^t}^2 = \sum_{i=1}^t\norm{y_i - \G_i(u)}_Y^2.
 \end{equation}
 
-This method has two main advantages. Firstly, it does not require to have all observations available at each step of the filtering, allowing to perform inference on a running experiment. Secondly, the sequence of posteriors acts as an interpolation between the prior and the posterior, as illustrated in the right panel of Figure \ref{uncertainty-posteriors} of page 15. This property will be shown to be central in the design of the numerical approximations presented later.
+This method has two main advantages. Firstly, it does not require to have all observations available at each step of the filtering, allowing to perform inference on a running experiment. Secondly, the sequence of posteriors acts as an interpolation between the prior and the posterior, as illustrated in the right panel of Figure \ref{uncertainty-posteriors} of page 14. This property will be shown to be central in the design of the numerical approximations presented later.
 
 While the argument presented above provides the correct result, the extension of Bayes' rule from events to probability measures is not valid. Moreover, it is not clear which assumptions were made about the model to ensure existence the solutions, and more generally, well-posedness has not been discussed. We present a more rigorous proof and characterization of well-posed inverse problems in the following section.
 
@@ -151,7 +151,7 @@ While the argument presented above provides the correct result, the extension of
 In this section, we will focus on well-posedness of Bayesian inverse problems. However, as shown in the previous section, a filtering problem can be interpreted as a sequence of inverse problems defined by forward response operators and likelihoods $(\G_1, \ell_1), \ldots, (\G_T, \ell_T)$. A filtering problem is then said to be well-posed if every intermediate inverse problem is well-posed.
 
 
-We start by stating the following assumptions first proposed by Stuart \cite{stuart_2010}
+We start by stating the following assumptions proposed by Stuart \cite{stuart_2010}
 
 \begin{assumption} \label{assumption-ll}
   The function $\Phi : X \times Y \rightarrow \mathbb{R}$ has the following properties.
@@ -244,10 +244,10 @@ We now prove the infinitesimal version of Bayes' rule as stated in (\ref{bayes-r
 \end{theorem}
 
 \begin{proof}
-  Let $\P_0(\d y) = \rho(y)\d y$ and $\P(\d y|u) = \rho(y - \G (u))\d y$. Since both measures have a Radon-Nikodym derivative with respect to the Lebesgue measure $\d y$, we have
+  Let $\P_0(\d y) = \rho(y)\d y$ and $\P(\d y|u) = \rho(y - \G (u))\d y$. Since both measures have a Radon-Nikodym derivative with respect to the Lebesgue measure, we have
 
   \begin{equation*}
-    \frac{\d \P}{\d \P_0}(y|u) = \frac{\d \P}{\d \lambda}(y|u)\left(\frac{\d \P_0}{\d \lambda}(y)\right)^{-1} = \frac{\rho(y - \G (u)}{\rho(y)} = C(y)\rho(y - \G (u)),
+    \frac{\d \P}{\d \P_0}(y|u) = \frac{\d \P}{\d y}(y|u)\left(\frac{\d \P_0}{\d y}(y)\right)^{-1} = \frac{\rho(y - \G (u)}{\rho(y)} = C(y)\rho(y - \G (u)),
   \end{equation*}
 
   where $C(y) := 1 / \rho(y)$ is well defined since Assumption \ref{assumption-ll}(2) gives an upper bound on $\Phi$ thus also giving a strictly positive lower bound on $\rho$. We further define two measures $\nu_0, \nu$ on $Y \times X$ by
@@ -281,7 +281,7 @@ We now prove the infinitesimal version of Bayes' rule as stated in (\ref{bayes-r
 
 The previous theorems provide a well defined solution to the Bayesian inverse problem. In order to show that the problem is well-posed, we still need to prove that the solution is continuous with respect to the data $y$. Proving continuity of the solution requires us to define a metric over the space of probability measures, we make use of the following metric
 
-\begin{definition} Let $\mu$ and $\mu'$ be two measures, both absolutely continuous to an arbitrary measure $\nu$. The \textit{Hellinger distance} between $\mu$ and $\mu'$ is then defined as
+\begin{definition} Let $\mu$ and $\mu'$ be two measures absolutely continuous to an arbitrary measure $\nu$. The \textit{Hellinger distance} between $\mu$ and $\mu'$ is then defined as
 
   \begin{equation*}
     d_{Hell}(\mu, \mu') = \sqrt{\frac12\int\left(\sqrt{\frac{\d \mu}{\d \nu}} - \sqrt{\frac{\d \mu'}{\d \nu}}\right)^2\d \nu}.
@@ -307,25 +307,17 @@ The restriction on light-tailed measures still allows us to use many common dist
 \begin{proof}
   Since many different temporary constants are being used throughout the proof, we use $C$ as a placeholder for a non-negative constant, and may change its value from term to term.
 
-  Let $y, y' \in Y$ and  $\mu^y, \mu^{y'}$ be the measures obtained by application of Bayes' rule and $Z, Z'$ be the respective model evidences. We start by showing that both $Z$ and $Z'$ are bounded by above and below by positive constants. Using Assumption \ref{assumption-ll}(2), and $r > \max\{\norm{y}_Y, \norm{y'}_Y\}$
+  Let $y, y' \in Y$ and  $\mu^y, \mu^{y'}$ be the measures obtained by application of Bayes' rule and $Z, Z'$ be the respective model evidences. We start by showing that both $Z$ and $Z'$ are bounded by above and below by positive constants. Using Assumption \ref{assumption-ll}(2) we have for any $r > 0$
   \begin{equation*}
     Z = \int_X\exp(-\Phi(u; y))\d\mu_0(u) \ge \int_{\norm{u}_X \le r}\exp(-C)\d\mu_0(u) = \exp(-C)\mu_0(\norm{u}_X \le r) > 0,
   \end{equation*}
-  where the last inequality holds because $\mu_0$ has support equal to $X$. Similarly, using $\alpha$ from the light-tailedness of $\mu_0$ and Assumtion \ref{assumption-ll}(1) with $\epsilon = \alpha$, we obtain
-  \begin{align*}
-    Z &= \int_X\exp(-\Phi(u; y))\d\mu_0(u)\\
-      &\le \int_X\exp(-C + \alpha\norm{u}_X^2)\d\mu_0(u)\\
-      &= \exp(-C)\int_X\exp(\alpha\norm{u}_X^2)\d\mu_0(u) < \infty.
-  \end{align*}
-  We thus have constant positive and finite lower and upper bounds on $Z$, which can be analogously derived for $Z'$. Further, using the notation $a \land b = \min\{a, b\}$ and that the exponential function has Lipschitz constant $1$, we have for any $u \in X$
+  where the last inequality holds because $\mu_0$ has support equal to $X$. This shows that $Z$, and analogously $Z'$, have a constant positive lower bound. We introduce the notation $a \land b = \min\{a, b\}$ and using the Lipschitz continuity with Lipschitz constant $1$ of the exponential function, we have for any $u \in X$
   \begin{align*}
     &|\exp(-\Phi(u; y)) - \exp(-\Phi(u; y'))|\\
-    &=\exp\left(-\frac{\Phi(u; y) + \Phi(u; y')}{2}\right)\left|\exp\left(\frac{\Phi(u; y')-\Phi(u; y)}2\right) - \exp\left(\frac{\Phi(u; y)-\Phi(u; y')}2\right)\right|\\
-    &\leq\exp\left(-[\Phi(u;y) \land \Phi(u; y')]\right)|\Phi(u;y) - \Phi(u; y')|.
+    =&\exp\left(-\frac{\Phi(u; y) + \Phi(u; y')}{2}\right)\left|\exp\left(\frac{\Phi(u; y')-\Phi(u; y)}2\right) - \exp\left(\frac{\Phi(u; y)-\Phi(u; y')}2\right)\right|\\
+    \leq&\exp\left(-[\Phi(u;y) \land \Phi(u; y')]\right)|\Phi(u;y) - \Phi(u; y')|.
   \end{align*}
-
-  This allows us to obtain the following upper bound
-
+  Integrating on both sides of the equation allows us to obtain the following upper bound
   \begin{align*}
     |Z - Z'|
     &=\left|\int_X\exp(-\Phi(u; y)) - \exp(-\Phi(u; y'))\d\mu_0(u)\right|\\
@@ -343,18 +335,16 @@ The restriction on light-tailed measures still allows us to use many common dist
       \end{aligned}
   \end{equation}
 
-  From the definition of the Hellinger distance, we 
-
-  \begin{equation*}
-    \begin{aligned}
-      2d_{Hell}(\mu^y, \mu^{y'})^2 &= \int_X\bigg[Z^{-1/2}\exp\left(-\frac12\Phi(u;y)\right) - (Z')^{-1/2}\exp\left(-\frac12\Phi(u; y')\right)\bigg]^2\d\mu_0(u)\\
-      &=\int_X\bigg[Z^{-1/2}\left(\exp\left(-\frac12\Phi(u;y)\right) - \exp\left(-\frac12\Phi(u; y')\right)\right)\\
-      &\ \ \  + \left(Z^{-1/2}- (Z')^{-1/2}\right)\exp\left(-\frac12\Phi(u; y')\right)\bigg]^2\d\mu_0(u)\\
-      &\le \frac2Z\int_X\bigg[\exp\left(-\frac12\Phi(u;y)\right) - \exp\left(-\frac12\Phi(u; y')\right)\bigg]^2\d\mu_0(u)\\
-      &\ \ \ + 2\left|Z^{-1/2} - (Z')^{-1/2}\right|^2\int_X\exp\left(-\Phi(u; y')\right)\d\mu_0(u)\\
-      &=: I_1 + I_2.
-    \end{aligned}
-  \end{equation*}
+  From the definition of the Hellinger distance, we further have
+  \begin{align*}
+    2d_{Hell}(\mu^y, \mu^{y'})^2
+    &= \int_X\bigg[Z^{-1/2}\exp\left(-\frac12\Phi(u;y)\right) - (Z')^{-1/2}\exp\left(-\frac12\Phi(u; y')\right)\bigg]^2\d\mu_0(u)\\
+    &=\int_X\bigg[Z^{-1/2}\left(\exp\left(-\frac12\Phi(u;y)\right) - \exp\left(-\frac12\Phi(u; y')\right)\right)\\
+    &\ \ \  + \left(Z^{-1/2}- (Z')^{-1/2}\right)\exp\left(-\frac12\Phi(u; y')\right)\bigg]^2\d\mu_0(u)\\
+    &\le \frac2Z\int_X\bigg[\exp\left(-\frac12\Phi(u;y)\right) - \exp\left(-\frac12\Phi(u; y')\right)\bigg]^2\d\mu_0(u)\\
+    &\ \ \ + 2\left|Z^{-1/2} - (Z')^{-1/2}\right|^2\int_X\exp\left(-\Phi(u; y')\right)\d\mu_0(u)\\
+    &=: I_1 + I_2.
+  \end{align*}
   
   By using Assumptions \ref{assumption-ll}(1) and (4), and the same reasoning as above, we get
 
@@ -365,25 +355,20 @@ The restriction on light-tailed measures still allows us to use many common dist
     \end{aligned}
   \end{equation*}
 
-  And we can further show that $Z$ is greater than zero using Assumption \ref{assumption-ll}(2), since for every $r > 0$
-  \begin{equation*}
-    Z \ge \int_{\norm{u}_X \le r}\exp(-C)\d\mu_0(u) = \exp(-C)\mu_0(\norm{u}_X \le r) > 0,
-  \end{equation*}
-  where the last inequality holds because $\mu_0$ has support equal to $X$. This, together with the previously given upper bound on $I_1 Z/2$ gives us $I_1 \le C\norm{y - y'}_Y$.
-
-  Additionally, using the notation $a \land b = \min \{a, b\}$, we have
-
+  This, together with the constant postivie lower bound on $Z$, shows $I_1 \le C\norm{y - y'}_Y$. Additionally, we can bound the $I_2$ term using the following result
   \begin{align*}
     \left|Z^{-1/2} - (Z')^{-1/2}\right|^2
     &= \left|\frac{\sqrt{Z} - \sqrt{Z'}}{\sqrt{ZZ'}}\right|^2 \leq \left|\frac{\sqrt{Z} - \sqrt{Z'}}{Z \land Z'}\right|^2 \\
     &= (Z \land Z')^{-3}\left|\sqrt{Z \land Z'}(\sqrt{Z} - \sqrt{Z'})\right|^2\\
-    &\le (Z \land Z')^{-3}\left|Z - Z'\right|^2 \le C\norm{y - y'}_Y^2.
+    &\le (Z \land Z')^{-3}\left|Z - Z'\right|^2 \le C\norm{y - y'}_Y^2,
   \end{align*}
 
-  Where the last inequality holds because both $Z$ and $Z'$ are strictly greater than $0$ and using bound (\ref{bound-z}). Moreover using Assumption \ref{assumption-ll}(2) and that $\mu_0$ is light-tailed, we can easily show that $\int_X\exp(-\Phi(u; y'))\d\mu_0(u)$ is bounded from above by a constant. This shows that $I_2 \le C\norm{y - y'}_Y^2$, hence completing the proof.
+  where the last inequality holds because both $Z$ and $Z'$ are strictly greater than $0$ and using bound (\ref{bound-z}). Moreover using Assumption \ref{assumption-ll}(2) and that $\mu_0$ is light-tailed, we can easily show that $\int_X\exp(-\Phi(u; y'))\d\mu_0(u)$ is bounded from above by a constant. This shows that $I_2 \le C\norm{y - y'}_Y^2$, hence completing the proof.
 \end{proof}
 
 We have shown that the Bayesian inverse problem is well-defined under light conditions on $\Phi$, given in Assumption \ref{assumption-ll}, and provided that the prior measure $\mu_0$ is light-tailed. In the next section, we will model the pendulum problem in the probabilistic framework presented earlier, and will show that it is a well-posed problem.
+
+\subsection{Another look at the Pendulum problem}
 
 \begin{figure}[t!]
   \begin{minipage}{.5\textwidth}
@@ -397,13 +382,12 @@ We have shown that the Bayesian inverse problem is well-defined under light cond
 \end{figure}
 
 
-\subsection{Another look at the Pendulum problem}
 
 To model the pendulum problem in the Bayesian framework, we need to define a prior measure for the value of the parameter $g$ and find a distribution to model the measurements error.
 
 To choose our prior measure, we first note that gravity attracts objects towards the center of the Earth. Given the coordinates system we have chosen, we know that the gravitational acceleration must be a positive value. We can also convince ourselves, by prior experiments or high-school knowledge, that the value of $g$ is close to $10$ and lower than $20$. Provided no additional information, the natural choice for the prior distribution to incorporate the knowledge stated above is to use a Gaussian distribution centered in $10$ with variance $1$, truncated to the interval $[0, 20]$.
 
-For modelling the uncertainty in our measurements, we assume that measurement errors are symmetrical around $0$, and further assume an error in the measurements of approximately half a second. We propagate the time uncertainty through the forward response operator of the pendulum to obtain a empirical estimate of the uncertainty model of the angle measurements. This forward propagation of the error is numerically estimated using the Monte Carlo method, described in Section 3, in which simulated time measurements were perturbated by a zero-mean Gaussian variable of standard deviation $0.5$ and used as new time measurements for the model. The result of this experiment leads us to model the uncertainty in the angles measurements with a zero-mean Gaussian of variance $0.035$. The left panel of Figure \ref{uncertainty-posteriors} illustrates the result of the numerical experiment.
+For modelling the uncertainty in our measurements, we assume that measurement errors are symmetrical around $0$, and further assume an error in the measurements of approximately half a second. In order to obtain an approximation of the angle uncertainty, we propagate the time uncertainty through the forward response operator of the pendulum. This gives us an estimate of the uncertainty in the angle measurements. The forward propagation of the error is numerically estimated using the Monte Carlo method, described in Section 3, in which simulated time measurements were perturbated by a zero-mean Gaussian variable of standard deviation $0.5$ and used as new time measurements for the model. The result of this experiment leads us to model the uncertainty in the angles measurements with a zero-mean Gaussian of variance $0.035$. The left panel of Figure \ref{uncertainty-posteriors} illustrates the result of the numerical experiment.
 
 We consider the estimation of the gravitational acceleration as a filtering problem, in which the sequence of likelihoods is defined using the construction proposed in equation (\ref{phi-seq})
 
