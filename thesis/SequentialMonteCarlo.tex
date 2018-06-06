@@ -211,9 +211,8 @@ where $V_i = U_j$ with probability $W^j_t$. This finally gives us the sequence o
   \end{cases}
 \end{align*}
 
-The final form of the standard Sequential Monte Carlo algorithm is given in Algorithm \ref{smc-alg}. We now proceed to proving convergence properties of the SMC algorithm.
 
-\begin{algorithm}[h]
+\begin{algorithm}[t!]
   \label{smc-alg}
   \caption{Sequential Monte Carlo}
   \textit{(1) $\mu_0 \trarrow{sample} S^M\mu_0 = \nu^M_0$}\\
@@ -239,6 +238,8 @@ The final form of the standard Sequential Monte Carlo algorithm is given in Algo
   }
 \end{algorithm}
 
+The final form of the standard Sequential Monte Carlo algorithm is given in Algorithm \ref{smc-alg}. We now proceed to proving convergence properties of the SMC algorithm.
+
 \subsection{Convergence of the SMC algorithm}
 
 In this section, we will prove properties of the different building blocks used in the construction of the SMC algorithm and use them to prove convergence of the algorithm. Since the output of the SMC algorithm is not deterministic, but instead a sequence of random probability measures, we will show that each of these approximations converges weakly in the number of particles $M$ to the approximated probability measures.
@@ -262,30 +263,6 @@ Note that this metric bounds the variance of the unbiased estimate of an integra
 \end{equation*}
 
 Hence, many of the results given in the coming lemma will not only show prove weak convergence of our approximations, but also bound the variance of the estimates as the number of particles increases.
-
-The following lemma shows that it is enough to prove convergence in the metric $d$ to prove weak convergence of our estimates
-
-\begin{lemma}
-  Let $(\mu_n)_{n \in \mathbb{N}}$ be a sequence of random probability measures in $\mathcal{P}(X)$ and $\mu \in \mathcal{P}(X)$ such that $\underset{n \rightarrow \infty}{\text{lim}} d(\mu_n, \mu) = 0$, then the sequence $(\mu_n)_{n \in \mathbb{N}}$ converges weakly to $\delta_\mu$.
-\end{lemma}
-\begin{proof}
-  Let $(\mu_n)_{n \in \mathbb{N}}$ be a sequence of random measures converging to $\delta_\mu$ in $d$. We recall that $(\mu_n)_{n \in \mathbb{N}}$ converges weakly to $\delta_\mu$ if and only if
-  \begin{equation*}
-    \underset{n \rightarrow \infty}{\text{lim}}\expec{\left|\mu_n(f) - \mu(f)\right|} = 0,
-  \end{equation*}
-
-  for every continuous and bounded function $f : X \rightarrow \mathbb{R}$. Let $f$ be such a function, we then have by Jensen's inequality
-
-  \begin{equation*}
-    \expec{\left|\mu_n(f) - \mu(f)\right|}  = \sqrt{\expec{\left|\mu_n(f) - \mu(f)\right|}^2} \le \sqrt{\expec{\left|\mu_n(f) - \mu(f)\right|^2}}
-  \end{equation*}
-
-  Since $f$ is continuous, it is also  measurable and by linearity of the integral and expectation we can assume without loss of generality that $|f|_\infty \le 1$. The proof is completed by bounding the right hand side of the equation by its supremum over all $|f|_\infty \le 1$
-
-  \begin{equation*}
-    \expec{\left|\mu_n(f) - \mu(f)\right|} \le \underset{|f|_\infty\le1}{\text{sup}} \sqrt{\expec{|\mu_n(f) - \mu(f)|^2}} = d(\mu_n, \delta_\mu) \overset{n \rightarrow \infty}{\longrightarrow} 0.
-  \end{equation*}
-\end{proof}
 
 We start by showing that the sampling operator can approximate any probability measure to an arbitrary precision using enough samples.
 

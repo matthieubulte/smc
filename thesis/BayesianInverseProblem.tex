@@ -22,7 +22,6 @@ In this sequential formulation, the data $y$ is decomposed in a finite sequence 
   y^{obs}_t = \G_t(u^*).
 \end{equation*}
 
-
 This allows us to reformulate the question from above as \textit{How can we use new observations to update our knowledge about $u^*$?} Answering this new question is called the \textit{filtering problem}. This thesis will focus on solving inverse and filtering problems.
 
 One situation where this decomposition can naturally be used is when the system is described by an initial value problem of the form
@@ -142,7 +141,7 @@ However, when no natural sequence of intermediate measures exists, we need to cr
   \Phi_t(u; y) = \norm{y_{1:t} - \G(u)_{1:t}}_{Y^t}^2 = \sum_{i=1}^t\norm{y_i - \G_i(u)}_Y^2.
 \end{equation}
 
-This method has two main advantages. Firstly, it does not require to have all observations available at each step of the filtering, allowing to perform inference on a running experiment. Secondly, the sequence of posteriors acts as an interpolation between the prior and the posterior, as illustrated in the right panel of Figure \ref{uncertainty-posteriors} of page 14. This property will be shown to be central in the design of the numerical approximations presented later.
+This method has two main advantages. Firstly, it does not require to have all observations available at each step of the filtering, allowing to perform inference on a running experiment. Secondly, the sequence of posteriors acts as an interpolation between the prior and the posterior, as illustrated in the right panel of Figure \ref{uncertainty-posteriors} of page 15. This property will be shown to be central in the design of the numerical approximations presented later.
 
 While the argument presented above provides the correct result, the extension of Bayes' rule from events to probability measures is not valid. Moreover, it is not clear which assumptions were made about the model to ensure existence the solutions, and more generally, well-posedness has not been discussed. We present a more rigorous proof and characterization of well-posed inverse problems in the following section.
 
@@ -188,11 +187,11 @@ These mild assumptions happen to be rather easy to fulfill for many practical pr
   \begin{enumerate}
   \item For every $\epsilon > 0$ there is an $M \in \mathbb{R}$ such that for all $u \in X$,
     \begin{equation*}
-      |\G(u)|_\Gamma \le \exp(\epsilon \norm{u}_X^2 + M).
+      \norm{\G(u)}_\Gamma \le \exp(\epsilon \norm{u}_X^2 + M).
     \end{equation*}
   \item For every $r > 0$ there is a $K > 0$ such that, for all $u_1, u_2 \in X$ with $\text{max}\{\norm{u_1}_X, \norm{u_2}_X\} < r$,
     \begin{equation*}
-      |\G(u_1) - \G(u_2)|_\Gamma \le K\norm{u_1 - u_2}_X.
+      \norm{\G(u_1) - \G(u_2)}_\Gamma \le K\norm{u_1 - u_2}_X.
     \end{equation*}
   \end{enumerate}
 \end{assumption}
@@ -204,7 +203,51 @@ We can naturally use these assumptions on the forward response operator $\G$ to 
 \end{lemma}
 
 \begin{proof}
-  TODO
+  Let $\G : X \rightarrow \mathbb{R}^N$ be a forward operator satisfying Assumption \ref{assumption-fw}, $\Gamma$ be a covariance matrix and $\Phi$ be the potential function given by (\ref{gaussian-potential}), i.e. $\Phi(u; y) = \norm{y - \G(u)}_\Gamma^2$. We now prove $\Phi$ satisfies Assumptions \ref{assumption-ll}(1-4).
+
+  1. Let $\epsilon > 0$ and $r > 0$, then for $M = 0$ and all $u \in X$, $y \in Y$ with $\norm{y}_Y < r$ we have by positivity of the norms $\norm{\cdot}_\Gamma$ and $\norm{\cdot}_X$
+  \begin{equation*}
+    \Phi(u; y) = \norm{y - \G(u)}_\Gamma^2 \ge 0 \ge 0 - \epsilon\norm{u}_X^2 = M - \epsilon\norm{u}_X^2.
+  \end{equation*}
+
+  2. Let $r > 0$, then from Assumption \ref{assumption-fw}(1) there is for $\epsilon = 1$ an $M \in \mathbb{R}$ such that $\norm{\G(u)}_\Gamma \le \exp(\norm{u}_X^2 + M)$ for every $u \in X$. Let $K = r^2 + \exp(2r^2 + 2M) > 0$, then for all $u \in X$ and $y \in Y$ with $\max{\norm{u}_X, \norm{y}_\Gamma} < r$ we have by
+  \begin{equation*}
+    \Phi(u; y) = \norm{y - \G(u)}_\Gamma^2 \le \norm{y}_\Gamma^2 + \norm{\G(u)}_\Gamma^2 \le \norm{y}_\Gamma^2 + \exp(\norm{u}_X^2 + M)^2 \le  K.
+  \end{equation*}
+
+  3. Let $r > 0$, from Assumption \ref{assumption-fw}(2) there is a $K > 0$ such that for every $u_1, u_2 \in X$ with $\max\{\norm{u_1}_X, \norm{u_2}_X\} < r$ we have $\norm{\G(u_1) - \G(u_2)}_\Gamma \le K\norm{u_1 - u_2}_X$. Let $L = 2rK^2$, for all $u_1, u_2 \in X$ and $y \in Y$ with $\max\{\norm{u_1}_X, \norm{u_2}_X,\norm{y}_\Gamma\} < r$ we obtain by definition of $L$ and reverse triangle inequality
+  \begin{align*}
+    |\Phi(u_1; y) - \Phi(u_2; y)|
+    &= \left|\norm{y - \G(u_1)}_\Gamma^2 - \norm{y - \G(u_2)}_\Gamma^2\right|
+    \le \norm{ (y - \G(u_1)) - (y - \G(u_2))}_\Gamma^2\\
+    &= \norm{\G(u_1) - \G(u_2)}_\Gamma^2 \le K^2\norm{u_1 - u_2}_X^2 \le L\norm{u_1 - u_2}_X.
+  \end{align*}
+
+  4. Let $\epsilon > 0$, $r > 0$ and $y_1, y_2 \in Y$ with $\max\{\norm{y_1}_\Gamma, \norm{y_2}_\Gamma\} < r$ and $u \in X$ be arbitrary. Since $\Phi$ is continuously differentiable with respect to $y$, we obtain
+  \begin{equation*}
+    |\Phi(u; y_1) - \Phi(u; y_2)|
+    \le \underset{\norm{y}_\Gamma \le r}{\sup}\norm{\nabla_y \Phi(u; y)}_\Gamma\norm{y_1 - y_2}_\Gamma.
+  \end{equation*}
+  Additionally, since $\nabla_y \Phi(u; y) = 2\langle y - \G(u), \cdot\rangle_\Gamma$ we have for any $y \in Y$
+  \begin{equation*}
+    \norm{\nabla_y \Phi(u; y)}_\Gamma
+    = \underset{\norm{w}_\Gamma = 1}{\sup} |\nabla_y \Phi(u; y)w|
+      = \underset{\norm{w}_\Gamma = 1}{\sup} 2|\langle y - \G(u), w\rangle|
+      = 2\norm{y - \G(u)}_\Gamma,
+  \end{equation*}
+  where the last inequality holds because $w = (y - \G(u)) / \norm{y - \G(u)}_\Gamma$ maximizes the scalar product. Furthermore, using Assumption \ref{assumption-fw}(2) there is an $M \in \mathbb{R}$ such that $\norm{G(u)}_\Gamma \le \exp(\epsilon \norm{u}_X^2 + M)$ for all $u \in X$, giving for any $y \in Y$ with $\norm{y}_\Gamma \le r$
+  \begin{align*}
+    \norm{y - \G(u)}_\Gamma
+    &\le \norm{y}_\Gamma + \norm{\G(u)}_\Gamma
+    \le r + \exp(\epsilon\norm{u}_X^2 + M)\\
+    &= \exp(\epsilon\norm{u}_X^2 + M)(r \exp(-\epsilon\norm{u}_X - M) + 1)\\
+    &\le \exp(\epsilon\norm{u}_X^2 + M)(r \exp(-M) + 1)\\
+    &= \exp(\epsilon\norm{u}_X^2 + C),
+  \end{align*}
+  where $C = M + \log(r \exp(-M) + 1)$. All together, we obtain the desired bound
+  \begin{equation*}
+    |\Phi(u; y_1) - \Phi(u; y_2)| \le \exp(\epsilon \norm{u}_X^2 + C)\norm{y_1 - y_2}.
+  \end{equation*}
 \end{proof}
 
 Using these assumptions, we can now proceed to provide a formal proof of Bayes' rule for continuous random variables and of equation (\ref{bayes-rule}), which we recall gives the following relation for the posterior distribution
