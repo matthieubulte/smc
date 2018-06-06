@@ -229,14 +229,14 @@ We can naturally use these assumptions on the forward response operator $\G$ to 
     |\Phi(u; y_1) - \Phi(u; y_2)|
     \le \underset{\norm{y}_\Gamma \le r}{\sup}\norm{\nabla_y \Phi(u; y)}_\Gamma\norm{y_1 - y_2}_\Gamma.
   \end{equation*}
-  Additionally, since $\nabla_y \Phi(u; y) = 2\langle y - \G(u), \cdot\rangle_\Gamma$ we have for any $y \in Y$
-  \begin{equation*}
+  Additionally, since $\nabla_y \Phi(u; y) = 2\langle y - \G(u), \cdot\rangle_\Gamma$ and making use of the Cauchy-Schwarz inequality, we have for any $y \in Y$
+  \begin{align*}
     \norm{\nabla_y \Phi(u; y)}_\Gamma
-    = \underset{\norm{w}_\Gamma = 1}{\sup} |\nabla_y \Phi(u; y)w|
-      = \underset{\norm{w}_\Gamma = 1}{\sup} 2|\langle y - \G(u), w\rangle|
-      = 2\norm{y - \G(u)}_\Gamma,
-  \end{equation*}
-  where the last inequality holds because $w = (y - \G(u)) / \norm{y - \G(u)}_\Gamma$ maximizes the scalar product. Furthermore, using Assumption \ref{assumption-fw}(2) there is an $M \in \mathbb{R}$ such that $\norm{G(u)}_\Gamma \le \exp(\epsilon \norm{u}_X^2 + M)$ for all $u \in X$, giving for any $y \in Y$ with $\norm{y}_\Gamma \le r$
+    &= \underset{\norm{w}_\Gamma = 1}{\sup} |\nabla_y \Phi(u; y)[w]|
+    = \underset{\norm{w}_\Gamma = 1}{\sup} 2|\langle y - \G(u), w\rangle_\Gamma|
+    \\ &\le \underset{\norm{w}_\Gamma = 1}{\sup}2\norm{y - \G(u)}_\Gamma\norm{w}_\Gamma = 2\norm{y - \G(u)}_\Gamma.
+  \end{align*}
+  Furthermore, using Assumption \ref{assumption-fw}(2) there is an $M \in \mathbb{R}$ such that $\norm{G(u)}_\Gamma \le \exp(\epsilon \norm{u}_X^2 + M)$ for all $u \in X$, giving for any $y \in Y$ with $\norm{y}_\Gamma \le r$
   \begin{align*}
     \norm{y - \G(u)}_\Gamma
     &\le \norm{y}_\Gamma + \norm{\G(u)}_\Gamma
