@@ -1,7 +1,7 @@
 \section{Sequential Monte Carlo}
-The last section was motivated by validating the use of Bayesian methods for solving inverse problems. However, the solution of Bayesian filtering problems, given by the sequence of posterior measures, often does not have a closed form solution. This requires us to construct numerical estimates of the sequence of posterior measures.
+The last section was motivated by validating the use of Bayesian methods for solving inverse problems. However, the solution for Bayesian filtering problems, given by the sequence of posterior measures, often does not have a closed form solution. This requires us to construct numerical estimates of the sequence of posterior measures.
 
-The class of estimators we will be considering for this task are \textit{sampling estimators}. Such estimators are constructed by using a set of \textit{particles} representing weighted points of the parameter space $X$ in order to estimate the distribution of interest. A building block of such estimators is the following operator
+The class of estimators we will be considering for this task are \textit{sampling estimators}. Such estimators are constructed by using a set of \textit{particles} representing weighted points of the parameter space $X$ in order to estimate the distribution of interest. A building block of such estimators is the following operator.
 
 \begin{definition}
   Let $\mathcal{P}(X)$ denote the set of probability measures on $X$. Let $M \in \mathbb{N}$, for any measure $\mu \in \mathcal{P}(X)$ we define $S^M\mu$ by
@@ -10,7 +10,7 @@ The class of estimators we will be considering for this task are \textit{samplin
     S^M\mu = \frac1{M}\sum_{i=1}^M\delta_{U_i},
   \end{equation*}
 
-  where $U_1, \ldots, U_M$ are i.i.d. random variables distributed according to $\mu$. From the randomness of $U_1, \ldots, U_M$, it follows that $S^M\mu$ is a not a probability measure, but a random variable taking values in $\mathcal{P}(X)$. The operator $\mu \mapsto S^M\mu$ is called \textit{sampling operator}.
+  where $U_1, \ldots, U_M$ are i.i.d. random variables distributed according to $\mu$. From the randomness of $U_1, \ldots, U_M$, it follows that $S^M\mu$ is a not a probability measure but a random variable taking values in $\mathcal{P}(X)$. The operator $\mu \mapsto S^M\mu$ is called \textit{sampling operator}.
 \end{definition}
 
 The sampling operator is the simplest building block we will use in the construction of particle algorithms, we will denote it by
@@ -19,22 +19,22 @@ The sampling operator is the simplest building block we will use in the construc
   \mu^y \xrightarrow{\text{sample}} S^M\mu^y.
 \end{equation*}
 
-When only using this single building block, we obtain the \textit{Monte Carlo} estimate, or \textit{empirical measure}, of $\mu^y$. One can easily check that the Monte Carlo estimate is unbiased, and we will later prove that it has a standard deviation of $\mathcal{O}(M^{-1/2})$, regardless of the dimension of $X$. This algorithm alone can only be used in specific situations where direct sampling from the distribution of interest is possible. In Bayesian filtering however, the sequence of posterior distributions $\mu^y_t$ is  often too complex to be directly sampled from, and a simple Monte Carlo estimate cannot be constructed. This requires us to extend the Monte Carlo method to let us approximate non-trivial distributions as well. \textit{Sequential Monte Carlo} (SMC) is such a method.
+When only using this single building block, we obtain the \textit{Monte Carlo} estimate, or \textit{empirical measure}, of $\mu^y$. One can easily check that the Monte Carlo estimate is unbiased and we will later prove that it has a standard deviation of $\mathcal{O}(M^{-1/2})$, regardless of the dimension of $X$. This algorithm alone can only be used in specific situations where direct sampling from the distribution of interest is possible. In Bayesian filtering however, the sequence of posterior distributions $\mu^y_t$ is  often too complex to be directly sampled from and a simple Monte Carlo estimate cannot be constructed. This requires us to extend the Monte Carlo method in order to also approximate non-trivial distributions. \textit{Sequential Monte Carlo} (SMC) is such a method.
 
-The rest of the section will be structured as follows. In Section 3.2, we will present more building blocks for constructing estimation algorithms and show how we can use them to construct several popular algorithms. These iterations over the simple Monte Carlo estimate will then finally lead us to the SMC algorithm. In Section 3.3, we prove convergence properties of different algorithm blocks, and use these properties to show that the SMC algorithm provides a good estimate of each distribution of the sequence of filtering posterior distributions.
+The rest of the section will be structured as follows. In Section 3.2, we will present more building blocks for constructing estimation algorithms and show how we can use them to construct several popular algorithms. These iterations over the simple Monte Carlo estimate will then finally lead us to the SMC algorithm. In Section 3.3, we prove convergence properties of different algorithm blocks and use these properties to show that the SMC algorithm provides a good estimate of each distribution of the sequence of filtering posterior distributions.
 
 \subsection{Sequential Monte Carlo}
 
-\paragraph{Importance sampling} An additional basic building block of SMC samplers is the \textit{Importance Sampling} (IS) method. The IS method can be used to estimate probability measures $\mu^y$ of the form of (\ref{bayes-rule}) for which the Radon-Nikodym derivative with respect to the prior $\mu_0$ is only known up to an unknown normalizing constant. To create an estimate, the IS method relies on using an \textit{importance distribution} $\nu$ from which we can easily generate samples. If $\mu^y \ll \nu \ll \mu_0$, by the chain rule for Radon-Nikodym derivatives and substituting the expression of the posterior distribution (\ref{bayes-rule}), we have
+\paragraph{Importance sampling} An additional basic building block of SMC samplers is the \textit{Importance Sampling} (IS) method. The IS method can be used to estimate probability measures $\mu^y$ of the form of (\ref{bayes-rule}) for which the Radon-Nikodym derivative with respect to the prior $\mu_0$ is only known up to an unknown normalizing constant. To create an estimate, the IS method relies on using an \textit{importance distribution} $\nu$ from which we can easily generate samples. If $\mu^y \ll \nu \ll \mu_0$, using the chain rule for Radon-Nikodym derivatives and substituting the expression of the posterior distribution (\ref{bayes-rule}), we have
 
 \begin{align*}
   \frac{\d\mu^y}{\d\nu}(u)
   &= \frac{\d\mu^y}{\d\mu_0}(u)\left(\frac{\d\nu}{\d\mu_0}(u) \right)^{-1}\\
   &= \frac1{Z_y}\ell(u|y)\left(\frac{\d\nu}{\d\mu_0}(u) \right)^{-1}\\
-  &=: w(u) / Z_y.
+  &=: w(u) / Z_y,
 \end{align*}
 
-Where $w$ is the \textit{importance weight} function. This gives us for any $\mu^y$-integrable function $f$ the following equality
+where $w$ is the \textit{importance weight} function. This gives us for any $\mu^y$-integrable function $f$ the following equality
 
 \begin{equation*}
   \mu^y(f) =  \nu(w \cdot f) / Z_y,
@@ -67,13 +67,13 @@ Before discussing properties of IS, we first give a slightly different formulati
 which, from the definition of $w$, gives us the equality $\mu^y = L^w\nu$. We can thus define a reweighting transition that can be used to construct algorithms as
 
 \begin{equation*}
-  \nu \trarrow{reweigh} L^w\nu = \mu^y.
+  \nu \trarrow{reweight} L^w\nu = \mu^y.
 \end{equation*}
 
 Having this new building block, we can combine the reweighting operator with the sampling operator to obtain
 
 \begin{equation*}
-  \nu \trarrow{sample} S^M\nu \trarrow{reweigh} L^wS^M\nu.
+  \nu \trarrow{sample} S^M\nu \trarrow{reweight} L^wS^M\nu.
 \end{equation*}
 
 We can then verify that the IS algorithm, written as a composition of the two blocks presented, delivers the same result as before
@@ -87,40 +87,40 @@ We can then verify that the IS algorithm, written as a composition of the two bl
 
 This formulation is thus identical to the previous formulation. However, we will later see how this modular definition of algorithms makes it easier to extend them and study their properties.
 
-The IS method provides an unbiased estimate for the normalizing constant $Z_y$ and a biased estimate for $\mu^y(f)$ with both bias of order $\mathcal{O}(M^{-1})$ and variance of order $\mathcal{O}(M^{-1/2})$ \cite{agapiou2017importance}. However, while this method provides asymptotic convergence results, we are interested in the non asymptotic regime and the constants involved. In this situation were $M$ is fixed, the variance of the estimation is proportional to the variance of the importance weights \cite{agapiou2017importance}. This means that the estimator is only useful if the importance distribution is \textit{close enough} to the distribution we want to sample from. In practice, finding good importance distributions can be hard for non-standard target distributions, which makes it hard or impossible to directly use IS. Yet, this does not imply that ideas of IS should be completely discarded, and we now show how IS can be extended to sample filtering distributions.
+The IS method provides an unbiased estimate for the normalizing constant $Z_y$ and a biased estimate for $\mu^y(f)$ with both bias of order $\mathcal{O}(M^{-1})$ and variance of order $\mathcal{O}(M^{-1/2})$ \cite{agapiou2017importance}. However, while this method provides asymptotic convergence results, we are interested in the non-asymptotic regime and the constants involved. In the case where $M$ is fixed, the variance of the estimation is proportional to the variance of the importance weights \cite{agapiou2017importance}. This means that the estimator is only useful if the importance distribution is \textit{close enough} to the distribution we want to sample from. In practice, finding good importance distributions can be hard for non-standard target distributions, which makes it hard or impossible to directly use IS. Yet, this does not imply that ideas of IS should be completely discarded and we now show how IS can be extended to sample filtering distributions.
 
 Considering the sequence of distributions induced by the potential functions given in (\ref{phi-seq}), we can expect consecutive distributions to be approximately close to each other. This means that each distribution $\mu^y_{t-1}$ should be a good importance distribution to use importance sampling on the next distribution $\mu^y_t$. This gives us for each importance sampling step $t$ from $\mu^y_{t-1}$ to $\mu^y_t$ an importance weight function $w_{t-1}$ and a reweighting operator $L_{t-1} = L^{w_{t-1}}$. We can thus iterate reweighting steps to map the prior distribution to any arbitrary distribution of the sequence of posteriors giving $\mu^y_t = (L_{t-1} \circ \ldots \circ L_0) \mu_0$ and
 
 \begin{equation*}
-  \mu_0 \trarrow{reweigh} L_0\mu_0 = \mu^y_1 \trarrow{reweigh} \ldots\trarrow{reweigh} L_{t-1}\mu^y_{t-1} = \mu^y_t.
+  \mu_0 \trarrow{reweight} L_0\mu_0 = \mu^y_1 \trarrow{reweight} \ldots\trarrow{reweight} L_{t-1}\mu^y_{t-1} = \mu^y_t.
 \end{equation*}
 
 Similar to the IS method, we can use this equality to create an algorithm by applying the sequence of operators to a Monte Carlo estimate of $\mu_0$, giving the algorithm
 
 \begin{align*}
   \mu_0 \trarrow{sample} S^M\mu_0
-  &\trarrow{reweigh} L_0S^M\mu_0\\
+  &\trarrow{reweight} L_0S^M\mu_0\\
   &\ \ \ \ldots\\
-  &\trarrow{reweigh} (L_{t-1} \circ \ldots \circ L_0)S^M\mu_0.
+  &\trarrow{reweight} (L_{t-1} \circ \ldots \circ L_0)S^M\mu_0.
 \end{align*}
 
 We note that in the common case where the posterior distributions are induced by potentials $\Phi_t$ given by (\ref{gaussian-potential}), the importance weight $w_{t-1}$ is then given by
 
 \begin{equation}\label{simple-weights}
-  w_{t-1}(u) = \frac{l_t(u|y)}{l_{t-1}(u|y)} = \exp\left(\Phi_{t-1}(u;y) - \Phi_t(u;y)\right) = \exp(-\left|y_t - \G_t(y)\right|^2_\Gamma),
+  w_{t-1}(u) = \frac{l_t(u|y)}{l_{t-1}(u|y)} = \exp\left(\Phi_{t-1}(u;y) - \Phi_t(u;y)\right) = \exp(-\left|y_t - \G_t(y)\right|^2_\Gamma).
 \end{equation}
 
-this implies that the reweighting operator can be efficiently implemented by only requiring $M$ evaluations of the forward response operator.
+This implies that the reweighting operator can be efficiently implemented by only requiring $M$ evaluations of the forward response operator.
 
 While this appears to be a valid algorithm for estimating the sequence of distributions, it does not work in general. A simple counter-example would be to consider estimating a sequence of Gaussian distributions shifting away from $\mu_0$ as $t$ increases. Since the initial set of samples will, with high probability, be concentrated around the mean of $\mu_0$, as $t$ increases the distributions will shift away from where the samples are located. This will cause the weights of each particle to decrease as $t$ increases, which in turn will increase the variance of the estimate and make each estimate worse than the previous one.
 
-\paragraph{Sequential Importance Sampling} To avoid this, we introduce an additional step after applying the reweighting operator to \textit{correct} the position of the samples by getting them closer to the target distribution. This should then result in a better importance distribution for the next step. To do this correction, we construct for each posterior distribution $\mu^y_t$ an ergodic Markov chain with stationary distribution $\mu^y_t$ characterized by its Markov kernel $K_t$ from which we know how to sample the next state given the current state, i.e. for every $u \in X$ we can sample from $K_t(u, \cdot)$. Since the Markov chain is ergodic, the limiting distribution of the Markov chain is equal to its stationary distribution $\mu^y_t$ regardless of the initial distribution \cite[Chapter 6]{Robert}. Considering the operator induced by the Markov kernel $K_t$ given by
+\paragraph{Sequential Importance Sampling} After applying the reweighting operator, we introduce an additional step to avoid this problem. The additional step \textit{corrects} the position of the samples by getting them closer to the target distribution. This should then result in a better importance distribution for the next step. To do this correction, we construct for each posterior distribution $\mu^y_t$ an ergodic Markov chain with stationary distribution $\mu^y_t$. The Markov chain is characterized by its Markov kernel $K_t$ from which we know how to sample the next state given the current state, i.e. for every $u \in X$ we can sample from $K_t(u, \cdot)$. Since the Markov chain is ergodic, the limiting distribution of the Markov chain is equal to its stationary distribution $\mu^y_t$ regardless of the initial distribution \cite[Chapter 6]{Robert}. Considering the operator induced by the Markov kernel $K_t$ given by
 
 \begin{equation*}
   (K_t\mu)(f) = \mu(K_t(f)) = \int_X\int_X f(u) K_t(x, \d u) \mu(\d x),
 \end{equation*}
 
-the theorem stated in the previous sentence implies that applying the operator $K_t$ to any distribution will get it closer $\mu^y_t$, the stationary distribution of the Markov chain. This lets us define a new correction building block
+the theorem stated in the previous sentence implies that applying the operator $K_t$ to any distribution will get it closer to the stationary distribution of the Markov chain, $\mu^y_t$. This lets us define a new correction building block
 
 \begin{equation*}
   \mu \trarrow{correct} K_t\mu.
@@ -150,30 +150,30 @@ We can then verify that the operator $\Psi_t$ maps $\mu^y_{t-1}$ to the distribu
 which gives us the transitions from any posterior distribution $\mu_{t-1}^y$ to $\mu^y_t$ by
 
 \begin{equation*}
-  \mu^y_{t-1} \trarrow{reweigh} L_{t-1}\mu^y_{t-1} \trarrow{correct} \Psi_t\mu^y_{t-1} = \mu^y_t.
+  \mu^y_{t-1} \trarrow{reweight} L_{t-1}\mu^y_{t-1} \trarrow{correct} \Psi_t\mu^y_{t-1} = \mu^y_t.
 \end{equation*}
 
 As done previously, we can apply the sequence of operators to map $\mu_0$ to any posterior distribution of the sequence $\mu^y_t$ giving $\mu^y_t = (\Psi_t \circ \ldots \circ \Psi_1)\mu_0$ and
 
 \begin{align*}
   \mu_0
-  &\trarrow{reweigh} L_0\mu_0 \trarrow{correct} \Psi_1\mu_0 = \mu^y_1\\
+  &\trarrow{reweight} L_0\mu_0 \trarrow{correct} \Psi_1\mu_0 = \mu^y_1\\
   &\ \ \ldots\\
-  &\trarrow{reweigh} L_{t-1}\mu^y_{t-1} \trarrow{correct} \Psi_t\mu^y_{t-1} = \mu^y_t.
+  &\trarrow{reweight} L_{t-1}\mu^y_{t-1} \trarrow{correct} \Psi_t\mu^y_{t-1} = \mu^y_t.
 \end{align*}
 
 Transforming this into an algorithm by performing a step of sampling on $\mu_0$ before applying the sequence of operators $\Psi_t \circ \ldots \circ \Psi_1$ gives the \textit{Sequential Importance Sampling} (SIS) algorithm
 
 \begin{align*}
   \mu_0 \trarrow{sample} S^M\mu_0
-  &\trarrow{reweigh} L_0S^M\mu_0 \trarrow{correct} \Psi_1S^M\mu_0\\
+  &\trarrow{reweight} L_0S^M\mu_0 \trarrow{correct} \Psi_1S^M\mu_0\\
   &\ \ \ldots\\
-  &\trarrow{reweigh} L_{t-1}(\Psi_{t-1} \circ \ldots \circ \Psi_1)S^M\mu_0 \trarrow{correct} (\Psi_t \circ \ldots \circ \Psi_1)S^M\mu_0.
+  &\trarrow{reweight} L_{t-1}(\Psi_{t-1} \circ \ldots \circ \Psi_1)S^M\mu_0 \trarrow{correct} (\Psi_t \circ \ldots \circ \Psi_1)S^M\mu_0.
 \end{align*}
 
-It remains to discuss the contruction of the Markov Kernels $K_1, \ldots, K_T$. The optimal choice for each step $t$ is the Markov chains generating i.i.d. samples of the posterior distribution $\mu^y_t$. However, this choice requires us being able to sample from $\mu^y_t$, which is not possible otherwise we could just use a Monte Carlo approximation. Thankfully, much work has been put in designing Markov kernels with specific invariant distribution from which it is easy to sample.
+It remains to discuss the construction of the Markov kernels $K_1, \ldots, K_T$. The optimal choice for each step $t$ is the Markov chain generating i.i.d. samples of the posterior distribution $\mu^y_t$. However, this choice requires us being able to sample from $\mu^y_t$, which is not possible, otherwise we could simply use a Monte Carlo approximation. Thankfully, much work has been put in designing Markov kernels with specific invariant distribution from which it is easy to sample.
 
-\paragraph{Sequential Monte Carlo} We have defined with SIS an algorithm that incrementally updates a population of weighted independent samples to fit a sequence of distributions. However, even if the SIS algorithm tries to correct the position of the particles to match the sequence of posterior distributions, the transitions applied by the Markov kernels only guarantee convergence in the asymptotic regime with respect to the number of transitions and particles. Since we are clearly not in this regime, we need to measure the impact of the re-weighting  procedure on the quality of the Monte Carlo estimate given by these weighted particles.
+\paragraph{Sequential Monte Carlo} We have defined with SIS an algorithm that incrementally updates a population of weighted independent samples to fit a sequence of distributions. However, even if the SIS algorithm tries to correct the position of the particles to match the sequence of posterior distributions, the transitions applied by the Markov kernels only guarantee convergence in the asymptotic regime with respect to the number of transitions and particles. Since we are clearly not in this regime, we need to measure the impact of the reweighting  procedure on the quality of the Monte Carlo estimate given by these weighted particles.
 
 If we consider a Monte Carlo estimate induced by $M$ i.i.d. random variables $Y_1, \ldots, Y_M$ of variance $\sigma^2$, the variance of the uniformly weighted sum of these variables would be equal to $\sigma^2/M$. If we instead consider a weighted sum of these variables, such as the one given by the IS and SIS algorithms of the form
 
@@ -181,32 +181,31 @@ If we consider a Monte Carlo estimate induced by $M$ i.i.d. random variables $Y_
   S = \frac{\sum_{i=1}^Mw_iY_i}{\sum_{i=1}^Mw_i},
 \end{equation}
 
-what would now be the variance of this sum? If each particle has an approximately equal importance weight, and thus equal participation in the estimate, we would have a variance close to the uniform case $\sigma^2/M$. We know this might not be the case and we want to measure the effective number of independent random variables $M_{eff}$ used in this sum, called the \textit{effective sample size} (ESS). We assume that $S$ was generated by summing $M_{eff}$ equally weighted i.i.d. samples and thus has a variance of $\sigma^2/M_{eff}$. This lets us solve for $M_{eff}$ by using the variance of the weighted sum $S$ given in (\ref{sum-s}). The resulting effective sample size is then
+what would now be the variance of this sum? If each particle has an approximately equal importance weight and thus equal participation in the estimate, we would have a variance close to the uniform case $\sigma^2/M$. We know this might not be the case and we want to measure the effective number of independent random variables $M_\text{eff}$ used in this sum, called the \textit{effective sample size} (ESS). We assume that $S$ was generated by summing $M_\text{eff}$ equally weighted i.i.d. samples and thus has a variance of $\sigma^2/M_\text{eff}$. This lets us solve for $M_\text{eff}$ by using the variance of the weighted sum $S$ given in (\ref{sum-s}). The resulting effective sample size is then
 
 \begin{equation}\label{ess}
-  M_{eff} = \frac{\left(\sum_{i=1}^Mw_i\right)^2}{\sum_{i=1}^Mw_i^2}.
+  M_\text{eff} = \frac{\left(\sum_{i=1}^Mw_i\right)^2}{\sum_{i=1}^Mw_i^2}.
 \end{equation}
 
 We can verify that this value is indeed bounded by the actual number of samples $M$
 
 \begin{equation*}
-  M_{eff} = M^2\frac{\left(\frac1M\sum_{i=1}^Mw_i\right)^2}{\sum_{i=1}^Mw_i^2} \le M^2 \frac{\frac1M\sum_{i=1}^Mw_i^2}{\sum_{i=1}^Mw_i^2} = M,
+  M_\text{eff} = M^2\frac{\left(\frac1M\sum_{i=1}^Mw_i\right)^2}{\sum_{i=1}^Mw_i^2} \le M^2 \frac{\frac1M\sum_{i=1}^Mw_i^2}{\sum_{i=1}^Mw_i^2} = M,
 \end{equation*}
 
 where the inequality is the weighted Jensen's inequality. This tells us that if the weights are too imbalanced, the effective size of our sample is going to be much smaller than the number of particles we have, which results in a Monte Carlo estimate of higher variance.
 
-We are interested in modifying our algorithm to control the variance of the weights within our population, and thus keep the ESS over a certain level $M_{thresh}$ close to $M$. To achieve this, the Sequential Monte Carlo (SMC) algorithm controls the ESS after each step of reweighting and performs a step of \textit{resampling} if the ESS is too low. The resampling will reset the population by applying the sampling operator to the current estimate. This will reset every weight to $M^{-1}$ and discard with high probability the particles with lower weights. Specifically, the resampling step maps the current population estimate of the posterior distribution $\mu^y_t$ to a new population with uniform weights,
+We are interested in modifying our algorithm to control the variance of the weights within our population and thus keep the ESS over a certain level $M_\text{thresh}$ close to $M$. To achieve this, the Sequential Monte Carlo (SMC) algorithm controls the ESS after each step of reweighting and performs a step of \textit{resampling} if the ESS is too low. The resampling will reset the population by applying the sampling operator to the current estimate. This will reset every weight to $M^{-1}$ and discard with high probability the particles with lower weights. Specifically, the resampling step maps the current population estimate of the posterior distribution $\mu^y_t$ to a new population with uniform weights,
 
 \begin{equation*}
   \sum_{i=1}^MW^i_t\delta_{U_i} \trarrow{resample} S^M\left(\sum_{i=1}^MW^i_t\delta_{U_i}\right) = \sum_{i=1}^M\frac1M\delta_{V_i},
 \end{equation*}
 
 where $V_i = U_j$ with probability $W^j_t$. This finally gives us the sequence of measures $\nu^M_0, \ldots, \nu^M_T$ created by the SMC algorithm to approximate the sequence of posterior measures $\mu_0, \ldots, \mu^y_T$
-
 \begin{align*}
   \nu_0 &= S^M\mu_0\\
   \nu_{t+1}^M &= \begin{cases}
-    \Psi_{t+1}\nu^M_t\text{\ \ \ \ \ \ \ \ if $M_{eff} > M_{thresh},$ }\\
+    \Psi_{t+1}\nu^M_t\text{\ \ \ \ \ \ \ \ if $M_\text{eff} > M_\text{thresh},$ }\\
     S^M\Psi_{t+1}\nu^M_t\text{\ \ \ \ otherwise. }
   \end{cases}
 \end{align*}
@@ -220,7 +219,7 @@ where $V_i = U_j$ with probability $W^j_t$. This finally gives us the sequence o
   set each weight to $W^i_0 = M^{-1}$. \\
   \;
   \For{$t = 1,\ldots,T$} {
-    \textit{(2.1) $K_t\nu^M_{t-1}\trarrow{reweigh} \Psi_t\nu^M_{t-1}$}\\
+    \textit{(2.1) $K_t\nu^M_{t-1}\trarrow{reweight} \Psi_t\nu^M_{t-1}$}\\
     Adjust weights $\hat W^i_t = w_t(U^i_{t-1})W^i_{t-1}$ and normalize them according to
 
     \begin{equation*}
@@ -231,8 +230,8 @@ where $V_i = U_j$ with probability $W^j_t$. This finally gives us the sequence o
     Sample each $U^i_t$ from $K_t(U^i_{t-1}, \cdot)$.\\
     \;
     \textit{(2.3) $\Psi_t\nu^M_{t-1} \trarrow{resample} \nu^M_t$}\\
-    Compute $M_{eff}$ according to (\ref{ess}).\\
-    \If{$M_{eff} < M_{thresh}$} {
+    Compute $M_\text{eff}$ according to (\ref{ess}).\\
+    \If{$M_\text{eff} < M_\text{thresh}$} {
       Sample each $U^i_t$ from $\Psi_t\nu^M_{t-1}$ and set each weight to $W^i_t = M^{-1}$.
     }
   }
@@ -244,7 +243,7 @@ The final form of the standard Sequential Monte Carlo algorithm is given in Algo
 
 In this section, we will prove properties of the different building blocks used in the construction of the SMC algorithm and use them to prove convergence of the algorithm. Since the output of the SMC algorithm is not deterministic, but instead a sequence of random probability measures, we will show that each of these approximations converges weakly in the number of particles $M$ to the approximated probability measures.
 
-We first define the following metric over the space of random probability measures
+We first define the following metric over the space of random probability measures.
 
 \begin{definition}
   For every $\mu$ and $\nu$ random variables with values in $\mathcal{P}(X)$, we define
@@ -262,7 +261,7 @@ Note that this metric bounds the variance of the unbiased estimate of an integra
   \mathbb{V}(\nu(f)) = \expec{\left|\nu(f) - \expec{\nu(f)}\right|^2} = \expec{\left|\nu(f) - \mu(f)\right|^2} \le d(\nu, \delta_\mu)^2.
 \end{equation*}
 
-Hence, many of the results given in the coming lemma will not only show prove weak convergence of our approximations, but also bound the variance of the estimates as the number of particles increases.
+Hence, the following results will not only prove weak convergence of our approximations, but also bound the variance of the estimates as the number of particles increases.
 
 We start by showing that the sampling operator can approximate any probability measure to an arbitrary precision using enough samples.
 
@@ -313,10 +312,10 @@ Before proving the main result, we formalize the assumption that consecutive pos
   \end{equation*}
 \end{assumption}
 
-For completeness, we show that if the inverse problem is well-posed and the sequence of posterior distributions given by the potential functions (\ref{phi-seq}) do satisfy the previous assumption on any bounded parameter space $X$.
+For completeness, we show that if the inverse problem is well-posed and the sequence of posterior distributions is given by the potential functions (\ref{phi-seq}), then the importance weights $w_0, \ldots, w_{T-1}$ satisfy the previous assumption on any bounded parameter space $X$.
 
 \begin{lemma}\label{easy-lemma}
-  Assume that the potentials functions $\Phi_1, \ldots, \Phi_T$ are given by (\ref{phi-seq}), that the forward response operators $\G_1, \ldots, \G_T$ satisfy Assumptions \ref{assumption-fw} and that $X$ is bounded. Then, given some fix observation $y \in Y^T$, the importance weights $w_0, \ldots, w_T$ given in (\ref{simple-weights}) satisfy Assumption \ref{kappa-assumption}.
+  Assume that the potential functions $\Phi_1, \ldots, \Phi_T$ are given by (\ref{phi-seq}), that the forward response operators $\G_1, \ldots, \G_T$ satisfy Assumptions \ref{assumption-fw} and that $X$ is bounded. Then, given some fixed observation $y \in Y$, the importance weights $w_0, \ldots, w_T$ given in (\ref{simple-weights}) satisfy Assumption \ref{kappa-assumption}.
 \end{lemma}
 
 \begin{proof}
@@ -325,7 +324,7 @@ For completeness, we show that if the inverse problem is well-posed and the sequ
   \begin{equation*}
     w_{t-1}(u)
     = \frac{\ell_t(u|y)}{\ell_{t-1}(u|y)}
-    = \exp\left(-\norm{y_t - \G_t(u)}_Y^2\right) \le 1
+    = \exp\left(-\norm{y_t - \G_t(u)}_Y^2\right) \le 1.
   \end{equation*}
 
   Then, using Assumption \ref{assumption-fw}(1), there exists an $M \in \mathbb{R}$ such that
@@ -385,7 +384,7 @@ We now show that the composition of reweighting and correction in the SIS and SM
     \frac{\nu(w_{t-1}K_t(f))}{\nu(w_{t-1})} = (\Psi_t\nu)(f) \le |f|_\infty(\Psi_t\nu)(X) \le 1.
   \end{equation*}
 
-  Further, since $w_{t-1}(u) \ge \kappa$ for all $u$, it holds that $\mu(w_{t-1}) \ge \kappa$ and $1 / \mu(w_{t-1}) \le 1/\kappa$. From these two bounds, we obtain
+  Further, since $w_{t-1}(u) \ge \kappa$ for all $u$, we have that $\mu(w_{t-1}) \ge \kappa$ and $1 / \mu(w_{t-1}) \le 1/\kappa$. From these two bounds, we obtain
   \begin{equation*}
     \begin{aligned}
       \sqrt{\expec{|(\Psi_t\mu - \Psi_t\nu)(f)|^2}}
@@ -401,11 +400,11 @@ We now show that the composition of reweighting and correction in the SIS and SM
     \sqrt{\expec{|(\Psi_t\mu - \Psi_t\nu)(f)|^2}} \le \frac2{\kappa^2}\underset{|g|_\infty \le 1}{\text{sup}} \sqrt{\expec{|\mu(g) - \nu(g)|^2}} =  \frac2{\kappa^2}d(\delta_\mu, \delta_\nu).
   \end{equation*}
 
-  Since this result is valid for all $f$ with $|f|_\infty \le 1$, taking the supremum on the left hand side of the inequality yields the desired result.
+  Since this result is valid for all $f$ with $|f|_\infty \le 1$, taking the supremum on the left-hand side of the inequality yields the desired result.
 \end{proof}
 
 \begin{theorem}\label{smc-convergence}
-  Assume that the importance weights $w_0, \ldots, w_{T-1}$ satisfy Assumption \ref{kappa-assumption} and consider the SMC algorithm with $M_{thresh} = M$. Then, for any $t \in \mathbb{N}$,
+  Assume that the importance weights $w_0, \ldots, w_{T-1}$ satisfy Assumption \ref{kappa-assumption} and consider the SMC algorithm with $M_\text{thresh} = M$. Then, for any $t \in \mathbb{N}$,
 
   \begin{equation*}
     d(\delta_{\nu_t}, \nu_t^M) \leq \frac1{\sqrt{M}}\sum_{j=0}^t\left(\frac2{\kappa^2}\right)^j.
@@ -413,7 +412,7 @@ We now show that the composition of reweighting and correction in the SIS and SM
 \end{theorem}
 
 \begin{proof}
-  We prove this result by induction over $t$. For $t=0$, the result holds by direct application of Lemma \ref{sampling-bound}. For $t > 0$ we have using the triangle inequality, Lemmata \ref{sampling-bound} and \ref{seq-bound}, and using the induction hypothesis
+  We prove this result by induction over $t$. For $t=0$, the result holds by direct application of Lemma \ref{sampling-bound}. For $t > 0$ we have, using the triangle inequality, Lemmata \ref{sampling-bound} and \ref{seq-bound}, and using the induction hypothesis
 
   \begin{equation*}
     \begin{aligned}
@@ -429,7 +428,7 @@ We now show that the composition of reweighting and correction in the SIS and SM
 
 
 
-This theorem shows that the SMC algorithm has an asymptotical standard deviation of $\mathcal{O}(d(\delta_{\mu_t}, \mu^M_t)) = \mathcal{O}(M^{-1/2})$. Furthermore, since the SMC algorithm is at its core an IS algorithm, it also has an asymptoticaly vanishing bias of order $\mathcal{O}(M^{-1})$. Since the mean square error (MSE) can be decomposed as $MSE = bias^2 + variance$, the mean square error of the SMC algorithm is dominated by the variance of the estimate, which is of $\mathcal{O}(M^{-1})$.
+This theorem shows that the SMC algorithm has an asymptotic standard deviation of $\mathcal{O}(d(\delta_{\mu_t}, \mu^M_t)) = \mathcal{O}(M^{-1/2})$. Furthermore, since the SMC algorithm is at its core an IS algorithm, it also has an asymptotically vanishing bias of order $\mathcal{O}(M^{-1})$. Since the mean square error (MSE) can be decomposed as $MSE = bias^2 + variance$, the mean square error of the SMC algorithm is dominated by the variance of the estimate, which is of $\mathcal{O}(M^{-1})$.
 
 %%% Local Variables:
 %%% mode: latex

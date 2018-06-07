@@ -1,10 +1,10 @@
 \section{Bayesian Filtering}
 
-This section introduces and describes the Bayesian approach for solving inverse problems, laying out the theoretical foundations of the taken approach. In Section 2.1 we present the class of problems we will be considering in this thesis: finite-dimensional inverse and filtering problems. In Section 2.2 we present a filtering problem based on a simple dynamical system estimation problem which will be used to illustrate concepts presented throughout the thesis. In Section 2.3 we define desired characteristics of solutions to inverse problems. We mention the challenges encountered by the classical optimization approach for solving inverse problems in practical situations. We then present the Bayesian framework, and show how it uses prior information about the structure of the problem to construct a solution to the inverse and filtering problems. In Section 2.4 we prove well-posedness of this constructed solution under some light assumptions about the model. Finally, Section 2.5 illustrates Bayesian modelling by describing the process of constructing a probabilistic model for the pendulum problem, and show that the problem is well-posed and thus admits a stable solution.
+This section introduces and describes the Bayesian approach for solving inverse problems, laying out the theoretical foundations of the taken approach. In Section 2.1 we present the class of problems we will be considering in this thesis: finite-dimensional inverse and filtering problems. In Section 2.2 we present a filtering problem based on a simple dynamical system estimation problem which will be used to illustrate concepts presented throughout the thesis. In Section 2.3 we define desired characteristics of solutions to inverse problems. We mention the challenges encountered by the classical optimization approach for solving inverse problems in practical situations. We then present the Bayesian framework, and show how it uses prior information about the structure of the problem to construct a solution to the inverse and filtering problems. In Section 2.4 we prove well-posedness of this constructed solution under some light assumptions about the model. Finally, Section 2.5 illustrates Bayesian modelling by describing the process of constructing a probabilistic model for the pendulum problem, and shows that the problem is well-posed and thus admits a stable solution.
 
 \subsection{Set-Up}
 
-We study parametrized models for which the value of the \textit{parameter} $u \in X$ is unknown or uncertain. To model the behaviour of the system, we introduce a \textit{forward response operator} $\mathcal{G} : X \rightarrow Y$ mapping values of the \textit{parameter space} to the \textit{data space}, assuming both spaces to be finite-dimensional vector spaces.
+We study parameterized models for which the value of the \textit{parameter} $u \in X$ is unknown or uncertain. To model the behaviour of the system, we introduce a \textit{forward response operator} $\mathcal{G} : X \rightarrow Y$ mapping values of the \textit{parameter space} to the \textit{data space}, assuming both spaces to be finite-dimensional vector spaces.
 
 We consider a real system described by $\mathcal{G}$ and the true parameter $u^* \in X$, and assume that \textit{observations} $y^{obs} \in Y$ of the system are available from measurements. The data $y$ is then the image of the true parameter under the mapping $\mathcal{G}$. We obtain the following model
 
@@ -33,13 +33,13 @@ One situation where this decomposition can naturally be used is when the system 
   \end{aligned}
 \end{equation}  
 
-where $u \in X$ is the parameter of the model, and the solution $x(t; u)$ is assumed to exist for every time $t \geq 0$. The sequence of observations then correspond to measurements at times  $0 \leq t_1 < \ldots < t_T$. We further define two additional kinds of operators: \textit{solution} and \textit{observational} operators. The solution operator $G$ maps elements of the parameter space to the solution of the associated initial value problem by $G(u) = x(\cdot, u)$. Observational operators $\mathcal{O}_i$ then map this solution to the respective observation, here we can define for each time $t_i$ the observational operator $\mathcal{O}_i(x(\cdot, u)) = x(t_i, u)$. The forward response operators can then be written as the composition of these two operators $\G_i = \mathcal{O}_i \circ G$. We provide an example of the modelling of a inverse problem in the next section.
+where $u \in X$ is the parameter of the model, and the solution $x(t; u)$ is assumed to exist for every time $t \geq 0$. The sequence of observations then correspond to measurements at times  $0 \leq t_1 < \ldots < t_T$. We further define two additional kinds of operators: \textit{solution} and \textit{observational} operators. The solution operator $G$ maps elements of the parameter space to the solution to the associated initial value problem by $G(u) = x(\cdot, u)$. Observational operators $\mathcal{O}_i$ then map this solution to the respective observation, here we can define for each time $t_i$ the observational operator $\mathcal{O}_i(x(\cdot, u)) = x(t_i, u)$. The forward response operators can then be written as the composition of these two operators $\G_i = \mathcal{O}_i \circ G$. We provide an example of the modelling of an inverse problem in the next section.
 
 \subsection{Pendulum problem}
 
-We now introduce a filtering problem that will guide the rest of the thesis. Using a pendulum, we would like to estimate the value of the Earth's gravitational acceleration. We start by modelling the behaviour of the pendulum using a differential equation parametrized by the gravitational acceleration $g$.
+We now introduce a filtering problem that will guide the rest of the thesis. Using a pendulum, we would like to estimate the value of the Earth's gravitational acceleration. We start by modelling the behaviour of the pendulum using a differential equation parameterized by the gravitational acceleration $g$.
 
-We choose the \textit{simple pendulum model}, a simplified mathematical model that ignores the mass of the string of the pendulum and ignores the forces of friction acting on the hanging mass. It also assumes that the movement of the pendulum only happens in two dimensions. This simplification allows us to model the state of the pendulum with a single value $x(t)$ representing the angle of the pendulum to the resting point, described by the following second ordinary order differential equation.
+We choose the \textit{simple pendulum model}, a simplified mathematical model that ignores both the mass of the string of the pendulum and the forces of friction acting on the hanging mass. It also assumes that the movement of the pendulum only happens in two dimensions. This simplification allows us to model the state of the pendulum with a single value $x(t)$ representing the angle of the pendulum to the resting point, described by the following second ordinary order differential equation.
 
 \begin{equation}\label{pendulum-ode}
   \begin{aligned}
@@ -102,15 +102,15 @@ The observations are then realizations of the \textit{data-generating measure} w
   \ell(y|u) = \exp(-\Phi(u;y)),
 \end{equation}
 
-where $\Phi$ is called a \textit{potential function}, or \textit{negative log-likelihood}. In the case where the uncertainty is modeled by a multivariate Gaussian distribution $\eta \sim \mathcal{N}(0, \Gamma)$, the potential function is given by
+where $\Phi$ is called a \textit{potential function}, or \textit{negative log-likelihood}. In the case where the uncertainty is modelled by a multivariate Gaussian distribution $\eta \sim \mathcal{N}(0, \Gamma)$, the potential function is given by
 
 \begin{equation} \label{gaussian-potential}
   \Phi(u; y) = \norm{\Gamma^{-1/2}(y - \G(u))}_Y^2.
 \end{equation}
 
-When solving the inverse problem, we are interested in using observed data to update our prior believes about the model's parameter $u$. This question can be naturally translated into studying the conditional distribution of $u$ under the observation $y = y^{obs}$. The new knowledge about the parameter $u$ is then contained in the distribution of $u$ given $y$, called the \textit{posterior distribution} with measure $\mu^y$. Intuitively, \textit{Bayes' rule} can be used to find the posterior distribution in terms of the prior distribution and the likelihood.
+When solving the inverse problem, we are interested in using observed data to update our prior beliefs about the model's parameter $u$. This question can naturally be translated into studying the conditional distribution of $u$ under the observation $y = y^{obs}$. The new knowledge about the parameter $u$ is then contained in the distribution of $u$ given $y$, called the \textit{posterior distribution} with measure $\mu^y$. Intuitively, \textit{Bayes' rule} can be used to find the posterior distribution in terms of the prior distribution and the likelihood.
 
-Given a probability space $(\Omega, \mathcal{F}, \P)$, and two events $A, B \in \mathcal{F}$ with $\P(B) > 0$, Bayes' rule gives the distribution of the conditioned event by
+Given a probability space $(\Omega, \mathcal{F}, \P)$ and two events $A, B \in \mathcal{F}$ with $\P(B) > 0$, Bayes' rule gives the distribution of the conditioned event by
 
 \begin{equation*}
   \P(A|B) = \frac{\P(B|A)\P(A)}{\P(B)}.
@@ -128,9 +128,9 @@ where the $\propto$ symbol denotes proportionality up to a constant factor $Z_y$
  Z_y = \int_X \ell(y|u)\d\mu_0(u).
 \end{equation}
 
-This framework for solving inverse problems can be used to express filtering problems, and thus also provide a solution to the latter. 
+This framework for solving inverse problems can be used to express filtering problems, and thus also provides a solution to the latter. 
 
-Extending the proposed formulation of inverse problems to filtering problems is done in an intuitive way. The use of a prior distribution to model existing knowledge about the model paramater remains unchanged. However, more structure has to be given to the uncertainty since it now requires a sequence of independent random variables $\eta_1, \ldots, \eta_T$ for each step of the filtering. This provides us with a sequence of potentials $\Phi_1, \ldots, \Phi_T$ and likelihoods $\ell_1, \ldots, \ell_T$, which in turn provide us with a sequence of partial solutions
+Extending the proposed formulation of inverse problems to filtering problems is done in an intuitive way. The use of a prior distribution to model existing knowledge about the model parameter remains unchanged. However, more structure has to be given to the uncertainty since it now requires a sequence of independent random variables $\eta_1, \ldots, \eta_T$ for each step of the filtering. This provides us with a sequence of potentials $\Phi_1, \ldots, \Phi_T$ and likelihoods $\ell_1, \ldots, \ell_T$, which in turn induce a sequence of partial solutions
 
 \begin{equation*}
   \d\mu_t^y(u) \propto \ell_t(u|y_{1:t})\d\mu_0(u).
@@ -144,7 +144,7 @@ However, when no natural sequence of intermediate measures exists, we need to cr
 
 This method has two main advantages. Firstly, it does not require to have all observations available at each step of the filtering, allowing to perform inference on a running experiment. Secondly, the sequence of posteriors acts as an interpolation between the prior and the posterior, as illustrated in the right panel of Figure \ref{uncertainty-posteriors} of page 15. This property will be shown to be central in the design of the numerical approximations presented later.
 
-While the argument presented above provides the correct result, the extension of Bayes' rule from events to probability measures is not valid. Moreover, it is not clear which assumptions were made about the model to ensure existence the solutions, and more generally, well-posedness has not been discussed. We present a more rigorous proof and characterization of well-posed inverse problems in the following section.
+While the argument presented above provides the correct result, the extension of Bayes' rule from events to probability measures is not valid. Moreover, it is not clear which assumptions were made about the model to ensure existence of the solutions, and more generally, well-posedness has not been discussed. We present a more rigorous proof and characterization of well-posed inverse problems in the following section.
 
 \subsection{Well-posedness of Bayesian inverse problems}
 
@@ -180,7 +180,7 @@ We start by stating the following assumptions proposed by Stuart \cite{stuart_20
   \end{enumerate}
 \end{assumption}
 
-These mild assumptions happen to be rather easy to fulfill for many practical problems. These assumptions provide us with upper and lower bounds on $\Phi$, as well as its Lipschitz continuity with respect to the data $y$ and the parameter $u$.  However, since potential functions are often of the form of (\ref{gaussian-potential}), we are interested in refining these assumptions to the shared structure of such problems.
+These mild assumptions happen to be rather easy to fulfill for many practical problems. These assumptions provide us with upper and lower bounds on $\Phi$, as well as its Lipschitz continuity with respect to the data $y$ and the parameter $u$.  However, since potential functions are often of the form of (\ref{gaussian-potential}), we are interested in refining these assumptions to the shared structure of such potential functions.
 
 \begin{assumption}\label{assumption-fw}
   The function $\G : X \rightarrow \mathbb{R}^N$ has the following properties.
@@ -211,7 +211,7 @@ We can naturally use these assumptions on the forward response operator $\G$ to 
     \Phi(u; y) = \norm{y - \G(u)}_\Gamma^2 \ge 0 \ge 0 - \epsilon\norm{u}_X^2 = M - \epsilon\norm{u}_X^2.
   \end{equation*}
 
-  2. Let $r > 0$, then from Assumption \ref{assumption-fw}(1) there is for $\epsilon = 1$ an $M \in \mathbb{R}$ such that $\norm{\G(u)}_\Gamma \le \exp(\norm{u}_X^2 + M)$ for every $u \in X$. Let $K = r^2 + \exp(2r^2 + 2M) > 0$, then for all $u \in X$ and $y \in Y$ with $\max{\norm{u}_X, \norm{y}_\Gamma} < r$ we have by
+  2. Let $r > 0$, then from Assumption \ref{assumption-fw}(1) there is for $\epsilon = 1$ an $M \in \mathbb{R}$ such that $\norm{\G(u)}_\Gamma \le \exp(\norm{u}_X^2 + M)$ for every $u \in X$. Let $K = r^2 + \exp(2r^2 + 2M) > 0$, then for all $u \in X$ and $y \in Y$ with $\max\{\norm{u}_X, \norm{y}_\Gamma\} < r$ we have by
   \begin{equation*}
     \Phi(u; y) = \norm{y - \G(u)}_\Gamma^2 \le \norm{y}_\Gamma^2 + \norm{\G(u)}_\Gamma^2 \le \norm{y}_\Gamma^2 + \exp(\norm{u}_X^2 + M)^2 \le  K.
   \end{equation*}
@@ -242,12 +242,11 @@ We can naturally use these assumptions on the forward response operator $\G$ to 
     &\le \norm{y}_\Gamma + \norm{\G(u)}_\Gamma
     \le r + \exp(\epsilon\norm{u}_X^2 + M)\\
     &= \exp(\epsilon\norm{u}_X^2 + M)(r \exp(-\epsilon\norm{u}_X - M) + 1)\\
-    &\le \exp(\epsilon\norm{u}_X^2 + M)(r \exp(-M) + 1)\\
-    &= \exp(\epsilon\norm{u}_X^2 + C),
+    &\le \exp(\epsilon\norm{u}_X^2 + M)(r \exp(-M) + 1).
   \end{align*}
-  where $C = M + \log(r \exp(-M) + 1)$. All together, we obtain the desired bound
+  All together, setting $C = M + \log(2r \exp(-M) + 2)$, we obtain the desired bound
   \begin{equation*}
-    |\Phi(u; y_1) - \Phi(u; y_2)| \le \exp(\epsilon \norm{u}_X^2 + C)\norm{y_1 - y_2}.
+    |\Phi(u; y_1) - \Phi(u; y_2)| \le \exp(\epsilon \norm{u}_X^2 + C)\norm{y_1 - y_2}_\Gamma.
   \end{equation*}
 \end{proof}
 
@@ -257,16 +256,16 @@ Using these assumptions, we can now proceed to provide a formal proof of Bayes' 
   \d\mu^y(u) \propto \ell(y|u)\d\mu_0(u).
 \end{equation*}
 
-The following theorem will play a central role in our proof
+The following theorem will play a central role in our proof.
 
 \begin{theorem}
   \label{duley}
-  Let $\mu, \nu$ be probability measures on $S \times T$, where $(S, \mathcal{A})$ and $(T, \mathcal{B})$ are measurable spaces. Let $(x, y) \in S \times T$. Assume that $\mu \ll \nu$ and that $\mu$ has Radon-Nikodym derivative $\phi$ with respect to $\mu$. Further assume that the conditional distributions of $x|y$ under $\nu$, denoted by $\nu^y(\d x)$, exists. Then, the conditional distribution of $x|y$ under $\mu$, denoted $\mu^y(\d x)$, exists and $\mu^y(\d x) \ll \nu^y(\d x)$. The Radon-Nikodym derivative is given by
+  Let $\mu, \nu$ be probability measures on $S \times T$, where $(S, \mathcal{A})$ and $(T, \mathcal{B})$ are measurable spaces. Let $(x, y) \in S \times T$. Assume that $\mu \ll \nu$ and that $\mu$ has Radon-Nikodym derivative $\phi$ with respect to $\mu$. Further, assume that the conditional distribution of $x|y$ under $\nu$, denoted by $\nu^y(\d x)$, exists. Then, the conditional distribution of $x|y$ under $\mu$, denoted $\mu^y(\d x)$, exists and $\mu^y(\d x) \ll \nu^y(\d x)$. The Radon-Nikodym derivative is given by
 
   \begin{equation}
     \frac{\d \nu^y}{\d \mu^y}(x) =  \begin{cases}
       \frac1{c(y)}\phi(x,y) & \text{if $c(y) > 0$}\\
-      1 & \text{ otherwise}
+      1 & \text{ otherwise,}
     \end{cases}  
   \end{equation}
 
@@ -277,7 +276,7 @@ The following theorem will play a central role in our proof
   The proof of this theorem is given in Section 10.2 of Dudley \cite{dudley_2002}.
 \end{proof}
 
-We now prove the infinitesimal version of Bayes' rule as stated in (\ref{bayes-rule}), and prove it using the previously stated theorem.
+We now prove, using the previously stated theorem, the infinitesimal version of Bayes' rule as stated in (\ref{bayes-rule}).
 
 \begin{theorem}[Generalized Bayes' Rule]
   Assume that the likelihood function is given as in (\ref{exponential-ell}) where $\Phi$ satisfies Assumptions \ref{assumption-ll} and that $\mu_0(X) = 1$. Then $u | y$ is distributed according to the measure $\mu^y$, with $\mu^y \ll \mu_0$ and its Radon-Nikodym derivative with respect to $\mu_0$ is given by
@@ -294,7 +293,7 @@ We now prove the infinitesimal version of Bayes' rule as stated in (\ref{bayes-r
     \frac{\d \P}{\d \P_0}(y|u) = \frac{\d \P}{\d y}(y|u)\left(\frac{\d \P_0}{\d y}(y)\right)^{-1} = \frac{\rho(y - \G (u)}{\rho(y)} = C(y)\rho(y - \G (u)),
   \end{equation*}
 
-  where $C(y) := 1 / \rho(y)$ is well defined since Assumption \ref{assumption-ll}(2) gives an upper bound on $\Phi$ thus also giving a strictly positive lower bound on $\rho$. We further define two measures $\nu_0, \nu$ on $Y \times X$ by
+  where $C(y) := 1 / \rho(y)$ is well-defined since Assumption \ref{assumption-ll}(2) gives an upper bound on $\Phi$ thus also giving a strictly positive lower bound on $\rho$. We further define two measures $\nu_0, \nu$ on $Y \times X$ by
   \begin{equation*}
     \begin{aligned}
       \nu_0(\d y, \d u) &= \P_0(\d y) \otimes \mu_0(\d u)\\
@@ -323,7 +322,7 @@ We now prove the infinitesimal version of Bayes' rule as stated in (\ref{bayes-r
   where $Z_y = \int_X\exp(-\Phi(u;y))\mu_0(\d u)$.
 \end{proof}
 
-The previous theorems provide a well defined solution to the Bayesian inverse problem. In order to show that the problem is well-posed, we still need to prove that the solution is continuous with respect to the data $y$. Proving continuity of the solution requires us to define a metric over the space of probability measures, we make use of the following metric
+The previous theorems provide a well-defined solution to the Bayesian inverse problem. In order to show that the problem is well-posed, we still need to prove that the solution is continuous with respect to the data $y$. Proving continuity of the solution requires us to define a metric over the space of probability measures. We make use of the following metric.
 
 \begin{definition} Let $\mu$ and $\mu'$ be two measures absolutely continuous to an arbitrary measure $\nu$. The \textit{Hellinger distance} between $\mu$ and $\mu'$ is then defined as
 
@@ -342,14 +341,14 @@ Moreover, we will require the prior measure to have exponentially bounded tails.
   \end{equation*}
 \end{definition}
 
-The restriction on light-tailed measures still allows us to use many common distributions, such as Gaussians by Fernique's theorem and distributions over compact sets, and is thus not too restrictive in practical situations. We can now complete the proof of well-posedness by the following theorem.
+The restriction on light-tailed measures still allows us to use many common distributions, such as Gaussians by Fernique's theorem and distributions over compact sets. This assumption is thus not too restrictive in practical situations. We can now complete the proof of well-posedness by the following theorem.
 
 \begin{theorem}
-  Let $\Phi$ satisfy Assumptions \ref{assumption-ll} and $\mu_0$ be a light-tailed probability measure with support equals to $X$. Then $\mu^y$ given in \ref{bayes-rule} is Lipschitz continuous with respect to the data $y$ in the Hellinger distance.
+  Let $\Phi$ satisfy Assumptions \ref{assumption-ll} and $\mu_0$ be a light-tailed probability measure with support equal to $X$. Then $\mu^y$ given in \ref{bayes-rule} is Lipschitz continuous with respect to the data $y$ in the Hellinger distance.
 \end{theorem}
 
 \begin{proof}
-  Since many different temporary constants are being used throughout the proof, we use $C$ as a placeholder for a non-negative constant, and may change its value from term to term.
+  Since many different temporary constants are being used throughout the proof, we use $C$ as a placeholder for a non-negative constant and may change its value from term to term.
 
   Let $y, y' \in Y$ and  $\mu^y, \mu^{y'}$ be the measures obtained by application of Bayes' rule and $Z, Z'$ be the respective model evidences. We start by showing that both $Z$ and $Z'$ are bounded by above and below by positive constants. Using Assumption \ref{assumption-ll}(2) we have for any $r > 0$
   \begin{equation*}
@@ -399,7 +398,7 @@ The restriction on light-tailed measures still allows us to use many common dist
     \end{aligned}
   \end{equation*}
 
-  This, together with the constant postivie lower bound on $Z$, shows $I_1 \le C\norm{y - y'}_Y$. Additionally, we can bound the $I_2$ term using the following result
+  This, together with the constant positive lower bound on $Z$, shows $I_1 \le C\norm{y - y'}_Y$. Additionally, we can bound the $I_2$ term using the following result
   \begin{align*}
     \left|Z^{-1/2} - (Z')^{-1/2}\right|^2
     &= \left|\frac{\sqrt{Z} - \sqrt{Z'}}{\sqrt{ZZ'}}\right|^2 \leq \left|\frac{\sqrt{Z} - \sqrt{Z'}}{Z \land Z'}\right|^2 \\
@@ -407,12 +406,12 @@ The restriction on light-tailed measures still allows us to use many common dist
     &\le (Z \land Z')^{-3}\left|Z - Z'\right|^2 \le C\norm{y - y'}_Y^2,
   \end{align*}
 
-  where the last inequality holds because both $Z$ and $Z'$ are strictly greater than $0$ and using bound (\ref{bound-z}). Moreover using Assumption \ref{assumption-ll}(2) and that $\mu_0$ is light-tailed, we can easily show that $\int_X\exp(-\Phi(u; y'))\d\mu_0(u)$ is bounded from above by a constant. This shows that $I_2 \le C\norm{y - y'}_Y^2$, hence completing the proof.
+  where the last inequality holds because both $Z$ and $Z'$ are strictly greater than $0$ and using bound (\ref{bound-z}). Moreover, using Assumption \ref{assumption-ll}(2) and that $\mu_0$ is light-tailed, we can show that $\int_X\exp(-\Phi(u; y'))\d\mu_0(u)$ is bounded from above by a constant. This shows that $I_2 \le C\norm{y - y'}_Y^2$, hence completing the proof.
 \end{proof}
 
-We have shown that the Bayesian inverse problem is well-defined under light conditions on $\Phi$, given in Assumption \ref{assumption-ll}, and provided that the prior measure $\mu_0$ is light-tailed. In the next section, we will model the pendulum problem in the probabilistic framework presented earlier, and will show that it is a well-posed problem.
+We have shown that the Bayesian inverse problem is well-defined under light conditions on $\Phi$, given in Assumption \ref{assumption-ll}, and provided that the prior measure $\mu_0$ is light-tailed. In the next section, we will model the pendulum problem in the probabilistic framework presented earlier and show that it is a well-posed problem.
 
-\subsection{Another look at the Pendulum problem}
+\subsection{Another look at the pendulum problem}
 
 \begin{figure}[t!]
   \begin{minipage}{.5\textwidth}
@@ -421,17 +420,17 @@ We have shown that the Bayesian inverse problem is well-defined under light cond
   \begin{minipage}{.5\textwidth}
     \includegraphics[width=0.97\linewidth]{posteriors}
   \end{minipage}
-  \caption{Left: numerical forward propagation of time uncertainties through the pendulum model. Dashed line is the density function of the Gaussian used to model the uncertainty in our probabilistic model. Right: Sequence of posterior densities after observing $t=0, 3, 6, 9$ data points from light to dark, the lightest and darkest being respectively the prior and full posterior density. We see how the sequence of posteriors interpolate between the prior and full posterior distributions. }
+  \caption{Left: numerical forward propagation of time uncertainties through the pendulum model. The dashed line is the density function of the Gaussian used to model the uncertainty in our probabilistic model. Right: Sequence of posterior densities after observing $t=0, 3, 6, 9$ data points from light to dark, the lightest and darkest being respectively the prior and full posterior density. We see how the sequence of posteriors interpolate between the prior and full posterior distributions. }
   \label{uncertainty-posteriors}
 \end{figure}
 
 
 
-To model the pendulum problem in the Bayesian framework, we need to define a prior measure for the value of the parameter $g$ and find a distribution to model the measurements error.
+To model the pendulum problem in the Bayesian framework, we need to define a prior measure for the value of the parameter $g$ and find a distribution to model the measurements' error.
 
-To choose our prior measure, we first note that gravity attracts objects towards the center of the Earth. Given the coordinates system we have chosen, we know that the gravitational acceleration must be a positive value. We can also convince ourselves, by prior experiments or high-school knowledge, that the value of $g$ is close to $10$ and lower than $20$. Provided no additional information, the natural choice for the prior distribution to incorporate the knowledge stated above is to use a Gaussian distribution centered in $10$ with variance $1$, truncated to the interval $[0, 20]$.
+To choose our prior measure, we first note that gravity attracts objects towards the center of the Earth. Given the coordinates system we have chosen, we know that the gravitational acceleration must be a positive value. We can also convince ourselves, by prior experiments or high-school knowledge, that the value of $g$ is close to $10$ and lower than $20$. Provided that there is no additional information, the natural choice for the prior distribution to incorporate the knowledge stated above is a Gaussian distribution centered at $10$ with variance $1$, truncated to the interval $[0, 20]$.
 
-For modelling the uncertainty in our measurements, we assume that measurement errors are symmetrical around $0$, and further assume an error in the measurements of approximately half a second. In order to obtain an approximation of the angle uncertainty, we propagate the time uncertainty through the forward response operator of the pendulum. This gives us an estimate of the uncertainty in the angle measurements. The forward propagation of the error is numerically estimated using the Monte Carlo method, described in Section 3, in which simulated time measurements were perturbated by a zero-mean Gaussian variable of standard deviation $0.5$ and used as new time measurements for the model. The result of this experiment leads us to model the uncertainty in the angles measurements with a zero-mean Gaussian of variance $0.035$. The left panel of Figure \ref{uncertainty-posteriors} illustrates the result of the numerical experiment.
+For modelling the uncertainty in our measurements, we assume that measurement errors are symmetric around $0$, and further assume an error in the measurements of approximately half a second. In order to obtain an approximation of the angle uncertainty, we propagate the time uncertainty through the forward response operator of the pendulum. This gives us an estimate of the uncertainty in the angle measurements. The forward propagation of the error is numerically estimated using the Monte Carlo method, described in Section 3, in which simulated time measurements were perturbed by a zero-mean Gaussian variable of standard deviation $0.5$ and used as new time measurements for the model. The result of this experiment leads us to model the uncertainty in the angle measurements with a zero-mean Gaussian of variance $0.035$. The left panel of Figure \ref{uncertainty-posteriors} illustrates the result of the numerical experiment.
 
 We consider the estimation of the gravitational acceleration as a filtering problem, in which the sequence of likelihoods is defined using the construction proposed in equation (\ref{phi-seq})
 
@@ -439,7 +438,7 @@ We consider the estimation of the gravitational acceleration as a filtering prob
   \ell_t(x|g) := \exp\left(-\frac12\sum_{i=1}^t\left|x_i - \G_i(g)\right|^2\right),
 \end{equation}
 
-where $\G_i(g)$ is the solution of the equation (\ref{pendulum-ode}) at time $t = t_i$ with parameter $g$. The un-normalized posteriors resulting from this model are illustrated in the right panel of Figure \ref{uncertainty-posteriors}.
+where $\G_i(g)$ is the solution to equation (\ref{pendulum-ode}) at time $t = t_i$ with parameter $g$. The un-normalized posteriors resulting from this model are illustrated in the right panel of Figure \ref{uncertainty-posteriors}.
 
 While the choice of prior is trivially light-tailed, we still need the following lemma to show that the pendulum problem is well-posed.
 
@@ -451,15 +450,15 @@ While the choice of prior is trivially light-tailed, we still need the following
   \begin{equation*}
     H(x, x') = \frac12 x'^2 - \frac{g}{l}\cos(x).
   \end{equation*}
-  By simple calculations, one can show that $H$ is constant along the solution of the initial value problem. Since the initial values are $x_0 \in (0, \pi/2)$ and $x_0' = 0$, we have $H(x(t), x'(t)) = -\frac{g}{l}\cos(x_0) \in (-\frac{g}{l}, 0)$ for all $t > 0$. Assuming that $x(t)$ is not bounded, since $x$ is continuous and $x_0 \le \pi/2$, there is a time $t^*$ such that $x(t^*) = \pi$, giving
+  By simple calculations, one can show that $H$ is constant along the solution to the initial value problem. Since the initial values are $x_0 \in (0, \pi/2)$ and $x_0' = 0$, we have $H(x(t), x'(t)) = -\frac{g}{l}\cos(x_0) \in (-\frac{g}{l}, 0)$ for all $t > 0$. Assuming that $x(t)$ is not bounded, since $x$ is continuous and $x_0 \le \pi/2$, there is a time $t^*$ such that $x(t^*) = \pi$, giving
   \begin{equation*}
     H(x(t^*), x'(t^*)) = \frac12 x'(t^*)^2 - \frac{g}{l}\cos(x(t^*)) \ge -\frac{g}{l}\cos(\pi) = \frac{g}{l} > 0.
   \end{equation*}
-  This contradicts $H(x(t), x'(t)) = H(x_0, x'_0) \in (-\frac{g}{l}, 0)$. Thus the solution of the initial value problem is bounded for every $g \in [0, 20]$ and $t > 0$ implying $\mathcal{G}_t$ is bounded as well, which in turn implies Assumption \ref{assumption-fw}(1).
-  Furthermore, we know that the solution of the initial value problem is continuously differentiable with respect to $g$, it is thus locally Lipschitz continuous everywhere, and so is $\mathcal{G}$, thus completing the proof.
+  This contradicts $H(x(t), x'(t)) = H(x_0, x'_0) \in (-\frac{g}{l}, 0)$. Thus the solution to the initial value problem is bounded for every $g \in [0, 20]$ and $t > 0$ implying $\mathcal{G}_t$ is bounded as well, which in turn implies Assumption \ref{assumption-fw}(1).
+  Furthermore, we know that the solution to the initial value problem is continuously differentiable with respect to $g$, it is thus locally Lipschitz continuous everywhere, and so is $\mathcal{G}$, thus completing the proof.
 \end{proof}
 
-We have proven that the pendulum problem is well posed, and can now use the Bayesian solution to the inverse problem to estimate the true value of $g$ from our measurements of the system. The next section will study numerical approximation methods to estimate this solution.
+We have proven that the pendulum problem is well-posed, and can now use the Bayesian solution to the inverse problem to estimate the true value of $g$ from our measurements of the system. The next section will study numerical approximation methods to estimate this solution.
 
 %%% Local Variables:
 %%% mode: latex
