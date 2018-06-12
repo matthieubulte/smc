@@ -1,5 +1,5 @@
 \section{Sequential Monte Carlo}
-The last section was motivated by validating the use of Bayesian methods for solving inverse problems. However, the solution for Bayesian filtering problems, given by the sequence of posterior measures, often does not have a closed form solution. This requires us to construct numerical estimates of the sequence of posterior measures.
+The last section was motivated by validating the use of Bayesian methods for solving inverse problems. However, the solution for Bayesian filtering problems, given by the sequence of posterior measures, often does not have a closed-form solution. This requires us to construct numerical estimates of the sequence of posterior measures.
 
 The class of estimators we will be considering for this task are \textit{sampling estimators}. Such estimators are constructed by using a set of \textit{particles} representing weighted points of the parameter space $X$ in order to estimate the distribution of interest. A building block of such estimators is the following operator.
 
@@ -70,7 +70,7 @@ which, from the definition of $w$, gives us the equality $\mu^y = L^w\nu$. We ca
   \nu \trarrow{reweight} L^w\nu = \mu^y.
 \end{equation*}
 
-Having this new building block, we can combine the reweighting operator with the sampling operator to obtain
+Having this new building block, we can combine the deterministic reweighting operator with the random sampling operator to obtain
 
 \begin{equation*}
   \nu \trarrow{sample} S^M\nu \trarrow{reweight} L^wS^M\nu.
@@ -96,7 +96,6 @@ Considering the sequence of distributions induced by the potential functions giv
 \end{equation*}
 
 Similar to the IS method, we can use this equality to create an algorithm by applying the sequence of operators to a Monte Carlo estimate of $\mu_0$, giving the algorithm
-
 \begin{align*}
   \mu_0 \trarrow{sample} S^M\mu_0
   &\trarrow{reweight} L_0S^M\mu_0\\
@@ -125,6 +124,12 @@ the theorem stated in the previous sentence implies that applying the operator $
 \begin{equation*}
   \mu \trarrow{correct} K_t\mu.
 \end{equation*}
+
+We note that when applied to a particle-approximated measure of the form $\mu = \sum_{i=1}^Mw_i\delta_{u_i}$ with $u_1, \ldots u_M \in X$ samples of $\mu$, each particle is replaced by sampling from $K_t(u_i, \cdot)$, giving
+\begin{equation*}
+  K_t\mu = \sum_{i=1}^Mw_i\delta_{V_i},
+\end{equation*}
+where $V_1, \ldots, V_M$ are random variables respectively distributed according to $K_t(u_1, \cdot), \ldots, K_t(u_M, \cdot)$. Similarly to the sampling step, the correction step is non-deterministic since it outputs a random probability measure.
 
 We can thus replace each step of reweighting in the previous algorithm by the operator $\Psi_t = K_tL_{t-1}$, giving for every $\mu$
 
@@ -163,7 +168,6 @@ As done previously, we can apply the sequence of operators to map $\mu_0$ to any
 \end{align*}
 
 Transforming this into an algorithm by performing a step of sampling on $\mu_0$ before applying the sequence of operators $\Psi_t \circ \ldots \circ \Psi_1$ gives the \textit{Sequential Importance Sampling} (SIS) algorithm
-
 \begin{align*}
   \mu_0 \trarrow{sample} S^M\mu_0
   &\trarrow{reweight} L_0S^M\mu_0 \trarrow{correct} \Psi_1S^M\mu_0\\
@@ -198,7 +202,7 @@ where the inequality is the weighted Jensen's inequality. This tells us that if 
 We are interested in modifying our algorithm to control the variance of the weights within our population and thus keep the ESS over a certain level $M_\text{thresh}$ close to $M$. To achieve this, the Sequential Monte Carlo (SMC) algorithm controls the ESS after each step of reweighting and performs a step of \textit{resampling} if the ESS is too low. The resampling will reset the population by applying the sampling operator to the current estimate. This will reset every weight to $M^{-1}$ and discard with high probability the particles with lower weights. Specifically, the resampling step maps the current population estimate of the posterior distribution $\mu^y_t$ to a new population with uniform weights,
 
 \begin{equation*}
-  \sum_{i=1}^MW^i_t\delta_{U_i} \trarrow{resample} S^M\left(\sum_{i=1}^MW^i_t\delta_{U_i}\right) = \sum_{i=1}^M\frac1M\delta_{V_i},
+  \sum_{i=1}^MW^i_t\delta_{U_i} \trarrow{sample} S^M\left(\sum_{i=1}^MW^i_t\delta_{U_i}\right) = \sum_{i=1}^M\frac1M\delta_{V_i},
 \end{equation*}
 
 where $V_i = U_j$ with probability $W^j_t$. This finally gives us the sequence of measures $\nu^M_0, \ldots, \nu^M_T$ created by the SMC algorithm to approximate the sequence of posterior measures $\mu_0, \ldots, \mu^y_T$
@@ -219,17 +223,17 @@ where $V_i = U_j$ with probability $W^j_t$. This finally gives us the sequence o
   set each weight to $W^i_0 = M^{-1}$. \\
   \;
   \For{$t = 1,\ldots,T$} {
-    \textit{(2.1) $K_t\nu^M_{t-1}\trarrow{reweight} \Psi_t\nu^M_{t-1}$}\\
-    Adjust weights $\hat W^i_t = w_t(U^i_{t-1})W^i_{t-1}$ and normalize them according to
+    \textit{(2.1) $\nu^M_{t-1}\trarrow{reweight} L_{t-1}\nu^M_{t-1}$}\\
+    Adjust weights $\hat W^i_t = w_{t-1}(U^i_{t-1})W^i_{t-1}$ and normalize them according to
 
     \begin{equation*}
       W^i_t = \hat W^i_t \Big/ \left(\sum_{j=1}^M\hat W_t^j\right).
     \end{equation*}
     
-    \textit{(2.2) $\nu^M_{t-1} \trarrow{correct} K_t\nu^M_{t-1}$ }\\
+    \textit{(2.2) $L_{t-1}\nu^M_{t-1} \trarrow{correct} \Psi_t\nu^M_{t-1}$ }\\
     Sample each $U^i_t$ from $K_t(U^i_{t-1}, \cdot)$.\\
     \;
-    \textit{(2.3) $\Psi_t\nu^M_{t-1} \trarrow{resample} \nu^M_t$}\\
+    \textit{(2.3) $\Psi_t\nu^M_{t-1} \trarrow{sample} \nu^M_t$}\\
     Compute $M_\text{eff}$ according to (\ref{ess}).\\
     \If{$M_\text{eff} < M_\text{thresh}$} {
       Sample each $U^i_t$ from $\Psi_t\nu^M_{t-1}$ and set each weight to $W^i_t = M^{-1}$.
@@ -305,7 +309,7 @@ We start by showing that the sampling operator can approximate any probability m
 Before proving the main result, we formalize the assumption that consecutive posterior distributions from a filtering problem should be close to each other.
 
 \begin{assumption}\label{kappa-assumption}
-  The importance weights $w_0, \ldots, w_{T-1}$ have the following property. There exists a $\kappa > 0$ such that for every $t \in \mathbb{N}$ and $u \in X$
+  The importance weights $w_0, \ldots, w_{T-1}$ have the following property. There exists a $\kappa > 0$ such that for every $t = 0, \ldots, T-1$ and $u \in X$
 
   \begin{equation*}
     \kappa \leq w_t(u) \leq 1/\kappa.
@@ -428,7 +432,7 @@ We now show that the composition of reweighting and correction in the SIS and SM
 
 
 
-This theorem shows that the SMC algorithm has an asymptotic standard deviation of $\mathcal{O}(d(\delta_{\mu_t}, \mu^M_t)) = \mathcal{O}(M^{-1/2})$. Furthermore, since the SMC algorithm is at its core an IS algorithm, it also has an asymptotically vanishing bias of order $\mathcal{O}(M^{-1})$. Since the mean square error (MSE) can be decomposed as $MSE = bias^2 + variance$, the mean square error of the SMC algorithm is dominated by the variance of the estimate, which is of $\mathcal{O}(M^{-1})$.
+This theorem shows that the SMC algorithm has an asymptotic standard deviation of $\mathcal{O}(d(\delta_{\mu_t}, \mu^M_t)) = \mathcal{O}(M^{-1/2})$. Furthermore, since the SMC algorithm is at its core an IS algorithm, it also has an asymptotically vanishing bias of order $\mathcal{O}(M^{-1})$. Since the mean square error (MSE) can be decomposed as $MSE = bias^2 + variance$, the mean square error of the SMC algorithm is dominated by the variance of the estiamte, which is of order $\mathcal{O}(M^{-1})$.
 
 %%% Local Variables:
 %%% mode: latex
